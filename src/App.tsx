@@ -1,31 +1,39 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { lazy } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Layout } from 'components/layouts/Layout';
+
+const MainPage = lazy(() => import('pages/main/MainPage'));
+const AdminMainPage = lazy(() => import('pages/admin/AdminMainPage'));
+const AdminUserPage = lazy(() => import('pages/admin/AdminUserPage'));
 
 function App() {
-  const [count, setCount] = useState(0);
+  const router = createBrowserRouter([
+    {
+      element: <Layout type="mobile" />,
+      children: [
+        {
+          path: '/',
+          element: <MainPage />
+        }
+      ]
+    },
+    {
+      path: 'admin',
+      element: <Layout type="admin" />,
+      children: [
+        {
+          path: '',
+          element: <AdminMainPage />
+        },
+        {
+          path: 'users',
+          element: <AdminUserPage />
+        }
+      ]
+    }
+  ]);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count: {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test.
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
