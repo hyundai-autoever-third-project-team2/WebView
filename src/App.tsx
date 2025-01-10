@@ -13,9 +13,9 @@ function App() {
       children: [
         {
           path: '/',
-          element: <MainPage />
-        }
-      ]
+          element: <MainPage />,
+        },
+      ],
     },
     {
       path: 'admin',
@@ -23,14 +23,14 @@ function App() {
       children: [
         {
           path: '',
-          element: <AdminMainPage />
+          element: <AdminMainPage />,
         },
         {
           path: 'users',
-          element: <AdminUserPage />
-        }
-      ]
-    }
+          element: <AdminUserPage />,
+        },
+      ],
+    },
   ]);
 
   return <RouterProvider router={router} />;

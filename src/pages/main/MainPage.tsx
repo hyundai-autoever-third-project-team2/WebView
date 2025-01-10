@@ -8,7 +8,7 @@ function MainPage() {
   log('MainPage rendered');
 
   const currentDate: Date = new Date();
-  
+
   return (
     <>
       <S.Header>
@@ -17,16 +17,10 @@ function MainPage() {
 
       <S.Container>
         <S.TabContainer>
-          <S.Tab 
-            $isActive={activeTab === 'popular'} 
-            onClick={() => setActiveTab('popular')}
-          >
+          <S.Tab $isActive={activeTab === 'popular'} onClick={() => setActiveTab('popular')}>
             인기
           </S.Tab>
-          <S.Tab 
-            $isActive={activeTab === 'recent'} 
-            onClick={() => setActiveTab('recent')}
-          >
+          <S.Tab $isActive={activeTab === 'recent'} onClick={() => setActiveTab('recent')}>
             최신
           </S.Tab>
         </S.TabContainer>
@@ -35,9 +29,7 @@ function MainPage() {
           <S.Card>
             <S.CardContent>
               <S.CardTitle>제목</S.CardTitle>
-              <S.CardDescription>
-                내용
-              </S.CardDescription>
+              <S.CardDescription>내용</S.CardDescription>
               <S.CardFooter>
                 <S.Badge>New</S.Badge>
                 <S.CardDate>{formatDate(currentDate)}</S.CardDate>
@@ -46,11 +38,11 @@ function MainPage() {
           </S.Card>
         </S.ContentSection>
 
-        <S.FloatingButton>
+        <S.FloatingButton onClick={Android.openCamera}>
           <S.PlusIcon>+</S.PlusIcon>
         </S.FloatingButton>
       </S.Container>
-    </> 
+    </>
   );
 }
 
