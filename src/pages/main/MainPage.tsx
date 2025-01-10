@@ -10,14 +10,10 @@ function MainPage() {
   const currentDate: Date = new Date();
 
   function handleOpenCamera() {
-    console.log('카메라 버튼 클릭됨');
-    console.log('Android 객체 존재 여부:', !!Android);
-    console.log('openCamera 함수 존재 여부:', !!(Android && Android.openCamera));
-
-    try {
+    if (!!Android) {
       Android.openCamera();
-    } catch (e) {
-      console.error('카메라 호출 중 에러:', e);
+    } else {
+      console.error('Android 객체가 존재하지 않습니다.');
     }
   }
 
