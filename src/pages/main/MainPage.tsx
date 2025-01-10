@@ -50,8 +50,8 @@ function MainPage() {
           </S.Card>
         </S.ContentSection>
 
-        <S.FloatingButton>
-          <S.PlusIcon onClick={handleOpenCamera}>+</S.PlusIcon>
+        <S.FloatingButton onClick={handleOpenCamera}>
+          <S.PlusIcon>+</S.PlusIcon>
         </S.FloatingButton>
       </S.Container>
     </>
