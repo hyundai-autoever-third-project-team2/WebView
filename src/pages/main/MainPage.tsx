@@ -10,7 +10,7 @@ function MainPage() {
   const currentDate: Date = new Date();
 
   function handleOpenCamera() {
-    if (!!Android) {
+    if (Android) {
       Android.openCamera();
     } else {
       console.error('Android 객체가 존재하지 않습니다.');
