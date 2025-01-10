@@ -9,6 +9,10 @@ function MainPage() {
 
   const currentDate: Date = new Date();
 
+  function openCamera() {
+    Android.openCamera();
+  }
+
   return (
     <>
       <S.Header>
@@ -38,8 +42,8 @@ function MainPage() {
           </S.Card>
         </S.ContentSection>
 
-        <S.FloatingButton onClick={Android.openCamera}>
-          <S.PlusIcon>+</S.PlusIcon>
+        <S.FloatingButton>
+          <S.PlusIcon onClick={openCamera}>+</S.PlusIcon>
         </S.FloatingButton>
       </S.Container>
     </>
