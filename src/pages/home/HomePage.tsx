@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { formatDate } from 'utils/formatDate';
 import Logo from '../../assets/logo_small.png';
 import { useNavigate } from 'react-router-dom';
+import Toolbar from 'components/common/Toolbar';
 
 function HomePage() {
   const [activeTab, setActiveTab] = useState<'popular' | 'recent'>('popular');
@@ -19,18 +20,9 @@ function HomePage() {
     }
   }
 
-  function handleNotificationButtonClick() {
-    navigate('/notification');
-  }
-
   return (
     <>
-      <S.Header>
-        <S.Logo src={Logo} alt="타볼카 로고" />
-        <S.IconWrapper>
-          <S.NotificationButton onClick={handleNotificationButtonClick}/>
-        </S.IconWrapper>
-      </S.Header>
+      <Toolbar showBackButton title='메인 페이지' titleAlignment='left' rightButtons={['notification','share','close']}/>
 
       <S.Container>
         <S.TabContainer>
