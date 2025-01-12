@@ -3,7 +3,7 @@ import { mobileStyles, mobileInputStyles } from './Layout.styles';
 
 export const GlobalStyle = createGlobalStyle<{ type: 'mobile' | 'admin' }>`
   * {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     box-sizing: border-box;
     // 컴포넌트 클릭 시 파란색 하이라이트를 제거합니다.
@@ -14,7 +14,7 @@ export const GlobalStyle = createGlobalStyle<{ type: 'mobile' | 'admin' }>`
   }
 
   html, body {
-    background-color: ${({ theme }) => theme.colors.neutral50};
+    background-color: #FFFFFF;
     ${({ type }) => type === 'mobile' && mobileStyles}
   }
 

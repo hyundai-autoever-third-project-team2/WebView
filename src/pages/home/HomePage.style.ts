@@ -1,18 +1,22 @@
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import { LAYOUT } from 'styles/constants';
+import { Bell } from 'lucide-react';
 
-export const Header = styled.header`
+export const Header = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: ${LAYOUT.HEADER_HEIGHT};
+  height: ${LAYOUT.APP_BAR_HEIGHT};
   z-index: 100;
   display: flex;
   align-items: center;
   padding: 0 20px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.neutral200};
+  background-color: #FFF;
+  justify-content: space-between;
 `;
+
+export const Logo = styled.img``;
 
 export const HeaderTitle = styled.h1`
   font-size: ${({ theme }) => theme.fontSize.lg};
@@ -20,10 +24,14 @@ export const HeaderTitle = styled.h1`
   color: ${({ theme }) => theme.colors.neutral900};
 `;
 
+export const IconWrapper = styled.div``;
+
+export const NotificationButton = styled(Bell)`
+  color: ${({ theme }) => theme.colors.primary};
+`
+
 export const Container = styled.div`
-  min-width: ${LAYOUT.MIN_WIDTH};
-  margin: 0 auto;
-  padding: 80px 16px 0;
+  /* padding: 80px 16px 0; */
 
   ${media.mobile} {
     padding: 80px 20px 0;
@@ -42,7 +50,7 @@ export const Tab = styled.button<{ $isActive: boolean }>`
   font-size: ${({ theme }) => theme.fontSize.md};
   font-weight: ${({ theme }) => theme.fontWeight.medium};
   color: ${({ theme, $isActive }) => 
-    $isActive ? theme.colors.primary : theme.colors.neutral500};
+    $isActive ? '#FFF' : theme.colors.neutral500};
   background-color: ${({ theme, $isActive }) => 
     $isActive ? theme.colors.primaryLight : 'transparent'};
   border: none;
@@ -60,12 +68,6 @@ export const Card = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.md};
   overflow: hidden;
   box-shadow: 0 2px 4px ${({ theme }) => theme.colors.modalBackground};
-`;
-
-export const CardImage = styled.img`
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
 `;
 
 export const CardContent = styled.div`
@@ -104,30 +106,4 @@ export const Badge = styled.span`
 export const CardDate = styled.span`
   font-size: ${({ theme }) => theme.fontSize.sm};
   color: ${({ theme }) => theme.colors.neutral400};
-`;
-
-export const FloatingButton = styled.button`
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 4px 6px ${({ theme }) => theme.colors.modalBackground};
-`;
-
-export const PlusIcon = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: ${({ theme }) => theme.fontSize.xl};
-  width: 40px;
-  height: 40px;
 `;
