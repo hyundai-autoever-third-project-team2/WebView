@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { LAYOUT } from 'styles/constants';
 import LogoIcon from '../../assets/logo_small.png';
 import ShareIcon from '../../assets/icon_share.svg'
@@ -23,27 +23,37 @@ interface ToolbarProps {
   showLogo?: boolean;
   title?: string;
   titleAlignment?: 'center' | 'left';
-  rightButtons?: ButtonType[]; 
+  rightButtons?: ButtonType[];
+  backgroundColor?: string;
   onBackClick?: () => void;
 }
 
-const ToolbarContainer = styled.header`
+const ToolbarContainer = styled.header<{ $backgroundColor?: string }>`
   position: fixed;
   top: 0;
-  width: 768px;
+  width: 100%;
+  max-width: 768px;
   height: ${LAYOUT.Toolbar_HEIGHT};
   z-index: 100;
   display: flex;
   align-items: center;
   padding: 0 20px;
-  
-  `;
+  background: white;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  ${({ $backgroundColor }) =>
+    $backgroundColor &&
+    css`
+      background: ${$backgroundColor};
+      border-bottom: none;
+    `}
+`;
 
 const LeftSection = styled.div<{ $isLeftAligned: boolean; $showBackButton: boolean; $showBackButtonWhite: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 0 0 ${props => (props.$isLeftAligned && (props.$showBackButton || props.$showBackButtonWhite)) ? '40px' : '128px'};
+  flex: 0 0 ${(props) => (props.$isLeftAligned && props.$showBackButton ? '40px' : '90px')};
 `;
 
 const IconButton = styled.button`
@@ -68,8 +78,8 @@ const Logo = styled.div``;
 const TitleSection = styled.div<{ $alignment: 'center' | 'left' }>`
   flex: 1;
   display: flex;
-  justify-content: ${(props) => props.$alignment === 'center' ? 'center' : 'flex-start'};
-  min-width: 0; 
+  justify-content: ${(props) => (props.$alignment === 'center' ? 'center' : 'flex-start')};
+  min-width: 0;
 `;
 
 const Title = styled.h1`
@@ -79,27 +89,27 @@ const Title = styled.h1`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0 8px; 
+  padding: 0 8px;
 `;
 
 const RightSection = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  flex: 0 0 128px; 
+  flex: 0 0 90px;
 `;
 
 const handleNotificationButtonClick = () => {
-    console.log('TODO : Notification 컴포넌트 동작')
-}
+  console.log('TODO : Notification 컴포넌트 동작');
+};
 
 const handleCloseButtonClick = () => {
-    console.log('TODO : 화면 닫기 구현')
-}
+  console.log('TODO : 화면 닫기 구현');
+};
 
-const handleShareButtonClick = () =>{
-    console.log('TODO : Share 컴포넌트 동작')
-}
+const handleShareButtonClick = () => {
+  console.log('TODO : Share 컴포넌트 동작');
+};
 
 const handleSettingButtonClick = () => {
     console.log( 'TODO : Setting 컴포넌트 동작')
@@ -116,9 +126,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
   title = '',
   titleAlignment = 'center',
   rightButtons = [],
+  backgroundColor,
   onBackClick,
 }) => {
-    // 우측 버튼 아이콘 설정
+  // 우측 버튼 아이콘 설정
   const getIconComponent = (type: ButtonType) => {
     switch (type) {
       case 'close':
@@ -153,8 +164,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <ToolbarContainer>
-      <LeftSection $isLeftAligned={titleAlignment === 'left'} $showBackButton={showBackButton} $showBackButtonWhite={showBackButtonWhite}>
+    <ToolbarContainer $backgroundColor={backgroundColor}>
+      <LeftSection $isLeftAligned={titleAlignment === 'left'} $showBackButton={showBackButton} $showBackButtonWhite={showBackButtonWhite}>      
         {showBackButton && (
           <IconButton onClick={onBackClick} aria-label="Back">
             <img src={BackIcon} alt='Back'/>
@@ -178,11 +189,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
       <RightSection>
         {rightButtons.map((button, index) => (
-          <IconButton
-            key={index}
-            onClick={getButtonOnClick(button)}
-            aria-label={button}
-          >
+          <IconButton key={index} onClick={getButtonOnClick(button)} aria-label={button}>
             {getIconComponent(button)}
           </IconButton>
         ))}
