@@ -53,7 +53,7 @@ const LeftSection = styled.div<{ $isLeftAligned: boolean; $showBackButton: boole
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 0 0 ${(props) => (props.$isLeftAligned && props.$showBackButton ? '40px' : '90px')};
+  flex: 0 0 ${(props) => (props.$isLeftAligned && (props.$showBackButton || props.$showBackButtonWhite)? '40px' : '90px')};
 `;
 
 const IconButton = styled.button`
