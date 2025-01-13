@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
+import PurchasePage from 'pages/my/PurchasePage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -33,7 +34,7 @@ const webviewRouter: RouteObject[] = [
         {
           path: 'my',
           element: <MyPage />, 
-        },
+        }
       ],
     },
     // 내비게이션 바가 없는 페이지를 추가해주세요.
@@ -57,6 +58,10 @@ const webviewRouter: RouteObject[] = [
         {
           path: 'filter',
           element: <FilterPage />,
+        },
+        {
+          path: 'my/purchase',
+          element: <PurchasePage />,
         }
       ],
     },
