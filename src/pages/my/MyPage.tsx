@@ -206,6 +206,7 @@ function MyPage() {
         title="마이페이지" 
         titleAlignment="left"
         rightButtons={['notificationWhite', 'settingWhite']}
+        backgroundColor={theme.colors.primary}
       />
       
       <Header>
