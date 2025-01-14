@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { media } from 'styles/media';
 import { LAYOUT } from 'styles/constants';
 import { Bell } from 'lucide-react';
+import { Swiper } from 'swiper/react';
 
 export const Header = styled.div`
   position: fixed;
@@ -12,8 +13,14 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   padding: 0 20px;
-  background-color: #FFF;
+  background-color: #fff;
   justify-content: space-between;
+`;
+
+export const HeaderInnerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
 `;
 
 export const Logo = styled.img``;
@@ -24,86 +31,257 @@ export const HeaderTitle = styled.h1`
   color: ${({ theme }) => theme.colors.neutral900};
 `;
 
-export const IconWrapper = styled.div``;
-
 export const NotificationButton = styled(Bell)`
   color: ${({ theme }) => theme.colors.primary};
-`
+`;
 
-export const Container = styled.div`
-  /* padding: 80px 16px 0; */
+export const HomePageContainer = styled.div`
+  padding: 80px 16px 0;
 
   ${media.mobile} {
     padding: 80px 20px 0;
   }
 `;
 
-export const TabContainer = styled.div`
+export const IconSection = styled.div`
   display: flex;
-  gap: 12px;
-  margin-bottom: 20px;
-`;
-
-export const Tab = styled.button<{ $isActive: boolean }>`
-  padding: 8px 16px;
+  background-color: ${({ theme }) => theme.colors.neutral50};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
-  font-size: ${({ theme }) => theme.fontSize.md};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
-  color: ${({ theme, $isActive }) => 
-    $isActive ? '#FFF' : theme.colors.neutral500};
-  background-color: ${({ theme, $isActive }) => 
-    $isActive ? theme.colors.primaryLight : 'transparent'};
-  border: none;
-  cursor: pointer;
-`;
-
-export const ContentSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
-
-export const Card = styled.div`
-  background-color: white;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  overflow: hidden;
-  box-shadow: 0 2px 4px ${({ theme }) => theme.colors.modalBackground};
-`;
-
-export const CardContent = styled.div`
-  padding: 16px;
-`;
-
-export const CardTitle = styled.h3`
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.neutral900};
-  margin-bottom: 8px;
-`;
-
-export const CardDescription = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.md};
-  color: ${({ theme }) => theme.colors.neutral600};
-  line-height: 1.5;
-  margin-bottom: 16px;
-`;
-
-export const CardFooter = styled.div`
-  display: flex;
+  padding: 20px;
+  margin-top: 20px;
   justify-content: space-between;
   align-items: center;
 `;
 
-export const Badge = styled.span`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: white;
-  padding: 4px 8px;
-  border-radius: ${({ theme }) => theme.borderRadius.xs};
-  font-size: ${({ theme }) => theme.fontSize.xs};
-  font-weight: ${({ theme }) => theme.fontWeight.medium};
+export const IconWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-weight: ${({ theme }) => theme.fontWeight.semibold};
+  text-align: center;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.neutral900};
+  gap: 5px;
+  font-size: 12px;
+  white-space: nowrap;
 `;
 
-export const CardDate = styled.span`
+export const IconInnerWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 40px;
+  height: 40px;
+`;
+
+export const AdSection = styled.div`
+  display: flex;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.neutral50};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  margin-top: 20px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const RecommendationSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 8px;
+  background-color: #090160;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  color: ${({ theme }) => theme.colors.neutral50};
+  padding: 20px;
   font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.neutral400};
+  background: linear-gradient(180deg, #e67e00 0%, #ff9d00 50%, #ffbf66 100%);
+
+  h3 {
+    font-size: ${({ theme }) => theme.fontSize.md};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+  }
+`;
+
+export const RecommendationSubTitle = styled.div`
+  display: flex;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
+  svg {
+    margin-left: 5px;
+  }
+`;
+
+export const RecommendationCarCard = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 10px;
+  cursor: pointer;
+`;
+
+export const CarCardImage = styled.img`
+  width: 40%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: ${({ theme }) => theme.borderRadius.xs};
+`;
+
+export const CarCardInfo = styled.div`
+  display: flex;
+  width: 70%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+`;
+
+export const CarName = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+`;
+
+export const CarYear = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+`;
+
+export const RecommendationRefreshButton = styled.button``;
+
+export const StyledSwiper = styled(Swiper)`
+  width: 100%;
+  height: auto;
+  padding-bottom: 40px;
+
+  .swiper-pagination {
+    display: flex;
+    justify-content: center;
+  }
+
+  .swiper-slide {
+    width: auto;
+  }
+
+  .swiper-pagination-bullet {
+    background: #d3e3f8;
+    opacity: 0.5;
+    margin: 0 4px;
+    width: 4px;
+    height: 4px;
+
+    &-active {
+      opacity: 1;
+      width: 12px;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+  }
+`;
+
+export const CarListSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  gap: 15px;
+`;
+
+export const TitleWithArrowButton = styled.div`
+  width: 100%;
+  align-items: center;
+  display: flex;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  color: ${({ theme }) => theme.colors.neutral900};
+
+  svg {
+    margin: 0px;
+    justify-content: flex-end;
+  }
+`;
+
+export const CarListCard = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  cursor: pointer;
+`;
+
+export const CarListCardImage = styled.img`
+  width: 30%;
+  height: 70px;
+  object-fit: cover;
+  border-radius: ${({ theme }) => theme.borderRadius.xs};
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+export const CarListCardInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 5px;
+  gap: 5px;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+
+  .price {
+    color: ${({ theme }) => theme.colors.primary};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+  }
+`;
+
+export const AllCarListButton = styled.button`
+  width: 100%;
+  height: 40px;
+  margin-top: 20px;
+  font-weight: ${({ theme }) => theme.fontWeight.bold};
+  border-radius: ${({ theme }) => theme.borderRadius.xs};
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary};
+  background-color: #fff;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin: 0px;
+  }
+`;
+
+export const FeedPreviewSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  gap: 20px;
+`;
+
+export const FeedPreviewCardWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const FeedPreviewCard = styled.img`
+  width: 32%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: ${({ theme }) => theme.borderRadius.xs};
+`;
+
+export const AnnouncementSection = styled.div`
+  width: 100%;
+  display: flex;
+  margin-top: 20px;
+  padding: 20px;
+  gap: 20px;
+  align-items: center;
+  cursor: pointer;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  background-color: ${({ theme }) => theme.colors.neutral50};
+
+  span {
+    font-size: ${({ theme }) => theme.fontSize.md};
+    font-weight: ${({ theme }) => theme.fontWeight.bold};
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;
