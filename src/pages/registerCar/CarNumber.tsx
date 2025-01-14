@@ -3,7 +3,7 @@ import * as S from './RegisterCarPage.style';
 import { useState } from 'react';
 
 interface CarNumberProps {
-  handleNextClick: (data: string | File[]) => void;
+  handleNextClick: (data: string | string[]) => void;
 }
 
 export const CarNumber = ({ handleNextClick }: CarNumberProps) => {

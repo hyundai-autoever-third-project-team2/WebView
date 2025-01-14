@@ -9,20 +9,21 @@ import carInside from 'assets/car_inside.png';
 import { useState } from 'react';
 
 interface CarImagesProps {
-  imageType: 'outside' | 'inside';
-  handleNextClick: (data: string | File[]) => void;
+  imageType: '외부' | '내부';
+  handleNextClick: (data: string | string[]) => void;
 }
 
 export const CarImages = ({ imageType, handleNextClick }: CarImagesProps) => {
-  const [uploadFiles, setUploadFiles] = useState<File[]>([]);
+  const [imageUrlList, setImageUrlList] = useState<string[]>([]);
 
-  const handleUploadImage = (file: File) => {
-    setUploadFiles([...uploadFiles, file]);
+  const handleUploadImage = (imageUrl: string) => {
+    setImageUrlList([...imageUrlList, imageUrl]);
   };
 
   const renderImageUploadButton = (images: string[]) => {
     return images.map((image, index) => (
       <ImageUploadButton
+        index={index}
         key={index}
         width={140}
         height={140}
@@ -43,12 +44,12 @@ export const CarImages = ({ imageType, handleNextClick }: CarImagesProps) => {
       </S.TitleWrapper>
 
       <S.TitleWrapper>
-        <S.Title>{imageType === 'outside' ? '외부(필수)' : '내부(최대4장)'}</S.Title>
+        <S.Title>{imageType}</S.Title>
       </S.TitleWrapper>
       <S.ImagesWrapper>
-        {imageType === 'outside' ? renderImageUploadButton(outsideImages) : renderImageUploadButton(insideImages)}
+        {imageType === '외부' ? renderImageUploadButton(outsideImages) : renderImageUploadButton(insideImages)}
       </S.ImagesWrapper>
-      <Button fixed onClick={() => handleNextClick(uploadFiles)}>
+      <Button fixed onClick={() => handleNextClick(imageUrlList)}>
         다음
       </Button>
     </S.CarInsideImagesWrapper>
