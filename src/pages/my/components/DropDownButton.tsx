@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { ChevronDown } from 'lucide-react';
 import { theme } from 'styles/theme';
 
 const DropdownContainer = styled.div`
   position: relative;
-  width: 150px;
+  width: 40%;
+  margin: auto 0;
 `;
 
 const DropdownButton = styled.button`
@@ -15,11 +16,11 @@ const DropdownButton = styled.button`
   align-items: center;
   justify-content: space-between;
   background: ${theme.colors.primary};
-  border-radius: 4px;
+  border-radius: 0.5rem;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
-
+  height: 45px;
 
   &:focus {
     outline: none;
@@ -85,8 +86,8 @@ const Option = styled.li`
 `;
 
 const DropDownButton = ({ 
-  options = ['옵션 1', '옵션 2', '옵션 3'],
-  placeholder = '선택하세요',
+  options = ['2022년', '2023년', '2024년', '2025년'],
+  placeholder = '연도별',
   onChange = (value: string) => console.log(value)
 }) => {
   const [isOpen, setIsOpen] = useState(false);

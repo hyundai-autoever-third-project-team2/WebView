@@ -1,6 +1,6 @@
 export interface AndroidInterface {
   showToast: (message: string) => void;
-  openCamera: () => void;
+  openCamera: (index: number) => void;
 }
 
 export interface KakaoInterface {

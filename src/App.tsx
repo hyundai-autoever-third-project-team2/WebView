@@ -15,6 +15,7 @@ const AdminMainPage = lazy(() => import('pages/admin/AdminMainPage'));
 const AdminUserPage = lazy(() => import('pages/admin/AdminUserPage'));
 const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
 const RegisterHistoryPage = lazy(() => import('pages/my/RegisterHistoryPage'));
+const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
 
 const webviewRouter: RouteObject[] = [
   // 내비게이션 바가 있는 페이지를 추가해주세요.
@@ -37,6 +38,10 @@ const webviewRouter: RouteObject[] = [
         path: 'my',
         element: <MyPage />,
       },
+      {
+        path: 'my/purchase/:id',
+        element: <PurchaseDetailPage />,
+      },
     ],
   },
   // 내비게이션 바가 없는 페이지를 추가해주세요.
@@ -50,10 +55,6 @@ const webviewRouter: RouteObject[] = [
       {
         path: 'feed',
         element: <FeedPage />,
-      },
-      {
-        path: 'feed/add',
-        element: <AddFeedPage />,
       },
       {
         path: 'notification',
