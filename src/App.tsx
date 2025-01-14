@@ -2,7 +2,6 @@ import { lazy } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
-import PurchasePage from 'pages/my/PurchasePage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -13,6 +12,8 @@ const NotificationPage = lazy(() => import('pages/notification/NotificationPage'
 const FilterPage = lazy(() => import('pages/filter/FilterPage'));
 const AdminMainPage = lazy(() => import('pages/admin/AdminMainPage'));
 const AdminUserPage = lazy(() => import('pages/admin/AdminUserPage'));
+const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
+const RegisterHistoryPage = lazy(() => import('pages/my/RegisterHistoryPage'));
 
 const webviewRouter: RouteObject[] = [
     // 내비게이션 바가 있는 페이지를 추가해주세요.
@@ -62,6 +63,10 @@ const webviewRouter: RouteObject[] = [
         {
           path: 'my/purchase',
           element: <PurchasePage />,
+        },
+        {
+          path: 'my/register',
+          element: <RegisterHistoryPage />,
         }
       ],
     },

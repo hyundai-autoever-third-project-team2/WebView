@@ -160,7 +160,7 @@ const STAT_ITEMS:StatItemProps[] = [
     value: 134, label: '구매 내역', path: '/my/purchase'
   },
   {
-    value: 213, label: '판매 내역', path: '/my/purchase'
+    value: 213, label: '판매 내역', path: '/my/register'
   },
   {
     value: 23, label: '찜한 상품', path: '/my/purchase'
