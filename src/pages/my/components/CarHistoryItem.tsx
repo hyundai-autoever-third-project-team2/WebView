@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
 
@@ -14,6 +15,7 @@ interface CarHistoryItemProps {
   price?: string;
   monthlyPayment?: string;
   imageUrl?: string;
+  isPurchase? : boolean;
 }
 
 const CarHistoryContainer = styled.div`
@@ -22,7 +24,7 @@ const CarHistoryContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   width: 100%;
-  margin-top: 80px;
+  margin-top: 20px;
   position: relative;
 `;
 
@@ -121,8 +123,11 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   model = "주문번호",
   price = "가격",
   monthlyPayment = "할부",
-  imageUrl = "이미지url"
+  imageUrl = "이미지url",
+  isPurchase = false
 }) => {
+  const navigate = useNavigate();
+
   const getActionButton = ($status: string) => {
     switch ($status) {
       case "시세 측정 중":
@@ -136,13 +141,19 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
     }
   };
 
+  const handleDetailButtonClick = (purchaseCarId : string) => () => {
+    navigate(`/my/purchase/${purchaseCarId}`)
+  }
+
   const actionButton = getActionButton(status);
 
   return (
     <CarHistoryContainer>
       <TopWrapper>
         <DateText>{date}</DateText>
-        <DetailButton>상세보기</DetailButton>
+        {isPurchase &&(
+        <DetailButton onClick={handleDetailButtonClick('2')}>상세보기</DetailButton>
+        )}
       </TopWrapper>
       <StatusLabel $status={status}>{status}</StatusLabel>
       <ContentWrapper>

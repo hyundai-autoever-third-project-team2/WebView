@@ -25,7 +25,7 @@ const StatItem = styled.div`
   text-align: center;
   flex: 1;
   cursor: pointer;
-  padding: 15px 0;
+  padding: 10px 0;
 
   &:not(:first-child) {
     border-left: 2px solid ${theme.colors.primary};
