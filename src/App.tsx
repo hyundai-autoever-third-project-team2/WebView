@@ -57,6 +57,10 @@ const webviewRouter: RouteObject[] = [
         element: <FeedPage />,
       },
       {
+        path: 'feed/add',
+        element: <AddFeedPage />,
+      },
+      {
         path: 'notification',
         element: <NotificationPage />,
       },
