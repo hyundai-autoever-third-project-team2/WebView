@@ -1,17 +1,18 @@
-import styled from "styled-components";
-import { LAYOUT } from "styles/constants";
+import styled from 'styled-components';
+import { LAYOUT } from 'styles/constants';
 
 export const NavContainer = styled.div`
-    position: fixed;
-    bottom: 8px;
-    left: 8px;
-    right: 8px;
-    height: ${LAYOUT.BOTTOM_NAVIGATION_HEIGHT};
-    /* margin: 0 5px 5px 5px; */
-    background-color: #FFFFFF;
-    border-radius: 25px;
-    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-`
+  position: fixed;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  height: ${LAYOUT.BOTTOM_NAVIGATION_HEIGHT};
+  /* margin: 0 5px 5px 5px; */
+  background-color: #ffffff;
+  border-radius: 25px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+`;
 
 export const NavWrapper = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ export const NavButton = styled.button<{ isActive?: boolean }>`
   background: none;
   border: none;
   cursor: pointer;
-  color: ${props => props.isActive ? props.theme.colors.primary : '#9ca3af'};
+  color: ${(props) => (props.isActive ? props.theme.colors.primary : '#9ca3af')};
 
   &:focus {
     outline: none;
@@ -49,7 +50,7 @@ export const CenterButtonWrapper = styled.div`
   bottom: 25px;
 `;
 
-export const CenterButton = styled.button<{ isActive?: boolean, onClick: () => void }>`
+export const CenterButton = styled.button<{ isActive?: boolean; onClick: () => void }>`
   position: absolute;
   left: 50%;
   transform: translateX(-50%) translateY(-24px);

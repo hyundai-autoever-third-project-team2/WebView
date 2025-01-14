@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky"
@@ -17,8 +17,10 @@
     "lucide-react": "^0.471.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-insta-stories": "^2.7.0",
     "react-router-dom": "^7.1.1",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.14",
+    "swiper": "^11.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
