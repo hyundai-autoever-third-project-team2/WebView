@@ -2,15 +2,24 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { LAYOUT } from 'styles/constants';
 import LogoIcon from '../../assets/logo_small.png';
-import ShareIcon from '../../assets/icon_share.svg';
-import CloseIcon from '../../assets/icon_close.svg';
-import NotificationIcon from '../../assets/icon_notification.svg';
+import ShareIcon from '../../assets/icon_share.svg'
+import CloseIcon from '../../assets/icon_close.svg'
+import NotificationIcon from '../../assets/icon_notification.svg'
+import NotificationIconWhite from '../../assets/icon_notification_white.svg'
+import SettingIconWhite from '../../assets/icon_setting_white.svg'
+import BackIcon from '../../assets/icon_back.svg'
+import BackIconWhite from '../../assets/icon_back_white.svg'
 
-type ButtonType = 'close' | 'notification' | 'share';
+export { Title, ToolbarContainer }; 
+
+
+//버튼 종류 늘어날 시 추가하시길 .. + getIconComponent 로 아이콘 import , clickbutton 이벤트로 동작 설정
+type ButtonType = 'close' | 'notification' | 'share' | 'notificationWhite' | 'settingWhite';
 
 //showBackButton (닫기 버튼튼)
 interface ToolbarProps {
   showBackButton?: boolean;
+  showBackButtonWhite? : boolean;
   showLogo?: boolean;
   title?: string;
   titleAlignment?: 'center' | 'left';
@@ -40,11 +49,11 @@ const ToolbarContainer = styled.header<{ $backgroundColor?: string }>`
     `}
 `;
 
-const LeftSection = styled.div<{ $isLeftAligned: boolean; $showBackButton: boolean }>`
+const LeftSection = styled.div<{ $isLeftAligned: boolean; $showBackButton: boolean; $showBackButtonWhite: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  flex: 0 0 ${(props) => (props.$isLeftAligned && props.$showBackButton ? '40px' : '90px')};
+  flex: 0 0 ${(props) => (props.$isLeftAligned && (props.$showBackButton || props.$showBackButtonWhite)? '40px' : '90px')};
 `;
 
 const IconButton = styled.button`
@@ -102,24 +111,17 @@ const handleShareButtonClick = () => {
   console.log('TODO : Share 컴포넌트 동작');
 };
 
-//뒤로가기 임시아이콘
-const BackIcon = () => (
-  <svg
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M15 18l-6-6 6-6" />
-  </svg>
-);
+const handleSettingButtonClick = () => {
+    console.log( 'TODO : Setting 컴포넌트 동작')
+}
+
+
+
+
 
 const Toolbar: React.FC<ToolbarProps> = ({
   showBackButton = false,
+  showBackButtonWhite = false,
   showLogo = false,
   title = '',
   titleAlignment = 'center',
@@ -133,9 +135,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
       case 'close':
         return <img src={CloseIcon} alt="Close" />;
       case 'notification':
-        return <img src={NotificationIcon} alt="Close" />;
+        return <img src={NotificationIcon} alt="Notification" />;
       case 'share':
         return <img src={ShareIcon} alt="Share" />;
+      case 'notificationWhite':
+        return <img src={NotificationIconWhite} alt="Notification_white_ver" />;
+      case 'settingWhite':
+        return <img src={SettingIconWhite} alt="Setting_white_ver" />;
       default:
         return null;
     }
@@ -144,11 +150,14 @@ const Toolbar: React.FC<ToolbarProps> = ({
   const getButtonOnClick = (type: ButtonType) => {
     switch (type) {
       case 'notification':
+      case 'notificationWhite' :
         return () => handleNotificationButtonClick();
       case 'close':
         return () => handleCloseButtonClick();
       case 'share':
         return () => handleShareButtonClick();
+      case 'settingWhite':
+        return () => handleSettingButtonClick();
       default:
         return () => {};
     }
@@ -156,10 +165,15 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   return (
     <ToolbarContainer $backgroundColor={backgroundColor}>
-      <LeftSection $isLeftAligned={titleAlignment === 'left'} $showBackButton={showBackButton}>
+      <LeftSection $isLeftAligned={titleAlignment === 'left'} $showBackButton={showBackButton} $showBackButtonWhite={showBackButtonWhite}>      
         {showBackButton && (
           <IconButton onClick={onBackClick} aria-label="Back">
-            <BackIcon />
+            <img src={BackIcon} alt='Back'/>
+          </IconButton>
+        )}
+        {showBackButtonWhite && (
+          <IconButton onClick={onBackClick} aria-label="Back">
+            <img src={BackIconWhite} alt='BackWhiteVer'/>
           </IconButton>
         )}
         {showLogo && (
