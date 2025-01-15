@@ -6,7 +6,7 @@ WORKDIR /app
 # Install dependencies
 COPY package.json yarn.lock ./
 ENV HUSKY=0
-RUN yarn install --frozen-lockfile
+RUN yarn install
 
 # Build application
 COPY . .
