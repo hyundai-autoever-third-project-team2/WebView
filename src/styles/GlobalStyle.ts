@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import { mobileStyles, mobileInputStyles } from './Layout.styles';
 
-export const GlobalStyle = createGlobalStyle<{ type: 'mobile' | 'admin' }>`
+export const GlobalStyle = createGlobalStyle<{ type: 'mobile' }>`
   * {
     margin: 0 auto;
     padding: 0;
