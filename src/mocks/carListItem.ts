@@ -1,0 +1,58 @@
+import { CarListItemData } from 'types/CarListItemData';
+
+const mockCarListItem: CarListItemData[] = [
+  {
+    carId: 1,
+    imageUrl: 'https://imgsc.chutcha.kr/files/car_resist/202501/08/2025010810275517362996758632_ori.jpeg',
+    brand: 'BMW',
+    modelName: '5시리즈 520d M 스포츠',
+    modelYear: '2023',
+    distance: 42_516,
+    price: 45_700_000,
+    discountPrice: 43_900_000,
+    monthPrice: 720_000,
+    createDate: '2024-01-15 09:30:00',
+    viewCount: 365,
+  },
+  {
+    carId: 2,
+    imageUrl: 'https://imgsc.chutcha.kr/files/car_resist/202501/08/2025010810275517362996758632_ori.jpeg',
+    brand: '벤츠',
+    modelName: 'E-Class E350 4MATIC',
+    modelYear: '2023',
+    distance: 38_000,
+    price: 82_000_000,
+    discountPrice: 79_500_000,
+    monthPrice: 1_200_000,
+    createDate: '2024-02-20 14:20:00',
+    viewCount: 289,
+  },
+  {
+    carId: 3,
+    imageUrl: 'https://imgsc.chutcha.kr/files/car_resist/202501/08/2025010810275517362996758632_ori.jpeg',
+    brand: '제네시스',
+    modelName: 'G80 3.5 터보',
+    modelYear: '2022',
+    distance: 45_000,
+    price: 65_000_000,
+    discountPrice: 62_000_000,
+    monthPrice: 950_000,
+    createDate: '2024-03-13 11:15:00',
+    viewCount: 412,
+  },
+  {
+    carId: 4,
+    imageUrl: 'https://imgsc.chutcha.kr/files/car_resist/202501/08/2025010810275517362996758632_ori.jpeg',
+    brand: '아우디',
+    modelName: 'A6 45 TFSI 콰트로',
+    modelYear: '2023',
+    distance: 32_000,
+    price: 68_000_000,
+    discountPrice: 65_500_000,
+    monthPrice: 980_000,
+    createDate: '2024-03-12 16:40:00',
+    viewCount: 278,
+  },
+];
+
+export default mockCarListItem;
