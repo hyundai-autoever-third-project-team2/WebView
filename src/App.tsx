@@ -10,7 +10,7 @@ const RegisterCarPage = lazy(() => import('pages/registerCar/RegisterCarPage'));
 const FeedPage = lazy(() => import('pages/feed/FeedPage'));
 const AddFeedPage = lazy(() => import('pages/feed/AddFeedPage'));
 const NotificationPage = lazy(() => import('pages/notification/NotificationPage'));
-const FilterPage = lazy(() => import('pages/filter/FilterPage'));
+const CarFilterPage = lazy(() => import('pages/carFilter/CarFilterPage'));
 const AdminMainPage = lazy(() => import('pages/admin/AdminMainPage'));
 const AdminUserPage = lazy(() => import('pages/admin/AdminUserPage'));
 const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
@@ -65,8 +65,8 @@ const webviewRouter: RouteObject[] = [
         element: <NotificationPage />,
       },
       {
-        path: 'filter',
-        element: <FilterPage />,
+        path: 'car-filter',
+        element: <CarFilterPage />,
       },
       {
         path: 'my/purchase',

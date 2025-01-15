@@ -3,8 +3,8 @@ import { UserStories } from 'types/story';
 export const stories: UserStories[] = [
   {
     userId: 5,
-    nickname: 'testNickname',
-    profile: 'testprofile',
+    nickname: '전우정',
+    profile: 'https://picsum.photos/40',
     stories: [
       {
         id: 15,
@@ -26,8 +26,8 @@ export const stories: UserStories[] = [
   },
   {
     userId: 8,
-    nickname: 'testUser1',
-    profile: 'testprofile1',
+    nickname: '송지웅',
+    profile: 'https://picsum.photos/41',
     stories: [
       {
         id: 20,
@@ -65,8 +65,8 @@ export const stories: UserStories[] = [
   },
   {
     userId: 9,
-    nickname: 'testUser2',
-    profile: 'testprofile2',
+    nickname: '김홍빈',
+    profile: 'https://picsum.photos/42',
     stories: [
       {
         id: 17,
