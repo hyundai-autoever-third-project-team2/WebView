@@ -121,7 +121,9 @@ function PurchasePage() {
                     mileage={"35,557km"} 
                     price={"1000만원"} 
                     tags={["as", "asas"]} 
-                    showTags showCheckbox />
+                    viewCount={102}
+                    postDate={new Date()}
+                    showTags showCheckbox showViewDate showHeartButton/>
             </CarHistoryList>
             </Contents>
         </>

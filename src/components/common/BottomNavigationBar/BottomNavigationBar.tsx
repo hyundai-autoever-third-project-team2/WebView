@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import * as S from './BottomNavigationBar.style'
 import { Home, CircleDollarSign, CarFront,Heart, User } from 'lucide-react';
 
@@ -30,6 +30,30 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick, to })
 function BottomNavigationBar() {
   const [activeTab, setActiveTab] = useState<string>('main');
   const navigate = useNavigate();
+  const location = useLocation();
+
+  //경로 따라 액티브 탭 설정
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/':
+        setActiveTab('main');
+        break;
+      case '/register-car':
+        setActiveTab('registercar');
+        break;
+      case '/feed':
+        setActiveTab('feed');
+        break;
+      case '/wishlist':
+        setActiveTab('wishlist');
+        break;
+      case '/my':
+        setActiveTab('my');
+        break;
+      default:
+        setActiveTab('main');
+    }
+  }, [location.pathname]);
   
   return (
     <S.NavContainer>
