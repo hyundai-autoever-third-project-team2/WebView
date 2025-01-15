@@ -1,6 +1,6 @@
 import Toolbar from 'components/common/Toolbar';
 import { useNavigate } from 'react-router-dom';
-import * as S from './CarDetail.style';
+import * as S from './CarDetailPage.style';
 import Tag from 'components/common/Tag';
 import { CarDetailSwiper } from './CarDetailSwiper';
 import EyeIcon from 'assets/icon_eye.svg?react';
@@ -13,7 +13,7 @@ import Button from 'components/common/Button';
 
 const optionList = ['네비게이션', 'HUD', '통풍시트', '열선시트', '크루즈컨트롤', '선루프', '주차보조', '차선이탈경보'];
 
-export const CarDetail = () => {
+export const CarDetailPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export const CarDetail = () => {
 
   return (
     <S.CarDetailWrapper>
-      <Toolbar title="차량상세" showBackButton onBackClick={handleBackClick} rightButtons={['share']} />
+      <Toolbar title="차량상세" showBackButton onBackClick={handleBackClick} rightButtons={['liked']} />
 
       <section>
         <S.SwiperWrapper>
