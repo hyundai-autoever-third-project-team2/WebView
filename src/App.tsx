@@ -15,6 +15,7 @@ const CarListPage = lazy(() => import('pages/carList/CarListPage'));
 const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
 const RegisterHistoryPage = lazy(() => import('pages/my/RegisterHistoryPage'));
 const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
+const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
 
 const webviewRouter: RouteObject[] = [

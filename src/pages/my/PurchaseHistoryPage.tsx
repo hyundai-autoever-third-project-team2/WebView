@@ -8,7 +8,7 @@ import CarHistoryItem from "./components/CarHistoryItem";
 import SearchInput from "components/common/SearchInput";
 
 import temp from "../../assets/feed_sample.jpg"
-import CarData from "components/common/CarData";
+import CarData from "components/common/CarCard";
 
 const Contents = styled.div`
 `
