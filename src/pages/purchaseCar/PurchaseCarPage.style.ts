@@ -32,10 +32,56 @@ export const ContractorName = styled.div`
   font-size: ${({ theme }) => theme.fontSize.md};
 `;
 
-export const CarInfoSection = styled(PurchaseCarPageSection)``;
+export const CarInfoSection = styled(PurchaseCarPageSection)<{ $isOpen: boolean }>`
+  svg {
+    margin: 0;
+    transform: rotate(${({ $isOpen }) => ($isOpen ? '180deg' : '0deg')});
+    transition: transform 0.3s ease-in-out;
+    color: ${({ theme }) => theme.colors.neutral500};
+  }
+
+  &:active svg {
+    background-color: ${({ theme }) => theme.colors.neutral100};
+    border-radius: 50%;
+  }
+`;
+
+export const CarInfoDetailSection = styled(PurchaseCarPageSection)`
+  padding: 0 20px 20px 20px;
+  gap: 10px;
+  justify-content: flex-start;
+`;
+
+export const CarInfoRightWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+export const CarInfoDetailImage = styled.img`
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+`;
+
+export const CarInfoDetailContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
 
 export const CarModelName = styled.div`
   font-size: ${({ theme }) => theme.fontSize.md};
+`;
+
+export const CarInfoYearAndDistance = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  color: ${({ theme }) => theme.colors.neutral800};
+`;
+
+export const CarInfoPrice = styled.div`
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: ${({ theme }) => theme.fontWeight.header};
 `;
 
 export const ContractPriceSection = styled(PurchaseCarPageSection)`
@@ -99,6 +145,7 @@ export const AgreementCheckboxWrapper = styled.div`
   display: flex;
   flex-direction: row;
   color: ${({ theme }) => theme.colors.neutral800};
+  align-items: center;
 `;
 
 export const AgreementCheckboxDescription = styled.div`
@@ -112,8 +159,11 @@ export const AgreementCheckboxSubtext = styled.p`
 `;
 
 export const AgreementCheckbox = styled.input`
-  margin-left: 0px;
+  width: 12px;
+  height: 12px;
+  margin: 0;
   margin-right: 10px;
+  accent-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const ButtonSection = styled(PurchaseCarPageSection)``;
