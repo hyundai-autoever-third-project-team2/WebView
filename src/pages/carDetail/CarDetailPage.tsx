@@ -141,7 +141,7 @@ export const CarDetailPage = () => {
             {optionList.map((option, idx) => (
               <S.OptionWrapper key={option}>
                 <S.OptionImageWrapper>
-                  <S.OptionImage src={`src/assets/option${idx + 1}.png`} />
+                  <S.OptionImage src={`/src/assets/option${idx + 1}.png`} />
                 </S.OptionImageWrapper>
                 <S.OptionText>{option}</S.OptionText>
               </S.OptionWrapper>
