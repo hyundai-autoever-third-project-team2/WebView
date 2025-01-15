@@ -1,13 +1,14 @@
+import { css } from 'styled-components';
 import { LAYOUT } from './constants';
 
-export const mobileStyles = `
+export const mobileStyles = (hasBottomPadding: boolean = true) => css`
   max-width: 768px;
   margin: 0 auto;
-  padding-bottom: ${LAYOUT.BOTTOM_NAVIGATION_HEIGHT};
+  padding-bottom: ${hasBottomPadding ? LAYOUT.BOTTOM_NAVIGATION_HEIGHT : 0};
   ::-webkit-scrollbar {
     display: none;
   }
-  scollbar-width: none;
+  scrollbar-width: none;
   -ms-overflow-style: none;
 `;
 

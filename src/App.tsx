@@ -11,17 +11,17 @@ const FeedPage = lazy(() => import('pages/feed/FeedPage'));
 const AddFeedPage = lazy(() => import('pages/feed/AddFeedPage'));
 const NotificationPage = lazy(() => import('pages/notification/NotificationPage'));
 const CarFilterPage = lazy(() => import('pages/carFilter/CarFilterPage'));
-const AdminMainPage = lazy(() => import('pages/admin/AdminMainPage'));
-const AdminUserPage = lazy(() => import('pages/admin/AdminUserPage'));
+const CarListPage = lazy(() => import('pages/carList/CarListPage'));
 const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
 const RegisterHistoryPage = lazy(() => import('pages/my/RegisterHistoryPage'));
 const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
+const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
 
 const webviewRouter: RouteObject[] = [
   // 내비게이션 바가 있는 페이지를 추가해주세요.
   {
     element: (
-      <Layout type="mobile">
+      <Layout type="mobile" hasNavBar={true}>
         <BottomNavigationBar />
       </Layout>
     ),
@@ -46,7 +46,7 @@ const webviewRouter: RouteObject[] = [
   },
   // 내비게이션 바가 없는 페이지를 추가해주세요.
   {
-    element: <Layout type="mobile" />,
+    element: <Layout type="mobile" hasNavBar={false} />,
     children: [
       {
         path: 'register-car',
@@ -76,27 +76,20 @@ const webviewRouter: RouteObject[] = [
         path: 'my/register',
         element: <RegisterHistoryPage />,
       },
+      {
+        path: 'car-list/:type',
+        element: <CarListPage />,
+      },
+      {
+        path: 'search',
+        element: <SearchResultPage />,
+      },
     ],
   },
 ];
 
-const adminPageRouter: RouteObject = {
-  path: '/admin',
-  element: <Layout type="admin" />,
-  children: [
-    {
-      path: '',
-      element: <AdminMainPage />,
-    },
-    {
-      path: 'users',
-      element: <AdminUserPage />,
-    },
-  ],
-};
-
 function App() {
-  const router = createBrowserRouter([...webviewRouter, adminPageRouter]);
+  const router = createBrowserRouter([...webviewRouter]);
 
   return <RouterProvider router={router} />;
 }

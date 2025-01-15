@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import styled from 'styled-components';
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface SearchInputProps {
   onSearch?: (value: string) => void;
@@ -49,33 +50,47 @@ const SearchButton = styled.button`
   transition: color 0.2s ease;
 `;
 
+interface SearchInputProps {
+  placeholder?: string;
+  initialValue?: string;
+  onSearch?: (value: string) => void;
+  searchPageRouting?: boolean;
+}
+
 const SearchInput: React.FC<SearchInputProps> = ({
-  onSearch,
   placeholder = '브랜드나 모델명으로 검색해보세요.',
   initialValue = '',
+  onSearch,
+  searchPageRouting = true,
 }) => {
   const [value, setValue] = useState<string>(initialValue);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSearch = () => {
+    const trimmedValue = value.trim();
+    if (trimmedValue.length === 0) return;
 
-    if (value.trim().length === 0) {
-      return;
+    if (searchPageRouting) {
+      navigate(`/search?${trimmedValue}`);
     }
 
-    onSearch?.(value);
-    console.log('Search value:', value);
+    onSearch?.(trimmedValue);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSearch();
   };
 
   return (
     <SearchContainer onSubmit={handleSubmit}>
       <InputWrapper>
         <Input type="text" value={value} onChange={handleChange} placeholder={placeholder} />
-        <SearchButton type="submit" disabled={value.trim().length === 0}>
+        <SearchButton type="button" onClick={handleSearch} disabled={value.trim().length === 0}>
           <Search size={20} />
         </SearchButton>
       </InputWrapper>
