@@ -8,7 +8,7 @@ import { firstStepValidation, secondStepValidation, thirdStepValidation } from '
 import { fetchRegisterCar, IRegisterCarData } from 'api/registerCar/registerCarApi';
 
 function RegisterCarPage() {
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(0);
   const [registerCarData, setRegisterCarData] = useState<IRegisterCarData>({
     car_number: '',
     comments: '',
