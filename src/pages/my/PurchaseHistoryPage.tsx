@@ -5,6 +5,10 @@ import DropDownButton from "./components/DropDownButton";
 import styled from "styled-components";
 import { theme } from "styles/theme";
 import CarHistoryItem from "./components/CarHistoryItem";
+import SearchInput from "components/common/SearchInput";
+
+import temp from "../../assets/feed_sample.jpg"
+import CarData from "components/common/CarData";
 
 const Contents = styled.div`
 `
@@ -14,13 +18,12 @@ const SearchContainer = styled.div`
     display: flex;
     justify-content: space-between;
     padding : 15px;
-    gap:5px;
+    gap:8px;
 `
 
-const TempSearchBar = styled.div`
-    background-color : ${theme.colors.primary};
-    width: 70%;
-    height: 35px;
+const CarHistoryList = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 
 function PurchasePage() {
@@ -51,9 +54,11 @@ function PurchasePage() {
             
             <Contents>
                 <SearchContainer>
-                    <TempSearchBar>gdgd</TempSearchBar>
+                    <SearchInput/>
                     <DropDownButton/>
                 </SearchContainer>
+
+            <CarHistoryList>
 
                 <CarHistoryItem        
                     date="2025. 01. 23"
@@ -62,8 +67,64 @@ function PurchasePage() {
                     model="주문번호 A-123"
                     price="840만원"
                     monthlyPayment="월 15만원"
-                    imageUrl={'차이미지'}
+                    imageUrl={temp}
+                    isPurchase
+                    />
+                <CarHistoryItem        
+                    date="2025. 01. 23"
+                    status="시세 측정 중"
+                    title="자동차 모델 들어갈 자리"
+                    model="주문번호 A-123"
+                    price="840만원"
+                    monthlyPayment="월 15만원"
+                    imageUrl={temp}
+                    isPurchase
+                    />
+                                
+                <CarHistoryItem        
+                    date="2025. 01. 23"
+                    status="시세 측정 중"
+                    title="자동차 모델 들어갈 자리"
+                    model="주문번호 A-123"
+                    price="840만원"
+                    monthlyPayment="월 15만원"
+                    imageUrl={temp}
+                    isPurchase
                 />
+                
+                <CarHistoryItem        
+                    date="2025. 01. 23"
+                    status="시세 측정 중"
+                    title="자동차 모델 들어갈 자리"
+                    model="주문번호 A-123"
+                    price="840만원"
+                    monthlyPayment="월 15만원"
+                    imageUrl={temp}
+                    isPurchase
+                    />
+                
+                <CarHistoryItem        
+                    date="2025. 01. 23"
+                    status="시세 측정 중"
+                    title="자동차 모델 들어갈 자리"
+                    model="주문번호 A-123"
+                    price="840만원"
+                    monthlyPayment="월 15만원"
+                    imageUrl={temp}
+                    isPurchase
+                    />
+
+                <CarData 
+                    imageUrl={temp}
+                    title={"벤츠 E-클래스 5세대 E250 아방가르드 W213"} 
+                    year={"2018년 10월"} 
+                    mileage={"35,557km"} 
+                    price={"1000만원"} 
+                    tags={["as", "asas"]} 
+                    viewCount={102}
+                    postDate={new Date()}
+                    showTags showCheckbox showViewDate showHeartButton/>
+            </CarHistoryList>
             </Contents>
         </>
     )

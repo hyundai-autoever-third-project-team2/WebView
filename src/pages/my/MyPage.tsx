@@ -15,7 +15,7 @@ const Container = styled.div`
   background-color: #fff;
 `;
 
-const Header = styled.div`
+const ProfileContainer = styled.div`
   background-color: ${theme.colors.primary};
   padding: 20px;
   padding-top: 100px;
@@ -55,7 +55,7 @@ const StatItem = styled.div`
   text-align: center;
   flex: 1;
   cursor:pointer;
-  padding: 15px 0;
+  padding: 6px 0;
 
       &:first-child {
     border-right : 2px solid ${theme.colors.primary};
@@ -80,7 +80,7 @@ const StatLabel = styled.div`
 const QuickMenuList = styled.div`
   display: flex;
   gap: 20px;
-  padding: 20px 30px;
+  padding: 30px 30px;
   background-color: #FFF3E0;  
 `;
 
@@ -100,7 +100,7 @@ const QuickMenuItem = styled.div`
   border-radius: 12px;
   font-size: 14px;
   cursor:pointer;
-  padding: 20px 0;
+  padding: 12px 0;
 `;
 
 const MenuList = styled.div`
@@ -163,7 +163,7 @@ const STAT_ITEMS:StatItemProps[] = [
     value: 213, label: '판매 내역', path: '/my/register'
   },
   {
-    value: 23, label: '찜한 상품', path: '/my/purchase'
+    value: 23, label: '찜한 상품', path: '/wishlist'
   }
 ]
 
@@ -189,6 +189,9 @@ const QUICKMENU_ITEMS : MenuItemProps[] = [
 function MyPage() {
   const navigate = useNavigate();
 
+  const handleBackClick = () => {
+    navigate('/')
+  }
 
   const handleMenuClick = (menuType: string) => () => {
     log("메뉴클릭 : " + menuType);
@@ -207,9 +210,11 @@ function MyPage() {
         titleAlignment="left"
         rightButtons={['notificationWhite', 'settingWhite']}
         backgroundColor={theme.colors.primary}
+        onBackClick={handleBackClick}
+        color='white'
       />
       
-      <Header>
+      <ProfileContainer>
         <ProfileSection>
           <ProfileImage src={testProfile} alt="profile" />
           <ProfileText>
@@ -226,7 +231,7 @@ function MyPage() {
             </StatItem>
           ))}
         </StatsContainer>
-      </Header>
+      </ProfileContainer>
 
       <QuickMenuList>
         {QUICKMENU_ITEMS.map((item) => (

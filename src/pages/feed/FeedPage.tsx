@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import Stories from 'react-insta-stories';
 import styled from 'styled-components';
 import Feed from './Feed';
+import { UserStories } from 'types/story';
+import stories from 'mocks/storiesList';
+import { getElapsedTime } from 'utils/getElapsedTime';
 
 const StoryContainer = styled.div`
   position: fixed;
@@ -11,82 +14,60 @@ const StoryContainer = styled.div`
   bottom: 0;
 `;
 
-const FeedPage = () => {
+const mockApiResponse: UserStories[] = stories;
+
+// Stories 컴포넌트용 데이터 변환
+const transformToStoriesData = (apiData: UserStories[]) => {
+  return apiData.map((userData) => ({
+    username: userData.nickname,
+    profile: userData.profile,
+    stories: userData.stories.map((story) => ({
+      content: () => (
+        <Feed
+          username={userData.nickname}
+          profile={userData.profile}
+          ellapsedTime={getElapsedTime(story.createdAt)}
+          title={story.content}
+          tags={story.tags}
+          isLiked={story.isLiked}
+          src={story.imageUrl}
+        />
+      ),
+      duration: 3000,
+    })),
+  }));
+};
+
+// 컴포넌트에서 사용
+function FeedPage() {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [key, setKey] = useState(0);
-
-  const [usersStories, setUsersStories] = useState([
-    {
-      username: '현대자동차',
-      stories: [
-        {
-          url: 'https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380182231_ori.jpg',
-          content: (props: any) => <Feed />,
-        },
-
-        {
-          url: 'https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380182210_ori.jpg',
-          header: {
-            heading: '현대자동차',
-            subheading: '1시간 전',
-            profileImage: 'https://picsum.photos/40',
-          },
-        },
-      ],
-    },
-    {
-      username: 'BMW코리아',
-      stories: [
-        {
-          url: 'https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380182210_ori.jpg',
-          header: {
-            heading: 'BMW코리아',
-            subheading: '30분 전',
-            profileImage: 'https://picsum.photos/40',
-          },
-        },
-        {
-          url: 'https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380187565_ori.jpg',
-          header: {
-            heading: 'BMW코리아',
-            subheading: '1시간 전',
-            profileImage: 'https://picsum.photos/40',
-          },
-        },
-      ],
-    },
-  ]);
+  const [usersStories, setUsersStories] = useState([]);
 
   useEffect(() => {
-    // username이 변경되면 해당 유저의 index로 변경
-    const newIndex = usersStories.findIndex((user) => user.username === usersStories[currentUserIndex].username);
-    if (newIndex !== -1 && newIndex !== currentUserIndex) {
-      setCurrentUserIndex(newIndex);
-    }
-  }, [usersStories, currentUserIndex]);
+    // API 호출을 시뮬레이션
+    const fetchStories = async () => {
+      // 실제로는 API 호출
+      const response = mockApiResponse;
+      const transformedData = transformToStoriesData(response);
+      setUsersStories(transformedData);
+    };
+
+    fetchStories();
+  }, []);
 
   const onAllStoriesEnd = () => {
     if (currentUserIndex < usersStories.length - 1) {
       setCurrentUserIndex((prev) => prev + 1);
-      setCurrentStoryIndex(0); // 스토리 인덱스 초기화
-      setKey((prev) => prev + 1); // Stories 컴포넌트 리렌더링
+      setCurrentStoryIndex(0);
+      setKey((prev) => prev + 1);
     } else {
-      console.log('스토리 재생 완료');
+      console.log('모든 스토리 재생 완료');
     }
   };
 
-  const storiesProps = {
-    width: '100%',
-    height: '100vh',
-    defaultInterval: 3000,
-    storyStyles: {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-    },
-    currentIndex: currentStoryIndex,
-  };
+  if (usersStories.length === 0) return null;
 
   return (
     <StoryContainer>
@@ -94,11 +75,14 @@ const FeedPage = () => {
         key={key}
         stories={usersStories[currentUserIndex].stories}
         onAllStoriesEnd={onAllStoriesEnd}
-        {...storiesProps}
+        width="100%"
+        height="100vh"
+        defaultInterval={3000}
         isPaused={false}
+        currentIndex={currentStoryIndex}
       />
     </StoryContainer>
   );
-};
+}
 
 export default FeedPage;
