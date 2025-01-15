@@ -34,6 +34,7 @@ const colors = {
     master: '#FF033E',
     kakao: '#FEE500',
     text: '#f0f0f0',
+    gray: 'rgba(62,56,96,0.47)',
 } as const;
   
 const fontSize = {

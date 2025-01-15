@@ -1,4 +1,4 @@
-import CarData from "components/common/CarData"
+import CarData from "components/common/CarCard"
 import Toolbar from "components/common/Toolbar"
 import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
@@ -9,6 +9,7 @@ import { keyframes, css } from 'styled-components';
 import temp from "../../assets/feed_sample.jpg"
 import { theme } from "styles/theme"
 import { useEffect, useState } from "react"
+import CarCard from "components/common/CarCard"
 
 const slideUp = keyframes`
   from {
@@ -58,7 +59,7 @@ const SelectModal = styled.div<{ $isClosing?: boolean }>`
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 15rem;
+  height: 14rem;
   z-index: 10000;
   border-radius: 20px 20px 0 0; 
   animation: ${props => props.$isClosing ? 
@@ -116,7 +117,7 @@ const SelectedItem = styled.div`
 
 const CompareActionButton = styled.button<{ disabled: boolean }>`
   padding: 12px 24px;
-  background-color: ${props => props.disabled ? '#ccc' : theme.colors.primary};
+  background-color: ${props => props.disabled ? 'rgba(62,56,96,0.37)' : theme.colors.primary};
   color: white;
   border: none;
   border-radius: 8px;
@@ -125,9 +126,6 @@ const CompareActionButton = styled.button<{ disabled: boolean }>`
   cursor: ${props => props.disabled ? 'default' : 'pointer'};
   margin-top: 16px;
 
-  &:hover {
-    background-color: ${props => props.disabled ? '#ccc' : theme.colors.primaryDark};
-  }
 `;
 
 function WishlistPage() {
@@ -198,9 +196,8 @@ function WishlistPage() {
       alert('2대 이상의 차량을 선택해주세요.');
       return;
     }
-    // 비교 페이지로 이동 또는 비교 로직 실행
-    console.log('Selected cars for comparison:', selectedCars);
-    // navigate('/compare', { state: { cars: selectedCars } });
+    
+    navigate('/compare', { state: { cars: selectedCars } });
   };
 
   return (
@@ -215,7 +212,7 @@ function WishlistPage() {
         )}
         <WishList>
           {carList.map(car => (
-            <CarData 
+            <CarCard 
               key={car.id}
               imageUrl={car.imageUrl}
               title={car.title}
@@ -227,7 +224,6 @@ function WishlistPage() {
               isLiked={car.isLiked}
               postDate={car.postDate}
               showTags
-              showViewDate
               showHeartButton
               showCheckbox={showCheckboxes}
               checked={selectedCars.some(selected => selected.id === car.id)}
@@ -244,7 +240,7 @@ function WishlistPage() {
             <CancelButton src={XButton} onClick={handleXButtonClick}/>
             <ModalContent>
               <SelectedCount>
-                선택된 차량: {selectedCars.length}대
+                {selectedCars.length < 2 ? "비교 할 차량을 선택 해주세요" : `${selectedCars.length}대의 차량 비교하기`}
               </SelectedCount>
               {/* {selectedCars.length > 0 && (
                 <SelectedList>

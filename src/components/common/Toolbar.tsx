@@ -12,6 +12,7 @@ import BackIconWhite from '../../assets/icon_back_white.svg';
 import LikedIcon from 'assets/icon_heart.svg';
 import LikedFillIcon from 'assets/icon_heart_fill.svg';
 
+
 export { Title, ToolbarContainer };
 
 //버튼 종류 늘어날 시 추가하시길 .. + getIconComponent 로 아이콘 import , clickbutton 이벤트로 동작 설정
@@ -35,7 +36,7 @@ const ToolbarContainer = styled.header<{ $backgroundColor?: string; $color?: str
   top: 0;
   width: 100%;
   max-width: 768px;
-  height: ${LAYOUT.Toolbar_HEIGHT};
+  height: ${LAYOUT.TOOLBAR_HEIGHT};
   z-index: 100;
   display: flex;
   align-items: center;
@@ -127,6 +128,7 @@ const handleSettingButtonClick = () => {
 const handleLikedButtonClick = () => {
   console.log('TODO : 찜하기 기능 동작');
 };
+
 
 const Toolbar: React.FC<ToolbarProps> = ({
   showBackButton = false,

@@ -67,13 +67,13 @@ const StatItem = styled.div`
 `;
 
 const StatValue = styled.div`
-  font-size: 24px;
+  font-size: 1rem;
   font-weight: bold;
   margin-bottom: 5px;
 `;
 
 const StatLabel = styled.div`
-  font-size: 14px;
+  font-size: 0.8rem;
   margin-top: 4px;
 `;
 
@@ -85,8 +85,8 @@ const QuickMenuList = styled.div`
 `;
 
 const QuickMenuIcon = styled.img`
-  width:30px;
-  height:30px;
+  width:1.6rem;
+  height:1.6rem;
   margin-bottom : 10px;
 `
 
@@ -98,7 +98,7 @@ const QuickMenuItem = styled.div`
   padding: 16px;
   background-color: white;
   border-radius: 12px;
-  font-size: 14px;
+  font-size: 0.8rem;
   cursor:pointer;
   padding: 12px 0;
 `;

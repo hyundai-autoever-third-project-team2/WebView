@@ -24,6 +24,25 @@ function HomePage() {
     navigate('/notification');
   }
 
+  function handleCarListButtonClick(type: string) {
+    switch (type) {
+      case 'DOMESTIC':
+        navigate('/car-list/domestic');
+        break;
+      case 'FOREIGN':
+        navigate('/car-list/foreign');
+        break;
+      case 'DISCOUNT':
+        navigate('/car-list/discount');
+        break;
+      case 'TOP_50':
+        navigate('/car-list/top50');
+        break;
+      default:
+        navigate('/car-list');
+    }
+  }
+
   const carList: CarData[] = [...CarList];
 
   return (
@@ -39,25 +58,25 @@ function HomePage() {
       <S.HomePageContainer>
         <SearchInput />
         <S.IconSection>
-          <S.IconWrapper>
+          <S.IconWrapper onClick={() => handleCarListButtonClick('DOMESTIC')}>
             <S.IconInnerWrapper>
               <img src={RedCar} />
               <span>국산차</span>
             </S.IconInnerWrapper>
           </S.IconWrapper>
-          <S.IconWrapper>
+          <S.IconWrapper onClick={() => handleCarListButtonClick('FOREIGN')}>
             <S.IconInnerWrapper>
               <img src={GreenCar} />
               <span>수입차</span>
             </S.IconInnerWrapper>
           </S.IconWrapper>
-          <S.IconWrapper>
+          <S.IconWrapper onClick={() => handleCarListButtonClick('DISCOUNT')}>
             <S.IconInnerWrapper>
               <img src={Discount} />
               <span>특가</span>
             </S.IconInnerWrapper>
           </S.IconWrapper>
-          <S.IconWrapper>
+          <S.IconWrapper onClick={() => handleCarListButtonClick('TOP_50')}>
             <S.IconInnerWrapper>
               <img src={Podium} />
               <span>TOP50</span>

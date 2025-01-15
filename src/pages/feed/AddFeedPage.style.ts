@@ -3,7 +3,7 @@ import { LAYOUT } from 'styles/constants';
 
 export const AddFeedPageContainer = styled.div`
   display: flex;
-  margin-top: ${LAYOUT.APP_BAR_HEIGHT};
+  margin-top: ${LAYOUT.TOOLBAR_HEIGHT};
   padding: 20px 20px 0 20px;
   flex-direction: column;
 `;
