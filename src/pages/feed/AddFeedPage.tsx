@@ -1,3 +1,4 @@
+import * as S from './AddFeedPage.style';
 import Button from 'components/common/Button';
 import { ImageUploadButton } from 'components/common/ImageUploadButton';
 import Toolbar from 'components/common/Toolbar';
@@ -5,120 +6,7 @@ import { Camera, PenLine, Tag as TagIcon, X } from 'lucide-react';
 import { TextArea } from 'pages/registerCar/RegisterCarPage.style';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { LAYOUT } from 'styles/constants';
 import AddImageBackground from 'assets/add_image_background.png';
-
-const AddFeedPageContainer = styled.div`
-  display: flex;
-  margin-top: ${LAYOUT.APP_BAR_HEIGHT};
-  padding: 20px 20px 0 20px;
-  flex-direction: column;
-`;
-
-const AddImageSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const TitleWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: ${({ theme }) => theme.fontSize.lg};
-  font-weight: ${({ theme }) => theme.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.neutral800};
-
-  svg {
-    margin-left: 0px;
-    margin-right: 10px;
-    color: ${({ theme }) => theme.colors.primary};
-  }
-`;
-
-const AddContentSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 30px;
-  gap: 10px;
-`;
-
-const AddTagSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 30px;
-  gap: 10px;
-`;
-
-const TagInputContainer = styled.div`
-  position: relative;
-`;
-
-const TagInput = styled.input`
-  width: auto;
-  padding: 8px 35px 8px 12px;
-  border-radius: ${({ theme }) => theme.borderRadius.xs};
-  border: solid ${({ theme }) => theme.colors.primary};
-  border-width: 1px;
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  transition: all 0.3s ease-in-out;
-
-  &:focus {
-    outline: none;
-    border-width: 2px;
-  }
-
-  &::placeholder {
-    color: ${({ theme }) => theme.colors.neutral400};
-  }
-`;
-
-const AddTagButton = styled.button`
-  position: absolute;
-  right: 58%;
-  top: 15px;
-  transform: translateY(-50%);
-  color: ${({ theme }) => theme.colors.primary};
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 0;
-  pointer-events: auto;
-  z-index: 1;
-`;
-
-const TagsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-`;
-
-const TagItem = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: ${({ theme }) => theme.colors.neutral100};
-  padding: 10px;
-  border-radius: 16px;
-  font-size: ${({ theme }) => theme.fontSize.sm};
-  color: ${({ theme }) => theme.colors.neutral800};
-
-  button {
-    background: none;
-    border: none;
-    padding: 0;
-    margin-left: 6px;
-    cursor: pointer;
-    color: ${({ theme }) => theme.colors.neutral500};
-    display: flex;
-    align-items: center;
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.neutral700};
-    }
-  }
-`;
 
 function AddFeedPage() {
   const [content, setContent] = useState<string>('');
@@ -167,35 +55,36 @@ function AddFeedPage() {
           navigate('/feed');
         }}
       />
-      <AddFeedPageContainer>
-        <AddImageSection>
-          <TitleWrapper>
+      <S.AddFeedPageContainer>
+        <S.AddImageSection>
+          <S.TitleWrapper>
             <Camera size={24} />
             차량 사진
-          </TitleWrapper>
+          </S.TitleWrapper>
           <ImageUploadButton
+            index={0}
             width={200}
             height={200}
             backgroundImage={AddImageBackground}
             handleUploadImage={() => {}}
           />
-        </AddImageSection>
+        </S.AddImageSection>
 
-        <AddContentSection>
-          <TitleWrapper>
+        <S.AddContentSection>
+          <S.TitleWrapper>
             <PenLine size={24} />
             본문
-          </TitleWrapper>
+          </S.TitleWrapper>
           <TextArea placeholder="내 차를 소개해보세요." value={content} onChange={handleContentChange} required />
-        </AddContentSection>
+        </S.AddContentSection>
 
-        <AddTagSection>
-          <TitleWrapper>
+        <S.AddTagSection>
+          <S.TitleWrapper>
             <TagIcon size={24} />
             태그
-          </TitleWrapper>
-          <TagInputContainer>
-            <TagInput
+          </S.TitleWrapper>
+          <S.TagInputContainer>
+            <S.TagInput
               maxLength={10}
               type="text"
               placeholder="태그"
@@ -203,24 +92,24 @@ function AddFeedPage() {
               onChange={handleTagInputChange}
               onKeyDown={handleTagKeyDown}
             />
-            <AddTagButton onClick={addTag}>+</AddTagButton>
-          </TagInputContainer>
-          <TagsContainer>
+            <S.AddTagButton onClick={addTag}>+</S.AddTagButton>
+          </S.TagInputContainer>
+          <S.TagsContainer>
             {tags.map((tag, index) => (
-              <TagItem key={index}>
+              <S.TagItem key={index}>
                 {tag}
                 <button onClick={() => removeTag(index)}>
                   <X size={14} />
                 </button>
-              </TagItem>
+              </S.TagItem>
             ))}
-          </TagsContainer>
-        </AddTagSection>
+          </S.TagsContainer>
+        </S.AddTagSection>
 
         <Button fixed onClick={handleUploadButtonClick}>
           등록
         </Button>
-      </AddFeedPageContainer>
+      </S.AddFeedPageContainer>
     </>
   );
 }

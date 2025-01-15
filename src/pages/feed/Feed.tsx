@@ -4,6 +4,87 @@ import { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+export interface FeedProps {
+  username: string;
+  profile: string;
+  ellapsedTime: string;
+  title: string;
+  tags: string[];
+  isLiked?: boolean;
+  src: string;
+}
+
+function Feed({ username, profile, ellapsedTime, title, tags, src, isLiked }: FeedProps) {
+  const [isMenuOpen, toggleMenu] = useReducer((v) => !v, false);
+  const [isLikedState, toggleLike] = useReducer((v) => !v, !!isLiked);
+  const navigate = useNavigate();
+
+  const handleArrowLeftClick = () => {
+    navigate('/');
+  };
+
+  const handleAddFeed = () => {
+    navigate('/feed/add');
+  };
+
+  const handleReportFeed = () => {
+    window.confirm('신고하시겠습니까?');
+  };
+
+  const handleLikeButton = () => {
+    toggleLike();
+  };
+
+  return (
+    <FeedContainer>
+      <FeedHeader>
+        <FeedHeaderLeft>
+          <ArrowLeft color="white" onClick={handleArrowLeftClick} />
+          <Profile src={profile} />
+          <FeedHeaderText>
+            <Nickname>{username}</Nickname>
+            <ElapsedTime>{ellapsedTime}</ElapsedTime>
+          </FeedHeaderText>
+        </FeedHeaderLeft>
+      </FeedHeader>
+      <ThreeDotsButton onClick={toggleMenu}>
+        <EllipsisVertical color="white" />
+      </ThreeDotsButton>
+      {isMenuOpen && (
+        <DropdownMenu>
+          <DropdownMenuItem onClick={handleAddFeed}>
+            <Camera size={20} />내 차도 자랑하기
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleReportFeed} style={{ color: 'red' }}>
+            <Flag size={20} />
+            부적절한 피드 신고
+          </DropdownMenuItem>
+        </DropdownMenu>
+      )}
+      <FeedImage src={src} />
+      <BottomSection>
+        <BottomSectionCotent>
+          <FeedTitle>{title}</FeedTitle>
+          <FeedTagWrapper>
+            {tags.map((tag) => (
+              <FeedTag key={tag}>#{tag}&nbsp;</FeedTag>
+            ))}
+          </FeedTagWrapper>
+        </BottomSectionCotent>
+        <BottomButtonSection>
+          <BottomButton onClick={handleLikeButton}>
+            <StyledHeart isLiked={isLikedState} />
+            좋아요
+          </BottomButton>
+          <BottomButton></BottomButton>
+        </BottomButtonSection>
+      </BottomSection>
+    </FeedContainer>
+  );
+}
+
+export default Feed;
+
 const FeedContainer = styled.div`
   display: flex;
   width: 100%;
@@ -162,84 +243,3 @@ const FeedImage = styled.img`
   height: 100%;
   object-fit: contain;
 `;
-
-export interface FeedProps {
-  username: string;
-  profile: string;
-  ellapsedTime: string;
-  title: string;
-  tags: string[];
-  isLiked?: boolean;
-  src: string;
-}
-
-function Feed({ username, profile, ellapsedTime, title, tags, src, isLiked }: FeedProps) {
-  const [isMenuOpen, toggleMenu] = useReducer((v) => !v, false);
-  const [isLikedState, toggleLike] = useReducer((v) => !v, !!isLiked);
-  const navigate = useNavigate();
-
-  const handleArrowLeftClick = () => {
-    navigate('/');
-  };
-
-  const handleAddFeed = () => {
-    navigate('/feed/add');
-  };
-
-  const handleReportFeed = () => {
-    window.confirm('신고하시겠습니까?');
-  };
-
-  const handleLikeButton = () => {
-    toggleLike();
-  };
-
-  return (
-    <FeedContainer>
-      <FeedHeader>
-        <FeedHeaderLeft>
-          <ArrowLeft color="white" onClick={handleArrowLeftClick} />
-          <Profile src={profile} />
-          <FeedHeaderText>
-            <Nickname>{username}</Nickname>
-            <ElapsedTime>{ellapsedTime}</ElapsedTime>
-          </FeedHeaderText>
-        </FeedHeaderLeft>
-      </FeedHeader>
-      <ThreeDotsButton onClick={toggleMenu}>
-        <EllipsisVertical color="white" />
-      </ThreeDotsButton>
-      {isMenuOpen && (
-        <DropdownMenu>
-          <DropdownMenuItem onClick={handleAddFeed}>
-            <Camera size={20} />내 차도 자랑하기
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleReportFeed} style={{ color: 'red' }}>
-            <Flag size={20} />
-            부적절한 피드 신고
-          </DropdownMenuItem>
-        </DropdownMenu>
-      )}
-      <FeedImage src={src} />
-      <BottomSection>
-        <BottomSectionCotent>
-          <FeedTitle>{title}</FeedTitle>
-          <FeedTagWrapper>
-            {tags.map((tag) => (
-              <FeedTag key={tag}>#{tag}&nbsp;</FeedTag>
-            ))}
-          </FeedTagWrapper>
-        </BottomSectionCotent>
-        <BottomButtonSection>
-          <BottomButton onClick={handleLikeButton}>
-            <StyledHeart isLiked={isLikedState} />
-            좋아요
-          </BottomButton>
-          <BottomButton></BottomButton>
-        </BottomButtonSection>
-      </BottomSection>
-    </FeedContainer>
-  );
-}
-
-export default Feed;
