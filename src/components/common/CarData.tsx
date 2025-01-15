@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { theme } from "styles/theme";
 import Checkbox from "./CheckBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CarDataProps {
   imageUrl: string; //사진
@@ -45,7 +45,7 @@ const InfoContainer = styled.div`
 `;
 
 const CarTitle = styled.h3`
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   margin-bottom: 4px;
 `;
@@ -84,7 +84,7 @@ const CarPrice = styled.div`
   font-size: 12px;
   font-weight: 500;
   position: absolute;
-  bottom: 0;
+  bottom: 4px;
 `;
 
 const ActionsWrapper = styled.div`
@@ -110,7 +110,7 @@ const HeartButton = styled.button`
 
 const ViewDate = styled.div`
     position: absolute;
-    bottom: 0;
+    bottom: 4px;
     right: 1rem;
 `
 
@@ -132,6 +132,7 @@ const FilledHeartIcon = () => (
   </svg>
 );
 
+
 function CarData({
   imageUrl,
   title,
@@ -152,6 +153,11 @@ function CarData({
 }: CarDataProps) {
   const [internalChecked, setInternalChecked] = useState(checked);
   const [internalLiked, setInternalLiked] = useState(isLiked);
+
+  useEffect(() => {
+    setInternalChecked(false);
+  },[showCheckbox])
+  
 
   const handleCheckChange = (newChecked: boolean) => {
     setInternalChecked(newChecked);
@@ -180,7 +186,7 @@ function CarData({
         <CarPrice>{price}</CarPrice>
         {showViewDate && (<ViewDate>
             <ViewText>{viewCount}</ViewText>
-            <ViewText>{postDate?.toDateString()}</ViewText>
+            <ViewText>{postDate?.toLocaleString()}</ViewText>
         </ViewDate>)}
       </InfoContainer>
       <ActionsWrapper>

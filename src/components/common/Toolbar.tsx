@@ -25,10 +25,11 @@ interface ToolbarProps {
   titleAlignment?: 'center' | 'left';
   rightButtons?: ButtonType[];
   backgroundColor?: string;
+  color?: string;
   onBackClick?: () => void;
 }
 
-const ToolbarContainer = styled.header<{ $backgroundColor?: string }>`
+const ToolbarContainer = styled.header<{ $backgroundColor?: string; $color?:string }>`
   position: fixed;
   top: 0;
   width: 100%;
@@ -47,6 +48,13 @@ const ToolbarContainer = styled.header<{ $backgroundColor?: string }>`
       background: ${$backgroundColor};
       border-bottom: none;
     `}
+  
+  ${({$color}) =>
+    $color &&
+    css`
+      color: ${$color};
+    `
+  }
 `;
 
 const LeftSection = styled.div<{ $isLeftAligned: boolean; $showBackButton: boolean; $showBackButtonWhite: boolean }>`
@@ -127,6 +135,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   titleAlignment = 'center',
   rightButtons = [],
   backgroundColor,
+  color,
   onBackClick,
 }) => {
   // 우측 버튼 아이콘 설정
@@ -164,7 +173,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   };
 
   return (
-    <ToolbarContainer $backgroundColor={backgroundColor}>
+    <ToolbarContainer $backgroundColor={backgroundColor} $color={color}>
       <LeftSection $isLeftAligned={titleAlignment === 'left'} $showBackButton={showBackButton} $showBackButtonWhite={showBackButtonWhite}>      
         {showBackButton && (
           <IconButton onClick={onBackClick} aria-label="Back">

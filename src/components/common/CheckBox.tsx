@@ -1,4 +1,3 @@
-// Checkbox.tsx
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
@@ -12,6 +11,8 @@ interface CheckboxProps {
 }
 
 const CheckboxContainer = styled.label<{ disabled?: boolean }>`
+    display: flex;
+    justify-content: center;
   align-items: center;
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
   opacity: ${props => props.disabled ? 0.5 : 1};
