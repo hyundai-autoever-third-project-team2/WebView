@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
+import { CarDetailPage } from 'pages/carDetail/CarDetailPage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -75,6 +76,10 @@ const webviewRouter: RouteObject[] = [
       {
         path: 'my/register',
         element: <RegisterHistoryPage />,
+      },
+      {
+        path: 'car-detail/:id',
+        element: <CarDetailPage />,
       },
     ],
   },
