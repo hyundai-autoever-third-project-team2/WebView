@@ -163,7 +163,7 @@ const STAT_ITEMS:StatItemProps[] = [
     value: 213, label: '판매 내역', path: '/my/register'
   },
   {
-    value: 23, label: '찜한 상품', path: '/my/purchase'
+    value: 23, label: '찜한 상품', path: '/wishlist'
   }
 ]
 
@@ -189,6 +189,9 @@ const QUICKMENU_ITEMS : MenuItemProps[] = [
 function MyPage() {
   const navigate = useNavigate();
 
+  const handleBackClick = () => {
+    navigate('/')
+  }
 
   const handleMenuClick = (menuType: string) => () => {
     log("메뉴클릭 : " + menuType);
@@ -207,6 +210,8 @@ function MyPage() {
         titleAlignment="left"
         rightButtons={['notificationWhite', 'settingWhite']}
         backgroundColor={theme.colors.primary}
+        onBackClick={handleBackClick}
+        color='white'
       />
       
       <ProfileContainer>
