@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { theme } from "styles/theme";
 import Checkbox from "./CheckBox";
 import { useEffect, useState } from "react";
+import ICarData from "types/carData";
 
 interface CarDataProps {
   imageUrl: string; //사진
@@ -22,8 +23,29 @@ interface CarDataProps {
   onLikeChange?: (liked: boolean) => void; // 좋아요 눌렸을때 온체인지함수
 }
 
+// export interface CarData {
+//   id: number;
+//   brand: string;
+//   model: string;
+//   price: string;
+//   views: number;
+//   lastDate: number;
+//   modelYear: string;
+//   dist: string;
+//   carNumber: string;
+//   fuel: string;
+//   gear: string;
+//   gasMileage: string;
+//   carType: string;
+//   displacement: string;
+//   color: string;
+//   imageUrlList: string[];
+//   options: boolean[];
+//   fixedLogImageList: string[];
+// }
+
 const Content = styled.div`
-  /* width: 100%; */
+  width: 100%;
   display: flex;
   gap: 8px;
 `;
@@ -38,7 +60,6 @@ const CarImage = styled.img`
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
   min-height: 100px;
   position: relative;
   padding: 4px;
@@ -133,7 +154,7 @@ const FilledHeartIcon = () => (
 );
 
 
-function CarData({
+function CarCard({
   imageUrl,
   title,
   year,
@@ -205,4 +226,4 @@ function CarData({
   );
 }
 
-export default CarData;
+export default CarCard;

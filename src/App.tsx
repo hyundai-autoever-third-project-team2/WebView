@@ -16,6 +16,7 @@ const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
 const RegisterHistoryPage = lazy(() => import('pages/my/RegisterHistoryPage'));
 const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
 const PurchaseCarPage = lazy(() => import('pages/purchaseCar/PurchaseCarPage'));
+const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
 
 const webviewRouter: RouteObject[] = [
@@ -88,6 +89,10 @@ const webviewRouter: RouteObject[] = [
       {
         path: 'purchase/:id',
         element: <PurchaseCarPage />,
+      },
+      {
+        path: 'compare',
+        element: <ComparePage />,
       },
     ],
   },
