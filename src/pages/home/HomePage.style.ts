@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { media } from 'styles/media';
 import { LAYOUT } from 'styles/constants';
-import { Bell } from 'lucide-react';
 import { Swiper } from 'swiper/react';
+import Bell from 'assets/icon_notification_white.svg?react';
 
 export const Header = styled.div`
   position: fixed;
@@ -32,7 +32,9 @@ export const HeaderTitle = styled.h1`
 `;
 
 export const NotificationButton = styled(Bell)`
-  color: ${({ theme }) => theme.colors.primary};
+  path {
+    fill: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 export const HomePageContainer = styled.div`
