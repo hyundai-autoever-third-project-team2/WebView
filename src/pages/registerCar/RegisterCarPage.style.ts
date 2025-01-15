@@ -51,19 +51,22 @@ export const SubTitle = styled.div`
 `;
 
 export const TextArea = styled.textarea`
-  width: 320px;
+  width: 100%;
   height: 140px;
   flex-shrink: 0;
   border-radius: 4px;
-  border: 1px solid #ff9d00;
+  border: solid #ff9d00;
+  border-width: 1px;
   background: #fff;
   resize: none;
   padding: 12px;
   font-family: Pretendard;
   font-size: 16px;
+  transition: all 0.3s ease-in-out;
 
   &:focus {
-    border: 2px solid ${theme.colors.primary};
+    border-width: 2px;
+    border-color: ${theme.colors.primary};
     outline: none;
   }
 `;

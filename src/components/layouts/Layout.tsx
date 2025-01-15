@@ -4,14 +4,15 @@ import { GlobalStyle } from 'styles/GlobalStyle';
 import Loading from 'components/common/Loading';
 
 interface LayoutProps {
-  type: 'mobile' | 'admin';
+  type: 'mobile';
+  hasNavBar?: boolean;
   children?: React.ReactNode;
 }
 
-export function Layout({ type, children }: LayoutProps) {
+export function Layout({ type, hasNavBar, children }: LayoutProps) {
   return (
     <>
-      <GlobalStyle type={type} />
+      <GlobalStyle type={type} hasNavBar={hasNavBar} />
       <Suspense fallback={<Loading />}>
         <Outlet />
         {children}

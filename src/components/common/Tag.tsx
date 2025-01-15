@@ -2,29 +2,31 @@ import styled from 'styled-components';
 
 interface TagProps {
   label: string;
+  width?: number;
   onClick?: () => void;
 }
 
-const TagContainer = styled.div`
+const TagContainer = styled.div<{ $width?: number }>`
   display: flex;
   justify-content: center;
-  width: 40px;
+  width: ${({ $width }) => `${$width}px` || '40px'};
   background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.xs};
-  padding: 7px 3px;
+  border-radius: 6px;
+  padding: 7px 4px;
 `;
 
 const TagWrapper = styled.div`
   display: flex;
   color: #ffffff;
-  font-weight: ${({ theme }) => theme.fontWeight.light};
+  font-weight: ${({ theme }) => theme.fontWeight.medium};
   font-size: ${({ theme }) => theme.fontSize.sm};
+  letter-spacing: 0.25px;
 `;
 
-function Tag({ label }: TagProps) {
+function Tag({ label, width }: TagProps) {
   return (
-    <TagContainer>
-      <TagWrapper>#{label}</TagWrapper>
+    <TagContainer $width={width}>
+      <TagWrapper># {label}</TagWrapper>
     </TagContainer>
   );
 }
