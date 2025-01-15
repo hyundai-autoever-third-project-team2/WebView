@@ -10,7 +10,7 @@ const NotificationPageContainer = styled.div`
   flex-direction: column;
   /* padding: 20px; */
   gap: 20px;
-  margin-top: ${LAYOUT.APP_BAR_HEIGHT};
+  margin-top: ${LAYOUT.TOOLBAR_HEIGHT};
 `;
 
 const mockApiResponse = notificationList;

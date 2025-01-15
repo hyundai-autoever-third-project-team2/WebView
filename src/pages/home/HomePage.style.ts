@@ -8,7 +8,7 @@ export const Header = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
-  height: ${LAYOUT.APP_BAR_HEIGHT};
+  height: ${LAYOUT.TOOLBAR_HEIGHT};
   z-index: 100;
   display: flex;
   align-items: center;
