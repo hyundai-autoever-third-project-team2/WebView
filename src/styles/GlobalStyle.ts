@@ -1,7 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import { mobileStyles, mobileInputStyles } from './Layout.styles';
 
-export const GlobalStyle = createGlobalStyle<{ type: 'mobile' }>`
+export const GlobalStyle = createGlobalStyle<{ type: 'mobile'; hasNavBar?: boolean }>`
   * {
     margin: 0 auto;
     padding: 0;
@@ -15,7 +15,7 @@ export const GlobalStyle = createGlobalStyle<{ type: 'mobile' }>`
 
   html, body {
     background-color: #FFFFFF;
-    ${({ type }) => type === 'mobile' && mobileStyles}
+    ${({ type, hasNavBar }) => type === 'mobile' && mobileStyles(hasNavBar)}
   }
 
   ${({ type }) => type === 'mobile' && mobileInputStyles}
