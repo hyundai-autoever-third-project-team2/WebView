@@ -1,5 +1,5 @@
 import Toolbar from 'components/common/Toolbar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import * as S from './CarDetailPage.style';
 import Tag from 'components/common/Tag';
 import { CarDetailSwiper } from './CarDetailSwiper';
@@ -15,6 +15,7 @@ const optionList = ['네비게이션', 'HUD', '통풍시트', '열선시트', '�
 
 export const CarDetailPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const handleBackClick = () => {
