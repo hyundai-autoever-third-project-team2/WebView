@@ -298,7 +298,7 @@ const QuestionColor = ({ nextStep }: ISurveyProps) => {
   );
 };
 
-const SurveyLastPage = () => {
+const SurveyLastPage = ({ handleSubmitSurvey }: { handleSubmitSurvey: () => void }) => {
   return (
     <S.SurveyIntroWrapper>
       <S.SurveyMessage>
@@ -306,7 +306,7 @@ const SurveyLastPage = () => {
         내게 맞는 차를
         만나러 가볼까요?`}
       </S.SurveyMessage>
-      <Button>시작하기</Button>
+      <Button onClick={handleSubmitSurvey}>시작하기</Button>
     </S.SurveyIntroWrapper>
   );
 };
@@ -321,7 +321,8 @@ export const SurveyModal = ({ closeModal }: ISurveyModal) => {
   };
 
   const handleSubmitSurvey = async () => {
-    // TODO: 설문조사 요청 API 호출
+    // TODO: 설문조사 API 호출
+    closeModal();
   };
 
   let height = '30%';
@@ -349,7 +350,7 @@ export const SurveyModal = ({ closeModal }: ISurveyModal) => {
         {step === 2 && <QuestionDistance nextStep={handleNextStep} />}
         {step === 3 && <QuestionModel nextStep={handleNextStep} />}
         {step === 4 && <QuestionColor nextStep={handleNextStep} />}
-        {step === 5 && <SurveyLastPage />}
+        {step === 5 && <SurveyLastPage handleSubmitSurvey={handleSubmitSurvey} />}
       </S.ModalWrapper>
       <S.ModalOverlay />
     </>
