@@ -16,9 +16,21 @@ import RedCar from 'assets/car_red.png';
 import GreenCar from 'assets/car_green.png';
 import Discount from 'assets/discount.png';
 import Podium from 'assets/podium.png';
+import { ModalPortal } from 'components/common/Modal/ModalPortal';
+import { SurveyModal } from 'components/common/Modal/SurveyModal';
+import { useModal } from 'hooks/useModal';
+import { useEffect } from 'react';
 
 function HomePage() {
   const navigate = useNavigate();
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  useEffect(() => {
+    if (!localStorage.getItem('newUser')) {
+      openModal();
+      localStorage.setItem('newUser', 'true');
+    }
+  }, []);
 
   function handleNotificationButtonClick() {
     navigate('/notification');
@@ -160,6 +172,11 @@ function HomePage() {
         <span>공지</span>
         타볼카 1.0.0 출시
       </S.AnnouncementSection>
+      {isModalOpen && (
+        <ModalPortal>
+          <SurveyModal closeModal={closeModal} />
+        </ModalPortal>
+      )}
     </>
   );
 }
