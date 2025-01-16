@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Stories from 'react-insta-stories';
 import styled from 'styled-components';
 import Feed from './Feed';
-import { UserStories } from 'types/story';
+import { UserStories } from 'types/Story';
 import stories from 'mocks/storiesList';
 import { getElapsedTime } from 'utils/getElapsedTime';
 
