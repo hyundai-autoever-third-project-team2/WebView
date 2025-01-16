@@ -4,18 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import SearchInput from 'components/common/SearchInput';
 import { BadgeCheck, ChevronRight } from 'lucide-react';
 import CarList from '../../mocks/carList';
-import CarData from 'types/carData';
+import CarData from 'types/CarData';
 import { SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
-// @ts-ignore
 import 'swiper/css';
-// @ts-ignore
 import 'swiper/css/pagination';
 import Profile from 'components/common/Profile';
 import RedCar from 'assets/car_red.png';
 import GreenCar from 'assets/car_green.png';
 import Discount from 'assets/discount.png';
 import Podium from 'assets/podium.png';
+import Advertisement1 from 'assets/advertisement1.png';
+import Advertisement2 from 'assets/advertisement2.png';
+import Advertisement3 from 'assets/advertisement3.png';
+import Advertisement4 from 'assets/advertisement4.png';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -44,6 +46,25 @@ function HomePage() {
   }
 
   const carList: CarData[] = [...CarList];
+
+  const advertisementList: { imageUrl: string; title: string }[] = [
+    {
+      imageUrl: Advertisement1,
+      title: '광고1',
+    },
+    {
+      imageUrl: Advertisement2,
+      title: '광고2',
+    },
+    {
+      imageUrl: Advertisement3,
+      title: '광고3',
+    },
+    {
+      imageUrl: Advertisement4,
+      title: '광고4',
+    },
+  ];
 
   return (
     <>
@@ -84,11 +105,22 @@ function HomePage() {
           </S.IconWrapper>
         </S.IconSection>
 
-        <S.StyledSwiper>
-          <SwiperSlide>
-            <S.AdSection>광고 배너</S.AdSection>
-          </SwiperSlide>
-        </S.StyledSwiper>
+        <S.StyledAdSwiper
+          modules={[Autoplay, Pagination]}
+          autoplay={{ delay: 3000 }}
+          slidesPerView={1}
+          pagination={{ clickable: true }}
+          loop={true}
+          className="mySwiper"
+        >
+          {advertisementList.map((ad) => (
+            <SwiperSlide key={ad.title}>
+              <S.AdSection>
+                <S.Advertisement src={ad.imageUrl} alt={ad.title} />
+              </S.AdSection>
+            </SwiperSlide>
+          ))}
+        </S.StyledAdSwiper>
 
         <S.RecommendationSection>
           <h3>회원님을 위한</h3>
@@ -99,7 +131,7 @@ function HomePage() {
 
           <S.StyledSwiper
             modules={[Autoplay, Pagination]}
-            autoplay={{ delay: 3000 }}
+            autoplay={{ delay: 5000 }}
             slidesPerView={1}
             pagination={{ clickable: true }}
             loop={true}

@@ -20,7 +20,7 @@ export const Header = styled.div`
 export const HeaderInnerWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
 `;
 
 export const Logo = styled.img``;
@@ -81,9 +81,15 @@ export const AdSection = styled.div`
   background-color: ${({ theme }) => theme.colors.neutral50};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   margin-top: 20px;
-  height: 100px;
+  height: auto;
   justify-content: center;
   align-items: center;
+`;
+
+export const Advertisement = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 `;
 
 export const RecommendationSection = styled.div`
@@ -152,10 +158,39 @@ export const CarYear = styled.p`
 
 export const RecommendationRefreshButton = styled.button``;
 
+export const StyledAdSwiper = styled(Swiper)`
+  width: 100%;
+  height: auto;
+
+  .swiper-pagination {
+    display: flex;
+    justify-content: center;
+  }
+
+  .swiper-slide {
+    width: auto;
+  }
+
+  .swiper-pagination-bullet {
+    background: #d3e3f8;
+    opacity: 0.5;
+    margin: 0 4px;
+    width: 4px;
+    height: 4px;
+
+    &-active {
+      opacity: 1;
+      width: 12px;
+      border-radius: 4px;
+      transition: width 0.3s ease;
+    }
+  }
+`;
+
 export const StyledSwiper = styled(Swiper)`
   width: 100%;
   height: auto;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
 
   .swiper-pagination {
     display: flex;
