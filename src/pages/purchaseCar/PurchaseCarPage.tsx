@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'components/common/Button';
 import { ChevronDown } from 'lucide-react';
 import FeedSample from 'assets/feed_sample.jpg';
+import MapTest from 'pages/map/MapTest';
 
 function PurchaseCarPage() {
   const navigate = useNavigate();
@@ -48,15 +49,20 @@ function PurchaseCarPage() {
         </S.CarInfoSection>
 
         {carDetailOpen && (
+          <>
           <S.CarInfoDetailSection>
-            <S.CarInfoDetailImage src={FeedSample}></S.CarInfoDetailImage>
-            <S.CarInfoDetailContent>
-              <S.CarModelName>2022 그랜저(IG) 하이브리드 르블랑</S.CarModelName>
-              <S.CarInfoYearAndDistance>2022년식 0km</S.CarInfoYearAndDistance>
-              <S.CarInfoPrice>4,000만원</S.CarInfoPrice>
-            </S.CarInfoDetailContent>
-          </S.CarInfoDetailSection>
-        )}
+          <S.CarInfoDetailImage src={FeedSample}></S.CarInfoDetailImage>
+          <S.CarInfoDetailContent>
+            <S.CarModelName>2022 그랜저(IG) 하이브리드 르블랑</S.CarModelName>
+            <S.CarInfoYearAndDistance>2022년식 0km</S.CarInfoYearAndDistance>
+            <S.CarInfoPrice>4,000만원</S.CarInfoPrice>
+          </S.CarInfoDetailContent>
+          
+        </S.CarInfoDetailSection>
+        <MapTest/></>
+      )}
+    
+          
 
         <S.SectionGap />
 
