@@ -9,6 +9,7 @@ import NotificationIconWhite from '../../assets/icon_notification_white.svg';
 import SettingIconWhite from '../../assets/icon_setting_white.svg';
 import BackIcon from '../../assets/icon_back.svg';
 import BackIconWhite from '../../assets/icon_back_white.svg';
+import { useNavigate } from 'react-router-dom';
 
 export { Title, ToolbarContainer };
 
@@ -74,11 +75,11 @@ const IconButton = styled.button`
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-
+  
   &:hover {
     background: rgba(0, 0, 0, 0.05);
   }
-`;
+  `;
 
 const Logo = styled.div``;
 
@@ -87,7 +88,7 @@ const TitleSection = styled.div<{ $alignment: 'center' | 'left' }>`
   display: flex;
   justify-content: ${(props) => (props.$alignment === 'center' ? 'center' : 'flex-start')};
   min-width: 0;
-`;
+  `;
 
 const Title = styled.h1`
   margin: 0;
@@ -97,22 +98,20 @@ const Title = styled.h1`
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 8px;
-`;
+  `;
 
 const RightSection = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   flex: 0 0 90px;
-`;
+  `;
+
 
 const handleNotificationButtonClick = () => {
   console.log('TODO : Notification 컴포넌트 동작');
 };
 
-const handleCloseButtonClick = () => {
-  console.log('TODO : 화면 닫기 구현');
-};
 
 const handleShareButtonClick = () => {
   console.log('TODO : Share 컴포넌트 동작');
@@ -133,6 +132,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
   color,
   onBackClick,
 }) => {
+  const navigate = useNavigate()
+
+  const handleCloseButtonClick = () => {
+    navigate(-1)
+  };
+
   // 우측 버튼 아이콘 설정
   const getIconComponent = (type: ButtonType) => {
     switch (type) {
