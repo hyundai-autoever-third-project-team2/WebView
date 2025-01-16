@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import * as S from './CarFilterPage.style';
 import Toolbar from 'components/common/Toolbar';
 import { useNavigate } from 'react-router-dom';
-import { CarFilterCondition, CarType, CarColor } from 'types/filter';
+import { CarFilterCondition, CarType, CarColor } from 'types/Filter';
 
 const CAR_TYPES: CarType[] = ['SUV', '경차', '대형', '상용', '소형', '스포츠카/쿠페', '준중형', '중대형'];
 
@@ -305,8 +305,8 @@ const CarFilterPage = () => {
         <S.Footer>
           <S.ResetButton onClick={resetFilter}>초기화</S.ResetButton>
           <Button
-            width="70%"
-            height="48px"
+            $width="70%"
+            $height="48px"
             onClick={() => {
               // 필터 적용 로직
               console.log('Applied Filter:', filterCondition);

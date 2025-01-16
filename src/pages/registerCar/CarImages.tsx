@@ -49,7 +49,7 @@ export const CarImages = ({ imageType, handleNextClick }: CarImagesProps) => {
       <S.ImagesWrapper>
         {imageType === '외부' ? renderImageUploadButton(outsideImages) : renderImageUploadButton(insideImages)}
       </S.ImagesWrapper>
-      <Button fixed onClick={() => handleNextClick(imageUrlList)}>
+      <Button $fixed onClick={() => handleNextClick(imageUrlList)}>
         다음
       </Button>
     </S.CarInsideImagesWrapper>

@@ -1,4 +1,4 @@
-import { AndroidInterface, KakaoInterface } from 'types/android';
+import { AndroidInterface, KakaoInterface } from 'types/Android';
 
 declare global {
   interface Window {

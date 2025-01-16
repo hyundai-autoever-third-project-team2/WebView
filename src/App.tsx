@@ -4,6 +4,7 @@ import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
 import { CarDetailPage } from 'pages/carDetail/CarDetailPage';
 import { SelectComparePage } from 'pages/compare/SelectComparePage';
+import ScrollToTop from 'components/common/ScrollToTop';
 import { LoginPage } from 'pages/login/LoginPage';
 import { RedirectPage } from 'pages/login/RedirectPage';
 
@@ -28,9 +29,12 @@ const webviewRouter: RouteObject[] = [
   // 내비게이션 바가 있는 페이지를 추가해주세요.
   {
     element: (
-      <Layout type="mobile" hasNavBar={true}>
-        <BottomNavigationBar />
-      </Layout>
+      <>
+        <ScrollToTop />
+        <Layout type="mobile" hasNavBar={true}>
+          <BottomNavigationBar />
+        </Layout>
+      </>
     ),
     children: [
       {
@@ -53,7 +57,12 @@ const webviewRouter: RouteObject[] = [
   },
   // 내비게이션 바가 없는 페이지를 추가해주세요.
   {
-    element: <Layout type="mobile" hasNavBar={false} />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Layout type="mobile" hasNavBar={false} />
+      </>
+    ),
     children: [
       {
         path: 'register-car',
