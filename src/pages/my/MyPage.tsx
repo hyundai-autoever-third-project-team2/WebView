@@ -46,7 +46,7 @@ const ProfileText = styled.div`
 const StatsContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px;
+  padding: 12px;
   background-color: rgba(255, 221, 166, 0.45);
   border-radius: 12px;
 `;
@@ -180,9 +180,9 @@ const MENU_ITEMS: MenuItemProps[] = [
 ];
 
 const QUICKMENU_ITEMS : MenuItemProps[] = [
-  {icon: ChatIcon, text: '채팅 상담', path: '/my'},
+  {icon: ChatIcon, text: '채팅 상담', path: '/chat/1'},
   {icon: NotificationIcon, text: '공지사항', path: '/my'},
-  {icon: GuideIcon, text: '이용안내', path: '/my'}
+  {icon: GuideIcon, text: '이용안내', path: '/c'}
   //퀵메뉴도 path로 라우팅해야할지 고민중
 ]
 

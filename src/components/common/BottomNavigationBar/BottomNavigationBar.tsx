@@ -20,7 +20,7 @@ const NavItem: React.FC<NavItemProps> = ({ icon, label, isActive, onClick, to })
   };
 
   return (
-    <S.NavButton isActive={isActive} onClick={handleClick}>
+    <S.NavButton $isActive={isActive} onClick={handleClick}>
       {icon}
       <S.NavLabel>{label}</S.NavLabel>
     </S.NavButton>
@@ -74,7 +74,7 @@ function BottomNavigationBar() {
         />
         <S.CenterButtonWrapper>
           <S.CenterButton
-            isActive={activeTab === 'feed'}
+            $isActive={activeTab === 'feed'}
             onClick={() => {
               setActiveTab('feed');
               navigate('/feed');

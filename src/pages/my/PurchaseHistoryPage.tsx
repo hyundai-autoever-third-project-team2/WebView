@@ -19,6 +19,7 @@ const SearchContainer = styled.div`
     justify-content: space-between;
     padding : 15px;
     gap:8px;
+    font-size: 0.9rem;
 `
 
 const CarHistoryList = styled.div`
@@ -72,7 +73,7 @@ function PurchasePage() {
                     />
                 <CarHistoryItem        
                     date="2025. 01. 23"
-                    status="시세 측정 중"
+                    status="판매 처리"
                     title="자동차 모델 들어갈 자리"
                     model="주문번호 A-123"
                     price="840만원"
