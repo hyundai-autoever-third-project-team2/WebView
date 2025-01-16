@@ -5,6 +5,8 @@ import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNav
 import { CarDetailPage } from 'pages/carDetail/CarDetailPage';
 import { SelectComparePage } from 'pages/compare/SelectComparePage';
 import ScrollToTop from 'components/common/ScrollToTop';
+import { LoginPage } from 'pages/login/LoginPage';
+import { RedirectPage } from 'pages/login/RedirectPage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -121,6 +123,14 @@ const webviewRouter: RouteObject[] = [
       {
         path: 'chat/:roomId',
         element: <ChatPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'login/my-success',
+        element: <RedirectPage />,
       },
     ],
   },

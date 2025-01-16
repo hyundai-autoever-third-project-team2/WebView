@@ -22,12 +22,23 @@ import { useEffect, useState } from 'react';
 import { CarListItemData } from 'types/CarListItemData';
 import { fetchRecentCarList } from 'api/carList/carListApi';
 import CarListItem from 'components/common/CarListItem';
+import { ModalPortal } from 'components/common/Modal/ModalPortal';
+import { SurveyModal } from 'components/common/Modal/SurveyModal';
+import { useModal } from 'hooks/useModal';
 
 function HomePage() {
   const navigate = useNavigate();
   const [recentCars, setRecentCars] = useState<CarListItemData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  useEffect(() => {
+    if (!localStorage.getItem('newUser')) {
+      openModal();
+      localStorage.setItem('newUser', 'true');
+    }
+  }, []);
 
   function handleNotificationButtonClick() {
     navigate('/notification');
@@ -219,6 +230,11 @@ function HomePage() {
         <span>공지</span>
         타볼카 1.0.0 출시
       </S.AnnouncementSection>
+      {isModalOpen && (
+        <ModalPortal>
+          <SurveyModal closeModal={closeModal} />
+        </ModalPortal>
+      )}
     </>
   );
 }
