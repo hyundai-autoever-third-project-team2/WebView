@@ -22,18 +22,25 @@ export const SelectComparePage = () => {
   };
 
   return (
-    <S.SelectComparePageWrapper>
-      <Toolbar title="차량비교 선택" onBackClick={handleBackClick} showBackButton />
-      <SelectCarList
-        title="찜한상품"
-        selectedCars={selectedCars}
-        handleSelectedButtonClick={handleSelectedButtonClick}
-      />
-      <SelectCarList
-        title="최근본상품"
-        selectedCars={selectedCars}
-        handleSelectedButtonClick={handleSelectedButtonClick}
-      />
-    </S.SelectComparePageWrapper>
+    <>
+      <S.SelectComparePageWrapper>
+        <Toolbar title="차량비교 선택" onBackClick={handleBackClick} showBackButton />
+        <SelectCarList
+          title="찜한상품"
+          selectedCars={selectedCars}
+          handleSelectedButtonClick={handleSelectedButtonClick}
+        />
+        <SelectCarList
+          title="최근본상품"
+          selectedCars={selectedCars}
+          handleSelectedButtonClick={handleSelectedButtonClick}
+        />
+      </S.SelectComparePageWrapper>
+      <S.CompareButtonWarpper $disabled={selectedCars.length < 2}>
+        <S.SelectedCount>
+          {selectedCars.length < 2 ? '비교 할 차량을 선택 해주세요' : `${selectedCars.length}대의 차량 비교하기`}
+        </S.SelectedCount>
+      </S.CompareButtonWarpper>
+    </>
   );
 };
