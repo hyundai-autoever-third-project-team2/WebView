@@ -151,10 +151,10 @@ const OptionItem = styled.div`
   font-size: 0.9rem;
 `;
 
-const CheckIcon = styled(Check)<{isChecked : boolean}>`
+const CheckIcon = styled(Check)<{$isChecked : boolean}>`
   width: 16px;
   height: 16px;
-  color: ${props => props.isChecked ? theme.colors.primary : 'none'};
+  color: ${props => props.$isChecked ? theme.colors.primary : 'none'};
 `;
 
 const CompareCarData: React.FC<CompareCarDataProps> = ({
@@ -224,7 +224,7 @@ const CompareCarData: React.FC<CompareCarDataProps> = ({
         <OptionList>
           {options.map((option, index) => (
             <OptionItem key={index}>
-              <CheckIcon isChecked={option.isChecked}/>
+              <CheckIcon $isChecked={option.isChecked}/>
               <span>{option.name}</span>
             </OptionItem>
           ))}

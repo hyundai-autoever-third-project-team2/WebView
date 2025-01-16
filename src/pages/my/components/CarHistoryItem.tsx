@@ -102,11 +102,13 @@ const CarPrice = styled.div`
 `;
 
 const ActionButton = styled.button`
+  width: 60px;
+  height: 25px;
   position: absolute;
-  bottom: 16px;
+  bottom: 12px;
   right: 16px;
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: 6px 10px;
+  font-size: 10px;
   background-color: white;
   color: ${theme.colors.primary};
   border: 1px solid ${theme.colors.primary};
@@ -130,12 +132,14 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
 
   const getActionButton = ($status: string) => {
     switch ($status) {
-      case "시세 측정 중":
+      case "심사전":
         return { text: "판매 취소", show: true };
-      case "구매 확정":
+      case "심사완료":
         return { text: "리뷰작성", show: true };
       case "판매 처리":
-        return { text: "계약서보기", show: true };
+        return { text: "계약서보기", show: false };
+      case "거래중":
+
       default:
         return { show: false };
     }
