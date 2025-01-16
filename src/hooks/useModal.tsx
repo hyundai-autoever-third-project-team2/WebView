@@ -5,10 +5,12 @@ export const useModal = () => {
 
   const openModal = useCallback(() => {
     setIsModalOpen(true);
+    document.body.style.overflow = 'hidden';
   }, []);
 
   const closeModal = useCallback(() => {
     setIsModalOpen(false);
+    document.body.style.overflow = 'auto';
   }, []);
 
   return {
