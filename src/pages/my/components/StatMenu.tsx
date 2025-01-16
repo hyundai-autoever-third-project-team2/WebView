@@ -14,7 +14,7 @@ interface StatMenuProps {
 const StatsContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px;
+  padding: 10px;
   background-color: rgba(255, 221, 166, 0.20);
   border-radius: 12px;
   margin-top : 100px;
@@ -33,7 +33,7 @@ const StatItem = styled.div`
 `;
 
 const StatValue = styled.div`
-  font-size: 24px;
+  font-size: 1rem;
   font-weight: bold;
   margin-bottom: 5px;
 `;
