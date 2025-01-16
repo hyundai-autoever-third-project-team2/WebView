@@ -2,14 +2,14 @@ interface CarListItemData {
   carId: number;
   imageUrl: string;
   brand: string;
-  modelName: string;
-  modelYear: string;
+  model_name: string;
+  model_year: string;
   distance: number;
   price: number;
-  discountPrice: number;
-  monthPrice: number;
-  createDate: string;
-  viewCount: number;
+  discount_price: number;
+  month_price: number;
+  create_date: string;
+  view_count: number;
 }
 
 type CarListResponse = CarListItemData[];
