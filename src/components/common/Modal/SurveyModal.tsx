@@ -210,7 +210,7 @@ const QuestionModel = ({ nextStep }: ISurveyProps) => {
     nextStep({ car_model_ids: selectedCarIds });
   };
   return (
-    <S.QuestionWrapper>
+    <S.QuestionWrapperLarge>
       <S.SurveyMessage>
         {`관심가는 차 5개를
          골라주세요`}
@@ -230,7 +230,7 @@ const QuestionModel = ({ nextStep }: ISurveyProps) => {
       <Button fixed onClick={handleNextButtonClick}>
         다음
       </Button>
-    </S.QuestionWrapper>
+    </S.QuestionWrapperLarge>
   );
 };
 
@@ -276,7 +276,7 @@ const QuestionColor = ({ nextStep }: ISurveyProps) => {
     nextStep({ colors: selectedColors });
   };
   return (
-    <S.QuestionWrapper>
+    <S.QuestionWrapperLarge>
       <S.SurveyMessage>
         {`마지막으로
         원하는 색상 3개를
@@ -294,7 +294,7 @@ const QuestionColor = ({ nextStep }: ISurveyProps) => {
       <Button fixed onClick={hanleNextButtonClick}>
         다음
       </Button>
-    </S.QuestionWrapper>
+    </S.QuestionWrapperLarge>
   );
 };
 
@@ -325,26 +325,9 @@ export const SurveyModal = ({ closeModal }: ISurveyModal) => {
     closeModal();
   };
 
-  let height = '30%';
-  switch (step) {
-    case 0:
-      height = '30%';
-      break;
-    case 1:
-    case 2:
-      height = '50%';
-      break;
-    case 3:
-    case 4:
-      height = '80%';
-      break;
-    case 5:
-      height = '30%';
-  }
-
   return (
     <>
-      <S.ModalWrapper $height={height}>
+      <S.ModalWrapper>
         {step === 0 && <SurveyIntro nextStep={handleNextStep} />}
         {step === 1 && <QuestionPrice nextStep={handleNextStep} />}
         {step === 2 && <QuestionDistance nextStep={handleNextStep} />}

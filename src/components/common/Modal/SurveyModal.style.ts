@@ -1,15 +1,15 @@
 import styled, { keyframes } from 'styled-components';
 import { theme } from 'styles/theme';
 
-export const ModalWrapper = styled.div<{ $height?: string }>`
+export const ModalWrapper = styled.div`
   width: 100%;
-  height: ${({ $height }) => $height || '30%'};
+  height: auto;
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   background: var(--neutral-900, #0f172a);
-  padding: 40px 20px;
+  padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 9999;
@@ -45,12 +45,12 @@ const fadeInOut = keyframes`
 
 export const SurveyIntroWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  height: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 40px 20px;
   gap: 20px;
 `;
 
@@ -71,10 +71,16 @@ export const SurveyMessageIntro = styled(SurveyMessage)`
 /* 설문조사 질문 */
 
 export const QuestionWrapper = styled.div`
+  width: 100%;
+  height: 400px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
+  padding: 20px 10px;
+`;
+
+export const QuestionWrapperLarge = styled(QuestionWrapper)`
+  height: 600px;
 `;
 
 export const SurveyRangeWrapper = styled.div`
@@ -112,9 +118,9 @@ export const SelectItemWrapper = styled.div`
 `;
 
 export const ImageWrapper = styled.div<{ $isSelected?: boolean }>`
-  border: ${({ $isSelected }) => ($isSelected ? `2px solid ${theme.colors.primary}` : 'none')};
-  width: 100px;
-  height: 100px;
+  outline: ${({ $isSelected }) => ($isSelected ? `2px solid ${theme.colors.primary}` : 'none')};
+  width: auto;
+  aspect-ratio: 1 / 1;
   border-radius: 4px;
   overflow: hidden;
   display: flex;
