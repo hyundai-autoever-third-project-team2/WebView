@@ -21,7 +21,6 @@ const PurchaseCarPage = lazy(() => import('pages/purchaseCar/PurchaseCarPage'));
 const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
 const ChatPage = lazy(() => import('pages/chat/ChatPage'))
-const MapTest = lazy(() => import('pages/map/MapTest'))
 
 const webviewRouter: RouteObject[] = [
   // 내비게이션 바가 있는 페이지를 추가해주세요.
@@ -113,10 +112,6 @@ const webviewRouter: RouteObject[] = [
       {
         path: 'chat/:roomId',
         element: <ChatPage />
-      },
-      {
-        path: 'map',
-        element: <MapTest />
       }
     ],
   },
