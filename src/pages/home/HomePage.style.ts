@@ -47,7 +47,6 @@ export const HomePageContainer = styled.div`
 
 export const IconSection = styled.div`
   display: flex;
-  background-color: ${({ theme }) => theme.colors.neutral50};
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   padding: 20px;
   margin-top: 20px;
@@ -270,7 +269,7 @@ export const CarListCardInfo = styled.div`
 export const AllCarListButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 20px;
+  margin-top: 10px;
   font-weight: ${({ theme }) => theme.fontWeight.bold};
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   border: 1px solid ${({ theme }) => theme.colors.primary};
@@ -321,4 +320,28 @@ export const AnnouncementSection = styled.div`
     font-weight: ${({ theme }) => theme.fontWeight.bold};
     color: ${({ theme }) => theme.colors.primary};
   }
+`;
+
+export const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  color: ${({ theme }) => theme.colors.grayLight};
+`;
+
+export const ErrorMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  color: ${({ theme }) => theme.colors.error};
+`;
+
+export const EmptyMessage = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  color: ${({ theme }) => theme.colors.neutral900};
 `;

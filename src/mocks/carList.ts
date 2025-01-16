@@ -1,4 +1,4 @@
-import CarData from '../types/carData';
+import CarData from '../types/CarData';
 
 const carList: CarData[] = [
   {

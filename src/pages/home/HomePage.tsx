@@ -18,9 +18,16 @@ import Advertisement1 from 'assets/advertisement1.png';
 import Advertisement2 from 'assets/advertisement2.png';
 import Advertisement3 from 'assets/advertisement3.png';
 import Advertisement4 from 'assets/advertisement4.png';
+import { useEffect, useState } from 'react';
+import { CarListItemData } from 'types/CarListItemData';
+import { fetchRecentCarList } from 'api/carList/carListApi';
+import CarListItem from 'components/common/CarListItem';
 
 function HomePage() {
   const navigate = useNavigate();
+  const [recentCars, setRecentCars] = useState<CarListItemData[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function handleNotificationButtonClick() {
     navigate('/notification');
@@ -45,7 +52,11 @@ function HomePage() {
     }
   }
 
-  const carList: CarData[] = [...CarList];
+  function handleAllCarListClick() {
+    // navigate('/car-list');
+  }
+
+  const recommendCarList: CarData[] = [...CarList];
 
   const advertisementList: { imageUrl: string; title: string }[] = [
     {
@@ -65,6 +76,23 @@ function HomePage() {
       title: '광고4',
     },
   ];
+
+  useEffect(() => {
+    async function loadRecentCars() {
+      try {
+        setLoading(true);
+        const data = await fetchRecentCarList();
+        setRecentCars(data.slice(0, 3)); // 최근 3개만 사용
+      } catch (error) {
+        console.error('Failed to load recent cars:', error);
+        setError('최근 차량을 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRecentCars();
+  }, []);
 
   return (
     <>
@@ -137,7 +165,7 @@ function HomePage() {
             loop={true}
             className="mySwiper"
           >
-            {carList.slice(0, 9).map((car) => (
+            {recommendCarList.slice(0, 9).map((car) => (
               <SwiperSlide key={car.id}>
                 <S.RecommendationCarCard>
                   <S.CarCardImage src={car.imageUrlList[0]} alt={car.model} />
@@ -154,22 +182,21 @@ function HomePage() {
         </S.RecommendationSection>
 
         <S.CarListSection>
-          <S.TitleWithArrowButton>
-            내 차 타볼카?
-            <ChevronRight size={16} />
-          </S.TitleWithArrowButton>
-          {carList.slice(0, 3).map((car) => (
-            <S.CarListCard key={car.id}>
-              <S.CarListCardImage src={car.imageUrlList[0]} alt={car.model} />
-              <S.CarListCardInfo>
-                <S.CarName>{car.model}</S.CarName>
-                <S.CarYear>{car.modelYear}</S.CarYear>
-                <p>{car.dist}</p>
-                <p className="price">{car.price}</p>
-              </S.CarListCardInfo>
-            </S.CarListCard>
-          ))}
-          <S.AllCarListButton>
+          <S.TitleWithArrowButton>내 차 타볼카?</S.TitleWithArrowButton>
+          {loading ? (
+            <S.LoadingWrapper>로딩중...</S.LoadingWrapper>
+          ) : error ? (
+            <S.ErrorMessage>{error}</S.ErrorMessage>
+          ) : recentCars.length === 0 ? (
+            <S.EmptyMessage>등록된 차량이 없습니다.</S.EmptyMessage>
+          ) : (
+            recentCars.map((car) => (
+              <>
+                <CarListItem key={car.carId} data={car} />
+              </>
+            ))
+          )}
+          <S.AllCarListButton onClick={handleAllCarListClick}>
             차량 전체 보기
             <ChevronRight />
           </S.AllCarListButton>
@@ -181,7 +208,7 @@ function HomePage() {
             <ChevronRight size={16} />
           </S.TitleWithArrowButton>
           <S.FeedPreviewCardWrapper>
-            {carList.slice(3, 6).map((car) => (
+            {recommendCarList.slice(3, 6).map((car) => (
               <S.FeedPreviewCard key={car.id} src={car.imageUrlList[0]} alt={car.model} />
             ))}
           </S.FeedPreviewCardWrapper>

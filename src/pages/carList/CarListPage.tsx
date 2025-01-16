@@ -1,32 +1,17 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Toolbar from 'components/common/Toolbar';
 import * as S from './CarListPage.style';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import CarListItem from 'components/common/CarListItem';
-import mockCarListItem from 'mocks/carListItem';
-
-const enum CarListPageType {
-  DOMESTIC = 'domestic',
-  FOREIGN = 'foreign',
-  DISCOUNT = 'discount',
-  TOP_50 = 'top50',
-}
-
-const mockApiResponse = mockCarListItem;
-
-function fetchCarListByType(type: CarListPageType) {
-  // 차량 목록을 가져오는 비동기 함수
-}
+import { CarListItemData } from 'types/CarListItemData';
+import { CarListPageType, fetchCarListByType } from 'api/carList/carListApi';
+import Loading from 'components/common/Loading';
 
 function CarListPage() {
   const navigate = useNavigate();
   const { type } = useParams<{ type: CarListPageType }>();
-
-  useEffect(() => {
-    if (type) {
-      fetchCarListByType(type);
-    }
-  }, [type]);
+  const [cars, setCars] = useState<CarListItemData[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const getTitle = () => {
     switch (type) {
@@ -43,11 +28,38 @@ function CarListPage() {
     }
   };
 
+  useEffect(() => {
+    if (type) {
+      setLoading(true);
+      fetchCarListByType(type)
+        .then((response) => {
+          // 응답이 배열인지 확인하고 설정
+          setCars(Array.isArray(response) ? response : []);
+        })
+        .catch((error) => {
+          console.error('Error fetching cars:', error);
+          setCars([]);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [type]);
+
+  if (loading) {
+    return (
+      <>
+        <Toolbar title={getTitle()} showBackButton onBackClick={() => navigate(-1)} />
+        <S.CarListPageContainer>
+          <Loading />
+        </S.CarListPageContainer>
+      </>
+    );
+  }
+
   return (
     <>
       <Toolbar title={getTitle()} showBackButton onBackClick={() => navigate(-1)} />
       <S.CarListPageContainer>
-        {mockApiResponse.map((car) => (
+        {cars.map((car) => (
           <CarListItem key={car.carId} data={car} />
         ))}
       </S.CarListPageContainer>
