@@ -1,4 +1,3 @@
-import { Outlet } from 'react-router-dom';
 import * as S from './LoginPage.style';
 import KakaoLoginButton from 'assets/kakao_login.png';
 
@@ -12,7 +11,6 @@ export const LoginPage = () => {
       <S.LogoWrapper>
         <S.Logo src="src/assets/logo_large.png" alt="logo" />
       </S.LogoWrapper>
-      <Outlet />
       <S.LoginButtonWrapper>
         <img src={KakaoLoginButton} alt="kakao-login" onClick={handleKakaoLoginClick} />
       </S.LoginButtonWrapper>
