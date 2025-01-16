@@ -305,8 +305,8 @@ const CarFilterPage = () => {
         <S.Footer>
           <S.ResetButton onClick={resetFilter}>초기화</S.ResetButton>
           <Button
-            width="70%"
-            height="48px"
+            $width="70%"
+            $height="48px"
             onClick={() => {
               // 필터 적용 로직
               console.log('Applied Filter:', filterCondition);

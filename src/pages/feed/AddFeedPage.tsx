@@ -106,7 +106,7 @@ function AddFeedPage() {
           </S.TagsContainer>
         </S.AddTagSection>
 
-        <Button fixed onClick={handleUploadButtonClick}>
+        <Button $fixed onClick={handleUploadButtonClick}>
           등록
         </Button>
       </S.AddFeedPageContainer>
