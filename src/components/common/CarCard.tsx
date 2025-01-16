@@ -48,13 +48,20 @@ const Content = styled.div`
   width: 100%;
   display: flex;
   gap: 8px;
+
+  @media (min-width: 500px) {
+    gap: 16px;
+  }
 `;
 
 const CarImage = styled.img`
   width: 160px;
-  height: 100px;
   object-fit: cover;
   border-radius: 4px;
+
+  @media (min-width: 500px) {
+    width: 220px;
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -63,19 +70,34 @@ const InfoContainer = styled.div`
   min-height: 100px;
   position: relative;
   padding: 4px;
+
+  @media (min-width: 500px) {
+    min-height: 150px;
+    padding: 8px;
+  }
 `;
 
 const CarTitle = styled.h3`
   font-size: 12px;
   font-weight: 600;
   margin-bottom: 4px;
+
+  @media (min-width: 500px) {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
 `;
 
 const CarYear = styled.div`
   font-size: 12px;
   color: ${theme.colors.neutral500};
   margin-top: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+
+  @media (min-width: 500px) {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
 `;
 
 const HashTagContainer = styled.div`
@@ -99,6 +121,11 @@ const HashTag = styled.button`
   &:hover {
     background-color: ${theme.colors.primaryDark};
   }
+
+  @media (min-width: 500px) {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
 `;
 
 const CarPrice = styled.div`
@@ -106,6 +133,11 @@ const CarPrice = styled.div`
   font-weight: 500;
   position: absolute;
   bottom: 4px;
+
+  @media (min-width: 500px) {
+    font-size: 14px;
+    bottom: 8px;
+  }
 `;
 
 const ActionsWrapper = styled.div`
