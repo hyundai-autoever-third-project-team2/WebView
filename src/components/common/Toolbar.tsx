@@ -9,12 +9,15 @@ import NotificationIconWhite from '../../assets/icon_notification_white.svg';
 import SettingIconWhite from '../../assets/icon_setting_white.svg';
 import BackIcon from '../../assets/icon_back.svg';
 import BackIconWhite from '../../assets/icon_back_white.svg';
+import LikedIcon from 'assets/icon_heart.svg';
+import LikedFillIcon from 'assets/icon_heart_fill.svg';
+
 import { useNavigate } from 'react-router-dom';
 
 export { Title, ToolbarContainer };
 
 //버튼 종류 늘어날 시 추가하시길 .. + getIconComponent 로 아이콘 import , clickbutton 이벤트로 동작 설정
-type ButtonType = 'close' | 'notification' | 'share' | 'notificationWhite' | 'settingWhite';
+type ButtonType = 'close' | 'notification' | 'share' | 'notificationWhite' | 'settingWhite' | 'liked';
 
 //showBackButton (닫기 버튼튼)
 interface ToolbarProps {
@@ -121,6 +124,11 @@ const handleSettingButtonClick = () => {
   console.log('TODO : Setting 컴포넌트 동작');
 };
 
+const handleLikedButtonClick = () => {
+  console.log('TODO : 찜하기 기능 동작');
+};
+
+
 const Toolbar: React.FC<ToolbarProps> = ({
   showBackButton = false,
   showBackButtonWhite = false,
@@ -151,6 +159,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
         return <img src={NotificationIconWhite} alt="Notification_white_ver" />;
       case 'settingWhite':
         return <img src={SettingIconWhite} alt="Setting_white_ver" />;
+      case 'liked':
+        return <img src={LikedIcon} alt="Setting_white_ver" />;
       default:
         return null;
     }
@@ -167,6 +177,8 @@ const Toolbar: React.FC<ToolbarProps> = ({
         return () => handleShareButtonClick();
       case 'settingWhite':
         return () => handleSettingButtonClick();
+      case 'liked':
+        return () => handleLikedButtonClick();
       default:
         return () => {};
     }

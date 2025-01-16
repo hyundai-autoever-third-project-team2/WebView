@@ -1,6 +1,6 @@
 import Toolbar from 'components/common/Toolbar';
-import { useNavigate } from 'react-router-dom';
-import * as S from './CarDetail.style';
+import { useNavigate, useParams } from 'react-router-dom';
+import * as S from './CarDetailPage.style';
 import Tag from 'components/common/Tag';
 import { CarDetailSwiper } from './CarDetailSwiper';
 import EyeIcon from 'assets/icon_eye.svg?react';
@@ -10,12 +10,18 @@ import DropDown from 'assets/icon_dropdown.svg?react';
 import DropUp from 'assets/icon_dropup.svg?react';
 import { useState } from 'react';
 import Button from 'components/common/Button';
+import RightIcon from 'assets/icon_right_button_primary.svg?react';
 
 const optionList = ['네비게이션', 'HUD', '통풍시트', '열선시트', '크루즈컨트롤', '선루프', '주차보조', '차선이탈경보'];
 
-export const CarDetail = () => {
+export const CarDetailPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const handleCompareCarClick = () => {
+    navigate(`/select-compare`);
+  };
 
   const handleBackClick = () => {
     navigate(-1);
@@ -23,7 +29,7 @@ export const CarDetail = () => {
 
   return (
     <S.CarDetailWrapper>
-      <Toolbar title="차량상세" showBackButton onBackClick={handleBackClick} rightButtons={['share']} />
+      <Toolbar title="차량상세" showBackButton onBackClick={handleBackClick} rightButtons={['liked']} />
 
       <section>
         <S.SwiperWrapper>
@@ -35,7 +41,11 @@ export const CarDetail = () => {
             <Tag label="현대자동차" />
             <Tag label="더미2" />
           </S.TagWrapper>
-          <S.CompareCarButton>차량 비교하기</S.CompareCarButton>
+
+          <S.CompareCarButtonWrapper>
+            <S.CompareCarButton onClick={handleCompareCarClick}>차량 비교하기</S.CompareCarButton>
+            <RightIcon />
+          </S.CompareCarButtonWrapper>
         </S.TagContainer>
 
         <S.ModelInfoWrapper>
@@ -140,7 +150,7 @@ export const CarDetail = () => {
             {optionList.map((option, idx) => (
               <S.OptionWrapper key={option}>
                 <S.OptionImageWrapper>
-                  <S.OptionImage src={`src/assets/option${idx + 1}.png`} />
+                  <S.OptionImage src={`/src/assets/option${idx + 1}.png`} />
                 </S.OptionImageWrapper>
                 <S.OptionText>{option}</S.OptionText>
               </S.OptionWrapper>

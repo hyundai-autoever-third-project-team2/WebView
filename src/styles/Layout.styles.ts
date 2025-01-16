@@ -14,9 +14,8 @@ export const mobileStyles = (hasBottomPadding: boolean = true) => css`
 
 // 기본 브라우저 스타일을 제거합니다.
 export const mobileInputStyles = `
-  input, textarea {
+  input:not([type="checkbox"]), textarea {
     -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none;
   }
 `;

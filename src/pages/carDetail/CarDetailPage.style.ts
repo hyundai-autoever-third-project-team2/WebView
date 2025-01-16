@@ -23,6 +23,14 @@ export const TagWrapper = styled.div`
   align-items: center;
 `;
 
+export const CompareCarButtonWrapper = styled.label`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  cursor: pointer;
+`;
+
 export const CompareCarButton = styled.button`
   color: ${theme.colors.primary};
   font-family: Pretendard;

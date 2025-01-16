@@ -2,6 +2,8 @@ import { lazy } from 'react';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
 import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
+import { CarDetailPage } from 'pages/carDetail/CarDetailPage';
+import { SelectComparePage } from 'pages/compare/SelectComparePage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -15,6 +17,7 @@ const CarListPage = lazy(() => import('pages/carList/CarListPage'));
 const PurchasePage = lazy(() => import('pages/my/PurchaseHistoryPage'));
 const RegisterHistoryPage = lazy(() => import('pages/my/RegisterHistoryPage'));
 const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
+const PurchaseCarPage = lazy(() => import('pages/purchaseCar/PurchaseCarPage'));
 const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
 const ChatPage = lazy(() => import('pages/chat/ChatPage'))
@@ -80,12 +83,28 @@ const webviewRouter: RouteObject[] = [
         element: <RegisterHistoryPage />,
       },
       {
+        path: 'car-detail/:id',
+        element: <CarDetailPage />,
+      },
+      {
+        path: 'select-compare',
+        element: <SelectComparePage />,
+      },
+      {
         path: 'car-list/:type',
         element: <CarListPage />,
       },
       {
         path: 'search',
         element: <SearchResultPage />,
+      },
+      {
+        path: 'purchase/:id',
+        element: <PurchaseCarPage />,
+      },
+      {
+        path: 'compare',
+        element: <ComparePage />,
       },
       {
         path: 'compare',
