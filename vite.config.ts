@@ -6,4 +6,15 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), svgr(), tsconfigPaths()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://twomuchcar.shop/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: true,
+        ws: true,
+      },
+    },
+  },
 });
