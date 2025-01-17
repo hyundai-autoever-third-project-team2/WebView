@@ -22,10 +22,7 @@ function NotificationPage() {
     <>
       <Toolbar
         title="알림"
-        onBackClick={() => {
-          navigate(-1);
-        }}
-        showBackButton
+        rightButtons={['close']}
       />
       <NotificationPageContainer>
         {mockApiResponse.map((notification) => (
