@@ -10,6 +10,8 @@ import RightButton from '../../assets/icon_right_button.svg'
 
 import testProfile from '../../assets/test_profile.jpg';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { fetchCountingList } from 'api/mypage/mypageApi';
 
 const Container = styled.div`
   background-color: #fff;
@@ -155,17 +157,7 @@ interface StatItemProps {
   path: string;
 }
 
-const STAT_ITEMS:StatItemProps[] = [
-  {
-    value: 134, label: '구매 내역', path: '/my/purchase'
-  },
-  {
-    value: 213, label: '판매 내역', path: '/my/register'
-  },
-  {
-    value: 23, label: '찜한 상품', path: '/wishlist'
-  }
-]
+
 
 interface MenuItemProps {
   icon: string;
@@ -188,6 +180,36 @@ const QUICKMENU_ITEMS : MenuItemProps[] = [
 
 function MyPage() {
   const navigate = useNavigate();
+
+  const [statItems,setStatItems] = useState([
+    {
+      value: 0, label: '구매 내역', path: '/my/purchase'
+    },
+    {
+      value: 0, label: '판매 내역', path: '/my/register'
+    },
+    {
+      value: 0, label: '찜한 상품', path: '/wishlist'
+    }
+  ])
+  
+  useEffect(() => {
+    const loadCountingData = async () => {
+      try {
+        const data = await fetchCountingList();
+  
+          setStatItems([
+          { value: data.purchaseCount, label: '구매 내역', path: '/my/purchase' },
+          { value: data.saleCount, label: '판매 내역', path: '/my/register' },
+          { value: data.heartCount, label: '찜한 상품', path: '/wishlist' }
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch counting data:', error);
+      }
+    };
+  
+    loadCountingData();
+  }, []); 
 
   const handleBackClick = () => {
     navigate('/')
@@ -224,7 +246,7 @@ function MyPage() {
         </ProfileSection>
 
         <StatsContainer>
-          {STAT_ITEMS.map((item,idx)=> (
+          {statItems.map((item,idx)=> (
             <StatItem key={idx} onClick={handleMenuClick(item.path)}>
               <StatValue>{item.value}</StatValue>
               <StatLabel>{item.label}</StatLabel>
