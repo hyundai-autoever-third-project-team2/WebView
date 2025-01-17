@@ -6,7 +6,6 @@ import DropDownButton from "./components/DropDownButton";
 import styled from "styled-components";
 import CarHistoryItem from "./components/CarHistoryItem";
 import { fetchViewTransactionList } from "api/mypage/mypageApi"; 
-import { setTestAccessToken } from "utils/axiosInstance";
 import { CarViewTransactionData } from "types/ViewTransactionData";
 import FilterSearchInput from "./components/FilterSearchInput";
 
@@ -79,7 +78,6 @@ function PurchasePage() {
     useEffect(() => {
         const loadTransactions = async () => {
             try {
-                setTestAccessToken();
                 setIsLoading(true);
                 setError(null);
                 const data = await fetchViewTransactionList();
