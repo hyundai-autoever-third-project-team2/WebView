@@ -2,7 +2,6 @@ import { updatePurchaseCar } from 'api/mypage/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
-import { setTestAccessToken } from 'utils/axiosInstance';
 
 interface ActionButtonType {
   text: string;
@@ -15,8 +14,8 @@ type StatusLabelProps = {
 
 // CarHistoryItem 판매, 구매 구분없이 일반화된 props
 interface CarHistoryItemProps {
-  car_purchase_id?: number,
-  car_sales_id?: number,
+  car_purchase_id?: number;
+  car_sales_id?: number;
   date?: string;
   status?: string;
   title?: string;
@@ -24,7 +23,7 @@ interface CarHistoryItemProps {
   price?: string;
   monthlyPayment?: string;
   imageUrl?: string;
-  isPurchase? : boolean;
+  isPurchase?: boolean;
 }
 
 const CarHistoryContainer = styled.div`
@@ -62,17 +61,19 @@ const StatusLabel = styled.div<StatusLabelProps>`
   font-size: 14px;
   margin-bottom: 12px;
   color: ${({ $status }) => {
-    switch ($status) { // progress별 색상 정하자
-      case "취소 / 반품":
-      case "거절":
+    switch (
+      $status // progress별 색상 정하자
+    ) {
+      case '취소 / 반품':
+      case '거절':
         return `${theme.colors.error}`;
-      case "판매 완료":
-      case "거래완료":
+      case '판매 완료':
+      case '거래완료':
         return `${theme.colors.success}`;
-      case "심사 완료":
-        return `${theme.colors.primary}`
+      case '심사 완료':
+        return `${theme.colors.primary}`;
       default:
-        return "#666";
+        return '#666';
     }
   }};
 `;
@@ -120,58 +121,58 @@ const ActionButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ActionButton = styled.button<{$isDecline : boolean}>`
+const ActionButton = styled.button<{ $isDecline: boolean }>`
   width: 60px;
   height: 25px;
   padding: 6px 10px;
   font-size: 10px;
   background-color: white;
-  color: ${({ $isDecline }) => $isDecline ? theme.colors.error : theme.colors.primary};
-  border: 1px solid ${({ $isDecline }) => $isDecline ? theme.colors.error : theme.colors.primary};
+  color: ${({ $isDecline }) => ($isDecline ? theme.colors.error : theme.colors.primary)};
+  border: 1px solid ${({ $isDecline }) => ($isDecline ? theme.colors.error : theme.colors.primary)};
   border-radius: 4px;
   cursor: pointer;
 `;
 
-const CarHistoryItem: React.FC<CarHistoryItemProps> = ({ 
-  car_purchase_id =0,
+const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
+  car_purchase_id = 0,
   car_sales_id = 0,
-  date = "날짜",
-  status = "정보",
-  title = "이름",
-  model = "주문번호",
-  price = "가격",
-  monthlyPayment = "",
-  imageUrl = "이미지url",
-  isPurchase = false
+  date = '날짜',
+  status = '정보',
+  title = '이름',
+  model = '주문번호',
+  price = '가격',
+  monthlyPayment = '',
+  imageUrl = '이미지url',
+  isPurchase = false,
 }) => {
   const navigate = useNavigate();
 
   const getActionButtons = ($status: string): ActionButtonType[] => {
     switch ($status) {
-      case "심사중":
+      case '심사중':
         return [
           {
-            text: "판매 취소",
+            text: '판매 취소',
             action: () => {
-              handleRejectButton()
-              console.log("판매 취소");
-            }
-          }
+              handleRejectButton();
+              console.log('판매 취소');
+            },
+          },
         ];
-      case "심사 완료":
+      case '심사 완료':
         return [
           {
-            text: "판매 승인",
+            text: '판매 승인',
             action: () => {
-              handleApproveButton()
-            }
+              handleApproveButton();
+            },
           },
           {
-            text: "판매 거절",
+            text: '판매 거절',
             action: () => {
-              handleRejectButton()
-            }
-          }
+              handleRejectButton();
+            },
+          },
         ];
       default:
         return [];
@@ -179,28 +180,25 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   };
 
   const handleApproveButton = async () => {
-    try{
-      await setTestAccessToken();
-      var strData = "판매중";
-      await updatePurchaseCar({car_purchase_id : car_purchase_id, progress : strData})
-      log('등록완료')
-  
-    } catch(e){
-      console.error("판매승인 변경 실패",e);
+    try {
+      var strData = '판매중';
+      await updatePurchaseCar({ car_purchase_id: car_purchase_id, progress: strData });
+      log('등록완료');
+    } catch (e) {
+      console.error('판매승인 변경 실패', e);
     }
-  }
+  };
 
   const handleRejectButton = async () => {
-    try{
-      await updatePurchaseCar({car_purchase_id : car_purchase_id, progress : '거절'})
-      log('등록완료')
-  
-    } catch(e){
-      console.error("판매승인 변경 실패",e);
+    try {
+      await updatePurchaseCar({ car_purchase_id: car_purchase_id, progress: '거절' });
+      log('등록완료');
+    } catch (e) {
+      console.error('판매승인 변경 실패', e);
     }
-  }
+  };
 
-  const handleDetailButtonClick = () => { 
+  const handleDetailButtonClick = () => {
     navigate(`/my/purchase/${car_purchase_id}`);
   };
 
@@ -210,9 +208,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
     <CarHistoryContainer>
       <TopWrapper>
         <DateText>{date}</DateText>
-        {isPurchase && (
-          <DetailButton onClick={handleDetailButtonClick}>상세보기</DetailButton>
-        )}
+        {isPurchase && <DetailButton onClick={handleDetailButtonClick}>상세보기</DetailButton>}
       </TopWrapper>
       <StatusLabel $status={status}>{status}</StatusLabel>
       <ContentWrapper>
@@ -223,18 +219,20 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
             <CarDetails>{model}</CarDetails>
           </div>
           <div>
-            <CarPrice>{price}  {monthlyPayment}</CarPrice>
+            <CarPrice>
+              {price} {monthlyPayment}
+            </CarPrice>
           </div>
         </InfoContainer>
       </ContentWrapper>
-      
+
       {actionButtons.length > 0 && (
         <ActionButtonContainer>
           {actionButtons.map((button, index) => (
-            <ActionButton 
-              key={index} 
+            <ActionButton
+              key={index}
               onClick={button.action}
-              $isDecline={button.text === "판매 거절" || button.text === "판매 취소"}
+              $isDecline={button.text === '판매 거절' || button.text === '판매 취소'}
             >
               {button.text}
             </ActionButton>
