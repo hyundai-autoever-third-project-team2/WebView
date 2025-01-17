@@ -310,8 +310,6 @@ export const SurveyModal = ({ closeModal }: ISurveyModal) => {
   };
 
   const handleSubmitSurvey = async () => {
-    console.log(surveyData);
-    // TODO: 설문조사 API 호출
     try {
       await submitSurvey(surveyData);
     } catch {
