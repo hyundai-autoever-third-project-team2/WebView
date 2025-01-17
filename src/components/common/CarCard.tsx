@@ -14,7 +14,7 @@ interface CarDataProps {
   checked?: boolean; // 체크했나
   isLiked?: boolean; // 좋아요 눌렀나
   viewCount?: number;
-  postDate?: Date;
+  postDate?: string;
   showHeartButton?: boolean; // 좋아요버튼 보여줄건가
   showTags?: boolean; // 태그 보여줄건가
   showCheckbox?: boolean; // 체크박스 보여줄건가
@@ -65,6 +65,7 @@ const CarImage = styled.img`
 `;
 
 const InfoContainer = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   min-height: 100px;
@@ -197,7 +198,7 @@ function CarCard({
   price,
   viewCount,
   postDate,
-  tags = [],
+  tags = ['무사고', '인증'],
   checked = false,
   isLiked = false,
   showHeartButton = false,
