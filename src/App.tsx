@@ -126,7 +126,7 @@ const webviewRouter: RouteObject[] = [
         element: <LoginPage />,
       },
       {
-        path: 'login/my-success',
+        path: 'success',
         element: <RedirectPage />,
       },
     ],
