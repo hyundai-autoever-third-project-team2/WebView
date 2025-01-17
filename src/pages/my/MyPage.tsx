@@ -12,6 +12,7 @@ import testProfile from '../../assets/test_profile.jpg';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchCountingList } from 'api/mypage/mypageApi';
+import { useUser } from 'hooks/useUser';
 
 const Container = styled.div`
   background-color: #fff;
@@ -180,7 +181,7 @@ const QUICKMENU_ITEMS : MenuItemProps[] = [
 
 function MyPage() {
   const navigate = useNavigate();
-
+  const { data: user, isLoading, error } = useUser();
   const [statItems,setStatItems] = useState([
     {
       value: 0, label: '구매 내역', path: '/my/purchase'
@@ -221,7 +222,8 @@ function MyPage() {
   };
 
   const handleLogoutClick = () => {
-    log("TODO: 로그아웃로직")
+    localStorage.removeItem('accessToken');
+    navigate('/');
   }
 
   return (
@@ -238,9 +240,11 @@ function MyPage() {
       
       <ProfileContainer>
         <ProfileSection>
-          <ProfileImage src={testProfile} alt="profile" />
+          <ProfileImage
+            src={user?.profileImage || testProfile} 
+            alt="profile" />
           <ProfileText>
-            같음 님 
+          {user?.name || '사용자'} 님 
             <span>반갑습니다!</span>
           </ProfileText>
         </ProfileSection>
