@@ -34,6 +34,8 @@ export interface CarDetailResponse {
   recommendCars: RecommendCar[];
 }
 
+export type CarComparisonData = Omit<CarDetailResponse, "recommendCars">;
+
 interface RecommendCar {
   carId: number;
   imageUrl: string;

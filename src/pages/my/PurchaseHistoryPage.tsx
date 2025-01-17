@@ -1,15 +1,16 @@
-import { SetStateAction, useEffect, useState } from 'react';
-import Toolbar from 'components/common/Toolbar';
-import StatMenu from './components/StatMenu';
-import { useNavigate } from 'react-router-dom';
-import DropDownButton from './components/DropDownButton';
-import styled from 'styled-components';
-import CarHistoryItem from './components/CarHistoryItem';
-import { fetchViewTransactionList } from 'api/mypage/mypageApi';
-import { CarViewTransactionData } from 'types/ViewTransactionData';
-import FilterSearchInput from './components/FilterSearchInput';
+import { SetStateAction, useEffect, useState } from "react";
+import Toolbar from "components/common/Toolbar";
+import StatMenu from "./components/StatMenu";
+import { useNavigate } from "react-router-dom";
+import DropDownButton from "./components/DropDownButton";
+import styled from "styled-components";
+import CarHistoryItem from "./components/CarHistoryItem";
+import { fetchViewTransactionList } from "api/mypage/mypageApi"; 
+import { CarViewTransactionData } from "types/ViewTransactionData";
+import FilterSearchInput from "./components/FilterSearchInput";
 
-const Contents = styled.div``;
+
+const Contents = styled.div``
 
 const SearchContainer = styled.div`
   margin-top: 20px;
@@ -38,6 +39,7 @@ const ErrorText = styled.div`
 `;
 
 function PurchasePage() {
+
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState<CarViewTransactionData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
