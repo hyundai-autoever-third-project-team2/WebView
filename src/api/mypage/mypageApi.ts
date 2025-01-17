@@ -5,13 +5,9 @@ import { client } from 'utils/axiosInstance';
 
 
 // (유저입장)구매내역 데이터 가져오기
-export const fetchViewTransactionList = async (progress: string = '거래중'): Promise<CarViewTransactionData[]> => {
+export const fetchViewTransactionList = async (): Promise<CarViewTransactionData[]> => {
   try {
-      const response = await client.get<CarViewTransactionListResponse>('/user/transaction', {
-          params: {
-              progress, // progress 값을 쿼리 파라미터로 전달 ㅡㅡㅡㅡㅡ 없앨예정정
-          }
-      });
+      const response = await client.get<CarViewTransactionListResponse>('/user/transaction');
       return response.data;
   } catch (e) {
       console.error('구매내역 데이터 가져오기 실패', e);
@@ -21,13 +17,9 @@ export const fetchViewTransactionList = async (progress: string = '거래중'): 
 
 
 // (유저입장)판매내역 데이터 가져오기
-export const fetchViewUserCarTransactionList = async (progress: string = '심사 완료'): Promise<CarViewUserCarTransactionData[]> => {
+export const fetchViewUserCarTransactionList = async (): Promise<CarViewUserCarTransactionData[]> => {
     try{
-        const response = await client.get<CarViewUserCarTransactionListResponse>('/user/userCarTransaction', {
-          params: {
-              progress, // progress 값을 쿼리 파라미터로 전달 ㅡㅡㅡㅡㅡ 없앨예정
-          }
-      });
+        const response = await client.get<CarViewUserCarTransactionListResponse>('/user/userCarTransaction');
         return response.data;
     } catch(e){
         console.error('판매내역 데이터 가져오기 실패',e);
@@ -47,16 +39,21 @@ export const fetchCountingList = async () : Promise<UserCountingData> =>{
   }
 }
 
+// 판매내역 갱신 인터페이스스
 interface UpdatePurchaseCarData {
     car_purchase_id: number;
     progress: string;
   }
 
-  //판매내역 갱신 (시세 결정 후 판매 여부 결정하기)
   export const updatePurchaseCar = async (data: UpdatePurchaseCarData): Promise<void> => {
     try {
-      const response = await client.put('/car/updatePurchaseCar', data);
-      console.log('판매내역 갱신 성공',response.data)
+      const response = await client.put('/car/updatePurchaseCar', null, {
+        params: {
+          car_purchase_id: data.car_purchase_id,
+          progress: data.progress
+        }
+      });
+      console.log('판매내역 갱신 성공', response.data);
     } catch (e) {
       console.error('판매내역 상태 갱신 실패', e);
     }

@@ -1,6 +1,8 @@
+import { updatePurchaseCar } from 'api/mypage/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
+import { setTestAccessToken } from 'utils/axiosInstance';
 
 interface ActionButtonType {
   text: string;
@@ -13,6 +15,8 @@ type StatusLabelProps = {
 
 // CarHistoryItem 판매, 구매 구분없이 일반화된 props
 interface CarHistoryItemProps {
+  car_purchase_id?: number,
+  car_sales_id?: number,
   date?: string;
   status?: string;
   title?: string;
@@ -59,12 +63,14 @@ const StatusLabel = styled.div<StatusLabelProps>`
   margin-bottom: 12px;
   color: ${({ $status }) => {
     switch ($status) { // progress별 색상 정하자
-      case "판매 처리":
-        return "red";
-      case "구매 확정":
-        return "#00A36C";
-      case "배송중":
-        return "#2B7DE9";
+      case "취소 / 반품":
+      case "거절":
+        return `${theme.colors.error}`;
+      case "판매 완료":
+      case "거래완료":
+        return `${theme.colors.success}`;
+      case "심사 완료":
+        return `${theme.colors.primary}`
       default:
         return "#666";
     }
@@ -127,6 +133,8 @@ const ActionButton = styled.button<{$isDecline : boolean}>`
 `;
 
 const CarHistoryItem: React.FC<CarHistoryItemProps> = ({ 
+  car_purchase_id =0,
+  car_sales_id = 0,
   date = "날짜",
   status = "정보",
   title = "이름",
@@ -145,7 +153,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
           {
             text: "판매 취소",
             action: () => {
-              // 판매 취소 로직
+              handleRejectButton()
               console.log("판매 취소");
             }
           }
@@ -155,13 +163,13 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
           {
             text: "판매 승인",
             action: () => {
-              // 판매 데이터로 서버에 보내는 로직 고고
+              handleApproveButton()
             }
           },
           {
             text: "판매 거절",
             action: () => {
-              // 판매 취소, 거절 : 프론트(매입차량id값 post), 백(해당 id값 프로그레스 판매거절로 변경)
+              handleRejectButton()
             }
           }
         ];
@@ -170,19 +178,40 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
     }
   };
 
-  const handleDetailButtonClick = (purchaseCarId : string) => () => {
-    navigate(`/my/purchase/${purchaseCarId}`)
+  const handleApproveButton = async () => {
+    try{
+      await setTestAccessToken();
+      var strData = "판매중";
+      await updatePurchaseCar({car_purchase_id : car_purchase_id, progress : strData})
+      log('등록완료')
+  
+    } catch(e){
+      console.error("판매승인 변경 실패",e);
+    }
   }
+
+  const handleRejectButton = async () => {
+    try{
+      await updatePurchaseCar({car_purchase_id : car_purchase_id, progress : '거절'})
+      log('등록완료')
+  
+    } catch(e){
+      console.error("판매승인 변경 실패",e);
+    }
+  }
+
+  const handleDetailButtonClick = () => { 
+    navigate(`/my/purchase/${car_purchase_id}`);
+  };
 
   const actionButtons = getActionButtons(status);
 
   return (
     <CarHistoryContainer>
-      {/* 기존 코드 유지 */}
       <TopWrapper>
         <DateText>{date}</DateText>
         {isPurchase && (
-          <DetailButton onClick={handleDetailButtonClick('2')}>상세보기</DetailButton>
+          <DetailButton onClick={handleDetailButtonClick}>상세보기</DetailButton>
         )}
       </TopWrapper>
       <StatusLabel $status={status}>{status}</StatusLabel>
@@ -205,7 +234,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
             <ActionButton 
               key={index} 
               onClick={button.action}
-              $isDecline={button.text === "판매 거절"}
+              $isDecline={button.text === "판매 거절" || button.text === "판매 취소"}
             >
               {button.text}
             </ActionButton>
