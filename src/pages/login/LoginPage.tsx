@@ -1,5 +1,6 @@
 import * as S from './LoginPage.style';
 import KakaoLoginButton from 'assets/kakao_login.png';
+import Logo from 'assets/logo_large.png';
 
 export const LoginPage = () => {
   const handleKakaoLoginClick = () => {
@@ -9,7 +10,7 @@ export const LoginPage = () => {
   return (
     <S.LoginPageWrapper>
       <S.LogoWrapper>
-        <S.Logo src="src/assets/logo_large.png" alt="logo" />
+        <S.Logo src={Logo} alt="logo" />
       </S.LogoWrapper>
       <S.LoginButtonWrapper>
         <img src={KakaoLoginButton} alt="kakao-login" onClick={handleKakaoLoginClick} />
