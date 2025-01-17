@@ -25,12 +25,16 @@ import CarListItem from 'components/common/CarListItem';
 import { ModalPortal } from 'components/common/Modal/ModalPortal';
 import { SurveyModal } from 'components/common/Modal/SurveyModal';
 import { useModal } from 'hooks/useModal';
+import Loading from 'components/common/Loading';
+import { getFeedList } from 'api/feed/feedApi';
 
 function HomePage() {
   const navigate = useNavigate();
-  const [recentCars, setRecentCars] = useState<CarListItemData[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [recentCarList, setRecentCarList] = useState<CarListItemData[]>([]);
+  const [feedPreviewList, setFeedPreviewList] = useState<string[]>([]);
+  const [recentCarListError, setRecentCarListError] = useState<string | null>(null);
+  const [feedPreviewListError, setFeedPreviewListError] = useState<string | null>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
 
   const recommendCarList: CarData[] = [...CarList];
@@ -65,11 +69,34 @@ function HomePage() {
     async function loadRecentCars() {
       try {
         setLoading(true);
-        const data = await fetchRecentCarList();
-        setRecentCars(data.slice(0, 3));
+        const recentCarList = await fetchRecentCarList();
+        setRecentCarList(recentCarList.slice(0, 3));
       } catch (error) {
         console.error('Failed to load recent cars:', error);
-        setError('최근 차량을 불러오는데 실패했습니다.');
+        setRecentCarListError('차량을 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRecentCars();
+  }, []);
+
+  useLayoutEffect(() => {
+    async function loadRecentCars() {
+      try {
+        setLoading(true);
+        const feedList = await getFeedList();
+        const feedImages = feedList
+          .flatMap((user) => user.stories)
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 3)
+          .map((story) => story.imageUrl);
+
+        setFeedPreviewList(feedImages);
+      } catch (error) {
+        console.error('Failed to load feed:', error);
+        setFeedPreviewListError('피드를 불러오는데 실패했습니다.');
       } finally {
         setLoading(false);
       }
@@ -195,13 +222,13 @@ function HomePage() {
         <S.CarListSection>
           <S.TitleWithArrowButton>내 차 타볼카?</S.TitleWithArrowButton>
           {loading ? (
-            <S.LoadingWrapper>로딩중...</S.LoadingWrapper>
-          ) : error ? (
-            <S.ErrorMessage>{error}</S.ErrorMessage>
-          ) : recentCars.length === 0 ? (
+            <Loading />
+          ) : recentCarListError ? (
+            <S.ErrorMessage>{recentCarListError}</S.ErrorMessage>
+          ) : recentCarList.length === 0 ? (
             <S.EmptyMessage>등록된 차량이 없습니다.</S.EmptyMessage>
           ) : (
-            recentCars.map((car) => <CarListItem key={car.carId} data={car} />)
+            recentCarList.map((car) => <CarListItem key={car.carId} data={car} />)
           )}
           <S.AllCarListButton onClick={handleAllCarListClick}>
             차량 전체 보기
@@ -212,11 +239,11 @@ function HomePage() {
         <S.FeedPreviewSection>
           <S.TitleWithArrowButton>
             오늘의 타볼카
-            <ChevronRight size={16} />
+            <ChevronRight size={16} onClick={() => navigate('/feed')} />
           </S.TitleWithArrowButton>
           <S.FeedPreviewCardWrapper>
-            {recommendCarList.slice(3, 6).map((car) => (
-              <S.FeedPreviewCard key={car.id} src={car.imageUrlList[0]} alt={car.model} />
+            {feedPreviewList.map((imageUrl, index) => (
+              <S.FeedPreviewCard key={index} src={imageUrl} alt={`피드 이미지 ${index + 1}`} />
             ))}
           </S.FeedPreviewCardWrapper>
         </S.FeedPreviewSection>
