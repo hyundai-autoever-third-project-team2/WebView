@@ -7,3 +7,8 @@ export const client = axios.create({
   },
   withCredentials: true,
 });
+
+client.interceptors.request.use((config) => {
+  config.headers['Authorization'] = localStorage.getItem('accessToken');
+  return config;
+});
