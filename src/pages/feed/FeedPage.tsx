@@ -22,6 +22,7 @@ const transformToStoriesData = (apiData: UserStories[]) => {
     stories: userData.stories.map((story) => ({
       content: () => (
         <Feed
+          feedId={story.id}
           username={userData.nickname}
           profile={userData.profile}
           ellapsedTime={getElapsedTime(story.createdAt)}

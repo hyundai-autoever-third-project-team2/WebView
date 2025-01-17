@@ -2,6 +2,7 @@ import { UserStories } from 'types/Feed';
 import { client } from '../../utils/axiosInstance';
 
 export interface WriteFeedRequest {
+  userId: number;
   contents: string;
   imageUrl: string;
   hashtagList: string[];
@@ -9,6 +10,10 @@ export interface WriteFeedRequest {
 
 export interface DeleteFeedRequest {
   feedId: number;
+}
+
+interface FeedLikeResponse {
+  success: boolean;
 }
 
 export const getFeedList = async (): Promise<UserStories[] | undefined> => {
@@ -23,29 +28,48 @@ export const getFeedList = async (): Promise<UserStories[] | undefined> => {
 
 export const postFeed = async (data: WriteFeedRequest): Promise<void> => {
   try {
-    const formData = new FormData();
-    formData.append('contents', data.contents);
-    formData.append('image', data.imageUrl);
-    data.hashtagList.forEach((tag) => {
-      formData.append('hashtagList', tag);
-    });
+    const requestData = {
+      userId: data.userId,
+      contents: data.contents,
+      imageUrl: data.imageUrl,
+      hashtagList: data.hashtagList,
+    };
 
-    await client.post('/feed/write', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    await client.post('/feed/write', requestData);
   } catch (error) {
     console.error('Failed to write feed:', error);
   }
 };
 
-export const deleteFeed = async (data: DeleteFeedRequest): Promise<boolean> => {
+export const deleteFeed = async (feedId: number): Promise<void> => {
   try {
-    await client.put('/feed/delete', data);
-    return true;
+    await client.put('/feed/delete', {
+      feedId: feedId,
+    });
   } catch (error) {
     console.error('Failed to delete feed:', error);
-    return false;
+    throw error;
+  }
+};
+
+export const feedLike = async (feedId: number): Promise<void> => {
+  try {
+    await client.post<FeedLikeResponse>('/feedLike/click', {
+      feedId: feedId,
+    });
+  } catch (error) {
+    console.error('Failed to like feed:', error);
+    throw error;
+  }
+};
+
+export const feedUnlike = async (feedId: number): Promise<void> => {
+  try {
+    await client.delete<FeedLikeResponse>('/feedLike/unclick', {
+      data: { feedId: feedId },
+    });
+  } catch (error) {
+    console.error('Failed to unlike feed:', error);
+    throw error;
   }
 };
