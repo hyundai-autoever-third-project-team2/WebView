@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouteObject, RouterProvider } from 'react-router-dom';
 import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
 import { CarDetailPage } from 'pages/carDetail/CarDetailPage';
@@ -25,6 +25,8 @@ const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
 const ChatPage = lazy(() => import('pages/chat/ChatPage'));
 
+const hasToken = localStorage.getItem('accessToken');
+
 const webviewRouter: RouteObject[] = [
   // 내비게이션 바가 있는 페이지를 추가해주세요.
   {
@@ -38,8 +40,8 @@ const webviewRouter: RouteObject[] = [
     ),
     children: [
       {
-        path: '',
-        element: <HomePage />,
+        path: '/',
+        element: hasToken ? <HomePage /> : <Navigate to="/login" replace />,
       },
       {
         path: 'wishlist',
@@ -117,7 +119,6 @@ const webviewRouter: RouteObject[] = [
         element: <ComparePage />,
       },
       {
-
         path: 'chat/:roomId',
         element: <ChatPage />,
       },

@@ -322,14 +322,6 @@ export const AnnouncementSection = styled.div`
   }
 `;
 
-export const LoadingWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 32px;
-  color: ${({ theme }) => theme.colors.grayLight};
-`;
-
 export const ErrorMessage = styled.div`
   display: flex;
   justify-content: center;

@@ -9,3 +9,4 @@ export const getUserInfo = async () => {
         console.error("유저정보 받기 실패: ",e)
     }
 } 
+

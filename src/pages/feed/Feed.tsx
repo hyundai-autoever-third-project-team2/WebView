@@ -1,10 +1,13 @@
+import { deleteFeed, feedLike, feedUnlike } from 'api/feed/feedApi';
 import Profile from 'components/common/Profile';
-import { ArrowLeft, Camera, EllipsisVertical, Flag, Heart } from 'lucide-react';
+import { useUser } from 'hooks/useUser';
+import { ArrowLeft, Camera, EllipsisVertical, Flag, Heart, X } from 'lucide-react';
 import { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 export interface FeedProps {
+  feedId: number;
   username: string;
   profile: string;
   ellapsedTime: string;
@@ -14,10 +17,11 @@ export interface FeedProps {
   src: string;
 }
 
-function Feed({ username, profile, ellapsedTime, title, tags, src, isLiked }: FeedProps) {
+function Feed({ feedId, username, profile, ellapsedTime, title, tags, src, isLiked }: FeedProps) {
   const [isMenuOpen, toggleMenu] = useReducer((v) => !v, false);
   const [isLikedState, toggleLike] = useReducer((v) => !v, !!isLiked);
   const navigate = useNavigate();
+  const { data: userInfo } = useUser();
 
   const handleArrowLeftClick = () => {
     navigate('/');
@@ -28,11 +32,31 @@ function Feed({ username, profile, ellapsedTime, title, tags, src, isLiked }: Fe
   };
 
   const handleReportFeed = () => {
-    window.confirm('신고하시겠습니까?');
+    window.confirm('부적절한 게시물인가요? 검토 후 조치할게요.');
   };
 
-  const handleLikeButton = () => {
-    toggleLike();
+  const handleDeleteFeed = async () => {
+    if (window.confirm('게시물을 삭제할까요?')) {
+      try {
+        await deleteFeed(feedId);
+        window.location.reload();
+      } catch (error) {
+        console.error('Failed to delete feed:', error);
+      }
+    }
+  };
+
+  const handleLikeButton = async () => {
+    try {
+      if (!isLikedState) {
+        await feedLike(feedId);
+      } else {
+        await feedUnlike(feedId);
+      }
+      toggleLike();
+    } catch (error) {
+      console.error('Failed to handle like:', error);
+    }
   };
 
   return (
@@ -55,10 +79,17 @@ function Feed({ username, profile, ellapsedTime, title, tags, src, isLiked }: Fe
           <DropdownMenuItem onClick={handleAddFeed}>
             <Camera size={20} />내 차도 자랑하기
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleReportFeed} style={{ color: 'red' }}>
-            <Flag size={20} />
-            부적절한 피드 신고
-          </DropdownMenuItem>
+          {userInfo?.nickname === username ? (
+            <DropdownMenuItem onClick={handleDeleteFeed} style={{ color: 'red' }}>
+              <X size={20} />
+              피드 삭제
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={handleReportFeed} style={{ color: 'red' }}>
+              <Flag size={20} />
+              부적절한 피드 신고
+            </DropdownMenuItem>
+          )}
         </DropdownMenu>
       )}
       <FeedImage src={src} />
