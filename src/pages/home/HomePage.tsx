@@ -18,7 +18,7 @@ import Advertisement1 from 'assets/advertisement1.png';
 import Advertisement2 from 'assets/advertisement2.png';
 import Advertisement3 from 'assets/advertisement3.png';
 import Advertisement4 from 'assets/advertisement4.png';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { CarListItemData } from 'types/CarListItemData';
 import { fetchRecentCarList } from 'api/carList/carListApi';
 import CarListItem from 'components/common/CarListItem';
@@ -33,11 +33,49 @@ function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
 
+  const recommendCarList: CarData[] = [...CarList];
+
+  const advertisementList: { imageUrl: string; title: string }[] = [
+    {
+      imageUrl: Advertisement1,
+      title: '광고1',
+    },
+    {
+      imageUrl: Advertisement2,
+      title: '광고2',
+    },
+    {
+      imageUrl: Advertisement3,
+      title: '광고3',
+    },
+    {
+      imageUrl: Advertisement4,
+      title: '광고4',
+    },
+  ];
+
   useEffect(() => {
     if (!localStorage.getItem('newUser')) {
       openModal();
       localStorage.setItem('newUser', 'true');
     }
+  }, []);
+
+  useLayoutEffect(() => {
+    async function loadRecentCars() {
+      try {
+        setLoading(true);
+        const data = await fetchRecentCarList();
+        setRecentCars(data.slice(0, 3));
+      } catch (error) {
+        console.error('Failed to load recent cars:', error);
+        setError('최근 차량을 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRecentCars();
   }, []);
 
   function handleNotificationButtonClick() {
@@ -66,44 +104,6 @@ function HomePage() {
   function handleAllCarListClick() {
     // navigate('/car-list');
   }
-
-  const recommendCarList: CarData[] = [...CarList];
-
-  const advertisementList: { imageUrl: string; title: string }[] = [
-    {
-      imageUrl: Advertisement1,
-      title: '광고1',
-    },
-    {
-      imageUrl: Advertisement2,
-      title: '광고2',
-    },
-    {
-      imageUrl: Advertisement3,
-      title: '광고3',
-    },
-    {
-      imageUrl: Advertisement4,
-      title: '광고4',
-    },
-  ];
-
-  useEffect(() => {
-    async function loadRecentCars() {
-      try {
-        setLoading(true);
-        const data = await fetchRecentCarList();
-        setRecentCars(data.slice(0, 3)); // 최근 3개만 사용
-      } catch (error) {
-        console.error('Failed to load recent cars:', error);
-        setError('최근 차량을 불러오는데 실패했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadRecentCars();
-  }, []);
 
   return (
     <>
@@ -201,11 +201,7 @@ function HomePage() {
           ) : recentCars.length === 0 ? (
             <S.EmptyMessage>등록된 차량이 없습니다.</S.EmptyMessage>
           ) : (
-            recentCars.map((car) => (
-              <>
-                <CarListItem key={car.carId} data={car} />
-              </>
-            ))
+            recentCars.map((car) => <CarListItem key={car.carId} data={car} />)
           )}
           <S.AllCarListButton onClick={handleAllCarListClick}>
             차량 전체 보기
