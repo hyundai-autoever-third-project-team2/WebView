@@ -6,6 +6,7 @@ export const AddFeedPageContainer = styled.div`
   margin-top: ${LAYOUT.TOOLBAR_HEIGHT};
   padding: 20px 20px 0 20px;
   flex-direction: column;
+  margin-bottom: 20px;
 `;
 
 export const AddImageSection = styled.div`
@@ -44,11 +45,15 @@ export const AddTagSection = styled.div`
 
 export const TagInputContainer = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 300px; // 인풋의 최대 너비 설정
 `;
 
 export const TagInput = styled.input`
-  width: auto;
-  padding: 8px 35px 8px 12px;
+  width: 100%;
+  padding: 8px 35px 8px 12px; // 오른쪽 패딩 조정
   border-radius: ${({ theme }) => theme.borderRadius.xs};
   border: solid ${({ theme }) => theme.colors.primary};
   border-width: 1px;
@@ -67,24 +72,22 @@ export const TagInput = styled.input`
 
 export const AddTagButton = styled.button`
   position: absolute;
-  right: 58%;
-  top: 15px;
+  right: 8px;
+  top: 50%;
   transform: translateY(-50%);
   color: ${({ theme }) => theme.colors.primary};
   background: none;
-  border: none;
   font-size: 20px;
-  cursor: pointer;
   padding: 0;
-  pointer-events: auto;
   z-index: 1;
+  cursor: pointer;
 `;
 
 export const TagsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 10px;
+  margin: 15px 0px;
 `;
 
 export const TagItem = styled.div`

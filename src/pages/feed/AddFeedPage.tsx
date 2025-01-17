@@ -7,11 +7,14 @@ import { TextArea } from 'pages/registerCar/RegisterCarPage.style';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AddImageBackground from 'assets/add_image_background.png';
+import { postFeed } from 'api/feed/feedApi';
 
 function AddFeedPage() {
   const [content, setContent] = useState<string>('');
   const [tagInput, setTagInput] = useState<string>('');
   const [tags, setTags] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -42,8 +45,39 @@ function AddFeedPage() {
     }
   };
 
-  const handleUploadButtonClick = () => {
-    // TODO: Implement upload functionality
+  const handleUploadImage = (uploadedImageUrl: string) => {
+    console.log('Uploaded image URL:', uploadedImageUrl);
+    setImageUrl(uploadedImageUrl);
+  };
+
+  const handleUploadButtonClick = async () => {
+    try {
+      // if (!imageUrl) {
+      //   console.error('이미지를 업로드해주세요.');
+      //   return;
+      // }
+      if (!content.trim()) {
+        console.error('내용을 입력해주세요.');
+        return;
+      }
+
+      setIsLoading(true);
+
+      const feedData = {
+        contents: content,
+        imageUrl: imageUrl,
+        hashtagList: tags,
+      };
+
+      console.log('피드 데이터:', feedData);
+      const response = await postFeed(feedData);
+      console.log('피드 등록 결과:', response);
+      navigate('/feed');
+    } catch (error) {
+      console.error('피드 등록 중 오류가 발생했습니다:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,6 +89,7 @@ function AddFeedPage() {
           navigate('/feed');
         }}
       />
+
       <S.AddFeedPageContainer>
         <S.AddImageSection>
           <S.TitleWrapper>
@@ -66,7 +101,7 @@ function AddFeedPage() {
             width={200}
             height={200}
             backgroundImage={AddImageBackground}
-            handleUploadImage={() => {}}
+            handleUploadImage={handleUploadImage}
           />
         </S.AddImageSection>
 
@@ -87,7 +122,7 @@ function AddFeedPage() {
             <S.TagInput
               maxLength={10}
               type="text"
-              placeholder="태그"
+              placeholder="태그를 추가해주세요"
               value={tagInput}
               onChange={handleTagInputChange}
               onKeyDown={handleTagKeyDown}
@@ -106,8 +141,8 @@ function AddFeedPage() {
           </S.TagsContainer>
         </S.AddTagSection>
 
-        <Button $fixed onClick={handleUploadButtonClick}>
-          등록
+        <Button onClick={handleUploadButtonClick} disabled={isLoading}>
+          {isLoading ? '등록 중...' : '등록'}
         </Button>
       </S.AddFeedPageContainer>
     </>
