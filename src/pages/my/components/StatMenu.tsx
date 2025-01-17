@@ -8,8 +8,10 @@ interface StatItemData {
 
 interface StatMenuProps {
   items: StatItemData[];
-  onItemClick?: (path: string) => void;
+  onItemClick?: (label: string) => void;
+  activeLabel?: string | null;
 }
+
 
 const StatsContainer = styled.div`
   display: flex;
@@ -21,17 +23,17 @@ const StatsContainer = styled.div`
   color : ${theme.colors.primary}
 `;
 
-const StatItem = styled.div`
-  text-align: center;
-  flex: 1;
-  cursor: pointer;
-  padding: 10px 0;
 
-  &:not(:first-child) {
-    border-left: 2px solid ${theme.colors.primary};
-  }
+const StatItem = styled.div<{ $isActive?: boolean }>`
+    text-align: center;
+    flex: 1;
+    cursor: pointer;
+    padding: 10px 0;
+
+    &:not(:first-child) {
+        border-left: 2px solid ${theme.colors.primary};
+    }
 `;
-
 const StatValue = styled.div`
   font-size: 1rem;
   font-weight: bold;
@@ -39,30 +41,25 @@ const StatValue = styled.div`
 `;
 
 const StatLabel = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 4px;
 `;
 
-function StatMenu({ items, onItemClick }: StatMenuProps) {
-  const handleItemClick = (label: string) => () => {
-    log(label + "버튼 클릭");
-  };
-
-  if (items.length !== 3) {
-    console.warn('StatMenu expects exactly 3 items');
-    return null;
-  }
-
-  return (
-    <StatsContainer>
-      {items.map((item, idx) => (
-        <StatItem key={idx} onClick={handleItemClick(item.label)}>
-          <StatValue>{item.value}</StatValue>
-          <StatLabel>{item.label}</StatLabel>
-        </StatItem>
-      ))}
-    </StatsContainer>
-  );
+function StatMenu({ items, onItemClick, activeLabel }: StatMenuProps) {
+    return (
+        <StatsContainer>
+            {items.map((item, idx) => (
+                <StatItem 
+                    key={idx} 
+                    onClick={() => onItemClick?.(item.label)}
+                    $isActive={item.label === activeLabel}
+                >
+                    <StatValue>{item.value}</StatValue>
+                    <StatLabel>{item.label}</StatLabel>
+                </StatItem>
+            ))}
+        </StatsContainer>
+    );
 }
 
 export default StatMenu;
