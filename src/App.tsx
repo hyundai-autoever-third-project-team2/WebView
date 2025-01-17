@@ -4,6 +4,9 @@ import { Layout } from 'components/layouts/Layout';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
 import { CarDetailPage } from 'pages/carDetail/CarDetailPage';
 import { SelectComparePage } from 'pages/compare/SelectComparePage';
+import ScrollToTop from 'components/common/ScrollToTop';
+import { LoginPage } from 'pages/login/LoginPage';
+import { RedirectPage } from 'pages/login/RedirectPage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -20,15 +23,18 @@ const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
 const PurchaseCarPage = lazy(() => import('pages/purchaseCar/PurchaseCarPage'));
 const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
-const ChatPage = lazy(() => import('pages/chat/ChatPage'))
+const ChatPage = lazy(() => import('pages/chat/ChatPage'));
 
 const webviewRouter: RouteObject[] = [
   // 내비게이션 바가 있는 페이지를 추가해주세요.
   {
     element: (
-      <Layout type="mobile" hasNavBar={true}>
-        <BottomNavigationBar />
-      </Layout>
+      <>
+        <ScrollToTop />
+        <Layout type="mobile" hasNavBar={true}>
+          <BottomNavigationBar />
+        </Layout>
+      </>
     ),
     children: [
       {
@@ -51,7 +57,12 @@ const webviewRouter: RouteObject[] = [
   },
   // 내비게이션 바가 없는 페이지를 추가해주세요.
   {
-    element: <Layout type="mobile" hasNavBar={false} />,
+    element: (
+      <>
+        <ScrollToTop />
+        <Layout type="mobile" hasNavBar={false} />
+      </>
+    ),
     children: [
       {
         path: 'register-car',
@@ -106,9 +117,18 @@ const webviewRouter: RouteObject[] = [
         element: <ComparePage />,
       },
       {
+
         path: 'chat/:roomId',
-        element: <ChatPage />
-      }
+        element: <ChatPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginPage />,
+      },
+      {
+        path: 'login/my-success',
+        element: <RedirectPage />,
+      },
     ],
   },
 ];

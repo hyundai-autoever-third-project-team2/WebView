@@ -6,6 +6,7 @@ export const SelectComparePageWrapper = styled.div`
   flex-direction: column;
   gap: 24px;
   padding-top: 72px;
+  padding-bottom: 56px;
 
   & > :last-child {
     padding-top: 24px;
@@ -122,4 +123,24 @@ export const Title = styled.span`
   font-weight: 600;
   color: #000;
   margin-bottom: 24px;
+`;
+
+export const CompareButtonWarpper = styled.div<{ $disabled: boolean }>`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: ${({ $disabled }) => ($disabled ? 'rgba(149,149,149,0.8)' : theme.colors.primary)};
+  width: 100%;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+`;
+
+export const SelectedCount = styled.div`
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+  font-weight: 500;
+  font-size: 16px;
+  font-weight: 500;
 `;

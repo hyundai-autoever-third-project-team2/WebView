@@ -214,7 +214,7 @@ export const CarDetailPage = () => {
           </S.SimilarCarFlexRow>
         </S.SimilarCarWrapper>
       </section>
-      <Button fixed>구매하기</Button>
+      <Button $fixed>구매하기</Button>
     </S.CarDetailWrapper>
   );
 };

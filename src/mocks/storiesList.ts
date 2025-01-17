@@ -1,4 +1,4 @@
-import { UserStories } from 'types/story';
+import { UserStories } from 'types/Story';
 
 export const stories: UserStories[] = [
   {

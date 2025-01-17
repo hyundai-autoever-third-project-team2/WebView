@@ -4,9 +4,10 @@ import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface SearchInputProps {
-  onSearch?: (value: string) => void;
   placeholder?: string;
   initialValue?: string;
+  onSearch?: (value: string) => void;
+  searchPageRouting?: boolean;
 }
 
 const SearchContainer = styled.form`
@@ -15,12 +16,14 @@ const SearchContainer = styled.form`
 
 const InputWrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 const Input = styled.input`
-  width: 100%;
+  flex: 1;
   height: 48px;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
   color: ${({ theme }) => theme.colors.primary};
   background-color: white;
   border: 2px solid ${({ theme }) => theme.colors.primary};
@@ -48,17 +51,16 @@ const SearchButton = styled.button`
   color: ${({ theme }) => theme.colors.primary};
   cursor: pointer;
   transition: color 0.2s ease;
+  padding: 8px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 `;
 
-interface SearchInputProps {
-  placeholder?: string;
-  initialValue?: string;
-  onSearch?: (value: string) => void;
-  searchPageRouting?: boolean;
-}
-
 const SearchInput: React.FC<SearchInputProps> = ({
-  placeholder = '브랜드나 모델명으로 검색해보세요.',
+  placeholder = '브랜드, 모델명으로 검색해보세요.',
   initialValue = '',
   onSearch,
   searchPageRouting = true,
@@ -75,7 +77,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     if (trimmedValue.length === 0) return;
 
     if (searchPageRouting) {
-      navigate(`/search?${trimmedValue}`);
+      navigate(`/search?keyword=${encodeURIComponent(trimmedValue)}`);
     }
 
     onSearch?.(trimmedValue);
@@ -90,7 +92,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
     <SearchContainer onSubmit={handleSubmit}>
       <InputWrapper>
         <Input type="text" value={value} onChange={handleChange} placeholder={placeholder} />
-        <SearchButton type="button" onClick={handleSearch} disabled={value.trim().length === 0}>
+        <SearchButton type="submit" disabled={value.trim().length === 0}>
           <Search size={20} />
         </SearchButton>
       </InputWrapper>

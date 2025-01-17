@@ -19,7 +19,7 @@ export const CarIntroduction = ({ handleNextClick }: CarIntroductionProps) => {
         <S.Title>차량에 대한 소개를 작성해주세요</S.Title>
         <S.TextArea value={carIntroduction} onChange={handleCarIntroductionChange} />
       </S.TitleWrapper>
-      <Button fixed onClick={() => handleNextClick(carIntroduction)}>
+      <Button $fixed onClick={() => handleNextClick(carIntroduction)}>
         완료
       </Button>
     </S.CarInsideImagesWrapper>
