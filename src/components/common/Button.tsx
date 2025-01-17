@@ -74,6 +74,8 @@ const StyledButton = styled.button<{
     background-color: ${(props) => props.theme.colors.primaryDark};
     transform: scale(0.97);
   }
+
+  z-index: 1000;
 `;
 
 export default Button;
