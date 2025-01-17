@@ -1,3 +1,4 @@
+import Loading from 'components/common/Loading';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,5 +17,5 @@ export const RedirectPage = () => {
     }
   }, [navigate]);
 
-  return <div>로그인중...</div>;
+  return <Loading />;
 };
