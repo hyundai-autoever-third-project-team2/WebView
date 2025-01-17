@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import Stories from 'react-insta-stories';
 import styled from 'styled-components';
 import Feed from './Feed';
-import { UserStories } from 'types/Story';
-import stories from 'mocks/storiesList';
+import { UserStories } from 'types/Feed';
 import { getElapsedTime } from 'utils/getElapsedTime';
+import { getFeedList } from 'api/feed/feedApi';
+import Loading from 'components/common/Loading';
 
 const StoryContainer = styled.div`
   position: fixed;
@@ -14,9 +15,6 @@ const StoryContainer = styled.div`
   bottom: 0;
 `;
 
-const mockApiResponse: UserStories[] = stories;
-
-// Stories 컴포넌트용 데이터 변환
 const transformToStoriesData = (apiData: UserStories[]) => {
   return apiData.map((userData) => ({
     username: userData.nickname,
@@ -38,20 +36,32 @@ const transformToStoriesData = (apiData: UserStories[]) => {
   }));
 };
 
-// 컴포넌트에서 사용
 function FeedPage() {
   const [currentUserIndex, setCurrentUserIndex] = useState(0);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [key, setKey] = useState(0);
-  const [usersStories, setUsersStories] = useState([]);
+  const [usersStories, setUsersStories] = useState<
+    {
+      username: string;
+      profile: string;
+      stories: { content: () => JSX.Element; duration: number }[];
+    }[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // API 호출을 시뮬레이션
     const fetchStories = async () => {
-      // 실제로는 API 호출
-      const response = mockApiResponse;
-      const transformedData = transformToStoriesData(response);
-      setUsersStories(transformedData);
+      try {
+        setIsLoading(true);
+        const response = await getFeedList();
+        console.log('피드 목록:', response);
+        const transformedData = response ? transformToStoriesData(response) : [];
+        setUsersStories(transformedData);
+      } catch (error) {
+        console.error('피드를 불러오는데 실패했습니다:', error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchStories();
@@ -67,7 +77,8 @@ function FeedPage() {
     }
   };
 
-  if (usersStories.length === 0) return null;
+  if (isLoading) return <Loading />;
+  if (usersStories.length === 0) return <div>등록된 피드가 없어요.</div>;
 
   return (
     <StoryContainer>

@@ -7,7 +7,7 @@ import DiscountIcon from 'assets/icon_down.png';
 const NotificationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 40px;
   gap: 10px;
   background: transparent;
   cursor: pointer;
