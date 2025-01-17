@@ -18,6 +18,10 @@ jobs:
         echo "VITE_KAKAO_API_KEY=${{ secrets.VITE_KAKAO_MAP_API_KEY }}" >> .env
         echo "VITE_KAKAO_LOGIN_URL=${{ secrets.VITE_KAKAO_LOGIN_URL }}" >> .env
 
+    - name: Debug env file
+      run: |
+        cat .env | grep -v "KEY\|TOKEN\|SECRET"    
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
