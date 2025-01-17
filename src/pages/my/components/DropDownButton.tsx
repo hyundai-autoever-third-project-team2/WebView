@@ -29,18 +29,18 @@ const DropdownButton = styled.button`
   }
 `;
 
-const DropdownText = styled.p<{ $hasValue : boolean}>`
+const DropdownText = styled.p<{ $hasValue: boolean }>`
   color: ${props => props.$hasValue ? '#fff' : '#fff'};
-  width:90%
+  width: 90%
 `;
 
-const RotatingIcon = styled(ChevronDown)<{$isOpen: boolean}>`
+const RotatingIcon = styled(ChevronDown)<{ $isOpen: boolean }>`
   width: 20px;
   height: 20px;
   color: #ffffff;
   transition: transform 0.2s ease;
   transform: ${props => props.$isOpen ? 'rotate(180deg)' : 'rotate(0)'};
-    flex-shrink: 0;
+  flex-shrink: 0;
 `;
 
 const DropdownMenu = styled.div`
@@ -85,18 +85,36 @@ const Option = styled.li`
   }
 `;
 
-const DropDownButton = ({ 
+interface DropDownButtonProps {
+  options?: string[];
+  placeholder?: string;
+  onChange?: (value: string) => void;
+  onYearSelect?: (year: string | null) => void;
+}
+
+const DropDownButton: React.FC<DropDownButtonProps> = ({
   options = ['2022년', '2023년', '2024년', '2025년'],
   placeholder = '연도별',
-  onChange = (value: string) => console.log(value)
+  onChange = (value: string) => console.log(value),
+  onYearSelect
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState('');
 
-  const handleSelect = (option : string) => {
+  const handleSelect = (option: string) => {
     setSelectedValue(option);
     setIsOpen(false);
     onChange(option);
+    
+    // 선택된 연도를 추출하여 상위 컴포넌트로 전달
+    if (onYearSelect) {
+      if (option === placeholder) {
+        onYearSelect(null); // 초기화 시
+      } else {
+        const year = option.replace('년', '');
+        onYearSelect(year);
+      }
+    }
   };
 
   return (
@@ -111,6 +129,12 @@ const DropDownButton = ({
       {isOpen && (
         <DropdownMenu>
           <OptionsList>
+            <Option
+              key="all"
+              onClick={() => handleSelect(placeholder)}
+            >
+              {placeholder}
+            </Option>
             {options.map((option, index) => (
               <Option
                 key={index}

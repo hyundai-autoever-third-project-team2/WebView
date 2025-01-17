@@ -2,11 +2,16 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
 
+interface ActionButtonType {
+  text: string;
+  action: () => void;
+}
+
 type StatusLabelProps = {
   $status: string;
 };
 
-// CarHistoryItem props erd보고 제대로 써야 함
+// CarHistoryItem 판매, 구매 구분없이 일반화된 props
 interface CarHistoryItemProps {
   date?: string;
   status?: string;
@@ -53,7 +58,7 @@ const StatusLabel = styled.div<StatusLabelProps>`
   font-size: 14px;
   margin-bottom: 12px;
   color: ${({ $status }) => {
-    switch ($status) {
+    switch ($status) { // progress별 색상 정하자
       case "판매 처리":
         return "red";
       case "구매 확정":
@@ -101,21 +106,24 @@ const CarPrice = styled.div`
   font-weight: 500;
 `;
 
-const ActionButton = styled.button`
-  width: 60px;
-  height: 25px;
+const ActionButtonContainer = styled.div`
   position: absolute;
   bottom: 12px;
   right: 16px;
+  display: flex;
+  gap: 8px;
+`;
+
+const ActionButton = styled.button<{$isDecline : boolean}>`
+  width: 60px;
+  height: 25px;
   padding: 6px 10px;
   font-size: 10px;
   background-color: white;
-  color: ${theme.colors.primary};
-  border: 1px solid ${theme.colors.primary};
+  color: ${({ $isDecline }) => $isDecline ? theme.colors.error : theme.colors.primary};
+  border: 1px solid ${({ $isDecline }) => $isDecline ? theme.colors.error : theme.colors.primary};
   border-radius: 4px;
   cursor: pointer;
-  &:hover {
-  }
 `;
 
 const CarHistoryItem: React.FC<CarHistoryItemProps> = ({ 
@@ -124,24 +132,41 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   title = "이름",
   model = "주문번호",
   price = "가격",
-  monthlyPayment = "할부",
+  monthlyPayment = "",
   imageUrl = "이미지url",
   isPurchase = false
 }) => {
   const navigate = useNavigate();
 
-  const getActionButton = ($status: string) => {
+  const getActionButtons = ($status: string): ActionButtonType[] => {
     switch ($status) {
-      case "심사전":
-        return { text: "판매 취소", show: true };
-      case "심사완료":
-        return { text: "리뷰작성", show: true };
-      case "판매 처리":
-        return { text: "계약서보기", show: false };
-      case "거래중":
-
+      case "심사중":
+        return [
+          {
+            text: "판매 취소",
+            action: () => {
+              // 판매 취소 로직
+              console.log("판매 취소");
+            }
+          }
+        ];
+      case "심사 완료":
+        return [
+          {
+            text: "판매 승인",
+            action: () => {
+              // 판매 데이터로 서버에 보내는 로직 고고
+            }
+          },
+          {
+            text: "판매 거절",
+            action: () => {
+              // 판매 취소, 거절 : 프론트(매입차량id값 post), 백(해당 id값 프로그레스 판매거절로 변경)
+            }
+          }
+        ];
       default:
-        return { show: false };
+        return [];
     }
   };
 
@@ -149,14 +174,15 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
     navigate(`/my/purchase/${purchaseCarId}`)
   }
 
-  const actionButton = getActionButton(status);
+  const actionButtons = getActionButtons(status);
 
   return (
     <CarHistoryContainer>
+      {/* 기존 코드 유지 */}
       <TopWrapper>
         <DateText>{date}</DateText>
-        {isPurchase &&(
-        <DetailButton onClick={handleDetailButtonClick('2')}>상세보기</DetailButton>
+        {isPurchase && (
+          <DetailButton onClick={handleDetailButtonClick('2')}>상세보기</DetailButton>
         )}
       </TopWrapper>
       <StatusLabel $status={status}>{status}</StatusLabel>
@@ -168,14 +194,23 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
             <CarDetails>{model}</CarDetails>
           </div>
           <div>
-            <CarPrice>{price} / {monthlyPayment}</CarPrice>
+            <CarPrice>{price}  {monthlyPayment}</CarPrice>
           </div>
         </InfoContainer>
       </ContentWrapper>
-      {actionButton.show && (
-        <ActionButton>
-          {actionButton.text}
-        </ActionButton>
+      
+      {actionButtons.length > 0 && (
+        <ActionButtonContainer>
+          {actionButtons.map((button, index) => (
+            <ActionButton 
+              key={index} 
+              onClick={button.action}
+              $isDecline={button.text === "판매 거절"}
+            >
+              {button.text}
+            </ActionButton>
+          ))}
+        </ActionButtonContainer>
       )}
     </CarHistoryContainer>
   );

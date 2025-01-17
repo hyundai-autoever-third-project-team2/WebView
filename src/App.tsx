@@ -117,10 +117,7 @@ const webviewRouter: RouteObject[] = [
         element: <ComparePage />,
       },
       {
-        path: 'compare',
-        element: <ComparePage />,
-      },
-      {
+
         path: 'chat/:roomId',
         element: <ChatPage />,
       },
@@ -129,7 +126,7 @@ const webviewRouter: RouteObject[] = [
         element: <LoginPage />,
       },
       {
-        path: 'login/my-success',
+        path: 'success',
         element: <RedirectPage />,
       },
     ],

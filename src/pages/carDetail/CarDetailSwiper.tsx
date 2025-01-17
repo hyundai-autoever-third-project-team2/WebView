@@ -22,8 +22,7 @@ const CustomSwiper = styled(Swiper)`
   }
 `;
 
-export const CarDetailSwiper = () => {
-  const carImages = carList[0].imageUrlList;
+export const CarDetailSwiper = ({ carImages }: { carImages: string[] }) => {
   return (
     <CustomSwiper
       modules={[Pagination, Autoplay]}
@@ -33,6 +32,23 @@ export const CarDetailSwiper = () => {
       autoplay={{ delay: 2000, disableOnInteraction: false }}
     >
       {carImages.map((imageUrl) => (
+        <SwiperSlide key={imageUrl}>
+          <Img src={imageUrl} alt="car" />
+        </SwiperSlide>
+      ))}
+    </CustomSwiper>
+  );
+};
+
+export const CarFixedSwiper = ({ fixedImages }: { fixedImages: string[] }) => {
+  return (
+    <CustomSwiper
+      modules={[Pagination]}
+      spaceBetween={10}
+      slidesPerView={1}
+      pagination={{ clickable: true, type: 'fraction' }}
+    >
+      {fixedImages.map((imageUrl) => (
         <SwiperSlide key={imageUrl}>
           <Img src={imageUrl} alt="car" />
         </SwiperSlide>

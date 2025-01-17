@@ -7,6 +7,7 @@ export const CarDetailWrapper = styled.div`
   gap: 16px;
   background-color: #eeeded;
   padding-top: 60px;
+  margin-bottom: 60px;
 `;
 
 export const TagContainer = styled.div`
@@ -93,6 +94,8 @@ export const BoxCarInfoContainer = styled.div`
   position: relative;
   display: flex;
   gap: 6px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const BoxInfoWrapper = styled.div`
@@ -196,11 +199,12 @@ export const OptionContainer = styled.div`
   background-color: #fff;
 `;
 
-export const OptionWrapper = styled.div`
+export const OptionWrapper = styled.div<{ $isActive: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 4px;
+  opacity: ${({ $isActive }) => ($isActive ? 1 : 0.3)};
 `;
 
 export const OptionImageWrapper = styled.div`

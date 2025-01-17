@@ -111,9 +111,7 @@ const RightSection = styled.div`
   `;
 
 
-const handleNotificationButtonClick = () => {
-  console.log('TODO : Notification 컴포넌트 동작');
-};
+
 
 
 const handleShareButtonClick = () => {
@@ -144,6 +142,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
 
   const handleCloseButtonClick = () => {
     navigate(-1)
+  };
+  const handleNotificationButtonClick = () => {
+    navigate('/notification');
   };
 
   // 우측 버튼 아이콘 설정
