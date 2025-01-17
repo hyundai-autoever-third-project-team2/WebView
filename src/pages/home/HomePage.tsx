@@ -27,8 +27,10 @@ import { SurveyModal } from 'components/common/Modal/SurveyModal';
 import { useModal } from 'hooks/useModal';
 import Loading from 'components/common/Loading';
 import { getFeedList } from 'api/feed/feedApi';
+import { useUser } from 'hooks/useUser';
 
 function HomePage() {
+  const { data: userInfo } = useUser();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [recentCarList, setRecentCarList] = useState<CarListItemData[]>([]);
@@ -87,7 +89,7 @@ function HomePage() {
       try {
         setLoading(true);
         const feedList = await getFeedList();
-        const feedImages = feedList
+        const feedImages = (feedList || [])
           .flatMap((user) => user.stories)
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .slice(0, 3)
@@ -138,7 +140,7 @@ function HomePage() {
         <S.Logo src={Logo} alt="타볼카 로고" />
         <S.HeaderInnerWrapper>
           <S.NotificationButton onClick={handleNotificationButtonClick} />
-          <Profile src="https://as1.ftcdn.net/v2/jpg/00/56/01/00/500_F_56010077_UA98ADMw95rEB2hCuAlFOJkjdirrAAPV.jpg" />
+          <Profile src={userInfo?.profileImage || 'default_profile_image_url'} />
         </S.HeaderInnerWrapper>
       </S.Header>
 
@@ -241,7 +243,7 @@ function HomePage() {
             오늘의 타볼카
             <ChevronRight size={16} onClick={() => navigate('/feed')} />
           </S.TitleWithArrowButton>
-          <S.FeedPreviewCardWrapper>
+          <S.FeedPreviewCardWrapper onClick={() => navigate('/feed')}>
             {feedPreviewList.map((imageUrl, index) => (
               <S.FeedPreviewCard key={index} src={imageUrl} alt={`피드 이미지 ${index + 1}`} />
             ))}
