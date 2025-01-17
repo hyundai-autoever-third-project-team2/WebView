@@ -13,8 +13,3 @@ client.interceptors.request.use((config) => {
   config.headers['Authorization'] = localStorage.getItem('accessToken');
   return config;
 });
-
-export const setTestAccessToken = () => {
-  document.cookie =
-    'AccessToken=eyJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6Imtha2FvIDM4ODA1MjA4NjQiLCJyb2xlIjoiUk9MRV9VU0VSIiwiZW1haWwiOiIwMTZ2aHNka2RsQG5hdmVyLmNvbSIsImlhdCI6MTczNzAwNTc3OCwiZXhwIjoxNzM3MDkyMTc4fQ.i2cBmQOPO-48I3kHc2dYPL_DM7eQh5D1I6z5qSB1iug; Path=/; Expires=Fri, 16 Jan 2026 06:38:08 GMT;';
-};

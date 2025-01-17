@@ -227,7 +227,7 @@ const QuestionModel = ({ nextStep }: ISurveyProps) => {
           </S.SelectItemWrapper>
         ))}
       </S.CarGrid>
-      <Button fixed onClick={handleNextButtonClick}>
+      <Button $fixed onClick={handleNextButtonClick}>
         다음
       </Button>
     </S.QuestionWrapperLarge>
@@ -291,7 +291,7 @@ const QuestionColor = ({ nextStep }: ISurveyProps) => {
           </S.ImageWrapper>
         ))}
       </S.CarGrid>
-      <Button fixed onClick={hanleNextButtonClick}>
+      <Button $fixed onClick={hanleNextButtonClick}>
         다음
       </Button>
     </S.QuestionWrapperLarge>

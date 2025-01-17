@@ -1,7 +1,6 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
-import carList from 'mocks/carList';
 import styled from 'styled-components';
 
 const Img = styled.img`
@@ -11,6 +10,7 @@ const Img = styled.img`
 const CustomSwiper = styled(Swiper)`
   .swiper-pagination {
     position: absolute;
+    width: 50px;
     bottom: 10px;
     right: 10px;
     z-index: 10;
