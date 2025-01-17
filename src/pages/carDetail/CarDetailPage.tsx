@@ -108,11 +108,11 @@ export const CarDetailPage = () => {
               </S.BoxInfoWrapper>
               <S.BoxInfoWrapper>
                 <S.InfoText>주행거리</S.InfoText>
-                <S.BoxInfoValue>{data.distance}</S.BoxInfoValue>
+                <S.BoxInfoValue>{data.distance}km</S.BoxInfoValue>
               </S.BoxInfoWrapper>
               <S.BoxInfoWrapper>
                 <S.InfoText>운행기간</S.InfoText>
-                <S.BoxInfoValue>3년 2개월</S.BoxInfoValue>
+                <S.BoxInfoValue>3년</S.BoxInfoValue>
               </S.BoxInfoWrapper>
             </S.BoxCarInfoContainer>
 
