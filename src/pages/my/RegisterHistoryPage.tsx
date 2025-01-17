@@ -16,7 +16,10 @@ import { setTestAccessToken } from "utils/axiosInstance";
 import FilterSearchInput from "./components/FilterSearchInput";
 
 
-const Contents = styled.div``
+const Contents = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+`
 
 const SearchContainer = styled.div`
     margin-top: 20px;
@@ -59,7 +62,7 @@ function RegisterHistoryPage() {
     const getStatusCounts = () => {
         const pending = transactions.filter(t => t.progress === "심사중").length;
         const completed = transactions.filter(t => t.progress === "심사 완료").length;
-        const cancelled = transactions.filter(t => t.progress === "심사 거절").length;
+        const cancelled = transactions.filter(t => t.progress === "거절").length;
         const selled = transactions.filter(t => t.progress === "판매중").length;
 
         return [
@@ -75,8 +78,8 @@ function RegisterHistoryPage() {
             },
             { 
                 value: cancelled, 
-                label: "심사 거절",
-                onClick: () => setSelectedProgress("심사 거절")
+                label: "거절",
+                onClick: () => setSelectedProgress("거절")
             },
             { 
                 value: selled, 
@@ -136,8 +139,13 @@ function RegisterHistoryPage() {
         }).replace(/\./g, '. ').replace(/ $/, '');
     };
 
-    const formatPrice = (price: number) => {
-        return `${(price / 10000).toFixed(0)}만원`;
+    const formatPrice = (price: number | null) => {
+        if (price){
+          return `${(price / 10000).toFixed(0)}만원`;
+        }
+        else {
+          return '가격 심사 중';
+        }
     };
 
     const handleYearSelect = (year: string | null) => {
@@ -154,8 +162,8 @@ function RegisterHistoryPage() {
             case "심사 완료":
                 status = "심사 완료";
                 break;
-            case "심사 거절":
-                status = "심사 거절";
+            case "거절":
+                status = "거절";
                 break;
             case "판매 완료":
                 status = "판매중"
@@ -196,6 +204,7 @@ function RegisterHistoryPage() {
                     {!isLoading && !error && filteredTransactions.map((transaction) => (
                         <CarHistoryItem
                             key={transaction.car_purchase_id}
+                            car_purchase_id={transaction.car_purchase_id}
                             date={formatDate(transaction.purchase_date)}
                             status={transaction.progress}
                             title={`${transaction.brand} ${transaction.model_name}`}

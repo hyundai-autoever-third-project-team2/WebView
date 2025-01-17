@@ -10,6 +10,10 @@ import temp from "../../assets/feed_sample.jpg"
 import { theme } from "styles/theme"
 import { useEffect, useState } from "react"
 import CarCard from "components/common/CarCard"
+import { fetchViewIsHeartCarList } from "api/mypage/mypageApi"
+import { CarListItemData } from "types/CarListItemData"
+import { formatPrice } from "utils/formatPrice"
+import { formatDate } from "utils/formatDate"
 
 const slideUp = keyframes`
   from {
@@ -132,37 +136,28 @@ function WishlistPage() {
   const navigate = useNavigate();
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [selectedCars, setSelectedCars] = useState<Array<{
-    id: string;
+    id: number;
     title: string;
   }>>([]);
   const [isClosing, setIsClosing] = useState(false);
+  const [carList, setCarList] = useState<CarListItemData[]>([]);
 
-  const carList = [
-    {
-      id: '1',
-      imageUrl: temp,
-      title: "벤츠 E-클래스 5세대 E250 아방가르드 W213",
-      year: "2018년 10월",
-      mileage: "35,557km",
-      price: "1000만원",
-      tags: ["무사고", "인증"],
-      viewCount: 102,
-      isLiked: true,
-      postDate: new Date(),
-    },
-    {
-      id: '2',
-      imageUrl: temp,
-      title: "벤츠 E-클래스 5세대 E250 아방가르드 W213",
-      year: "2018년 10월",
-      mileage: "35,557km",
-      price: "1000만원",
-      tags: ["무사고", "인증"],
-      viewCount: 102,
-      isLiked: true,
-      postDate: new Date(),
-    },
-  ];
+  
+
+    // 데이터 로딩
+  useEffect(() => {
+    const loadTransactions = async () => {
+      try {
+        const data = await fetchViewIsHeartCarList();
+        log(data)
+        setCarList(data);
+      } catch (e) {
+        console.error(e);
+    }
+  };
+
+      loadTransactions();
+  }, []);  
 
   const handleBackClick = () => {
     navigate('/');
@@ -182,7 +177,7 @@ function WishlistPage() {
   };
 
   // 체크박스 상태 변경 핸들러
-  const handleCarSelect = (carId: string, carTitle: string) => (checked: boolean) => {
+  const handleCarSelect = (carId: number, carTitle: string) => (checked: boolean) => {
     if (checked) {
       setSelectedCars(prev => [...prev, { id: carId, title: carTitle }]);
     } else {
@@ -211,23 +206,23 @@ function WishlistPage() {
           </CompareButton>
         )}
         <WishList>
-          {carList.map(car => (
+          {carList && carList.map(car => (
             <CarCard 
-              key={car.id}
+              key={car.carId}
               imageUrl={car.imageUrl}
-              title={car.title}
-              year={car.year}
-              mileage={car.mileage}
-              price={car.price}
-              tags={car.tags}
-              viewCount={car.viewCount}
-              isLiked={car.isLiked}
-              postDate={car.postDate}
+              title={car.model_name}
+              year={car.model_year}
+              mileage={car.distance.toLocaleString() + 'km'}
+              price={formatPrice(car.month_price)}
+              tags={[]}
+              viewCount={car.view_count}
+              isLiked={true} // 현재 dto에없음
+              postDate={car.create_date}
               showTags
               showHeartButton
               showCheckbox={showCheckboxes}
-              checked={selectedCars.some(selected => selected.id === car.id)}
-              onCheckChange={handleCarSelect(car.id, car.title)}
+              checked={selectedCars.some(selected => selected.id === car.carId)}
+              onCheckChange={handleCarSelect(car.carId, car.model_name)}
             />
           ))}
         </WishList>
