@@ -38,6 +38,10 @@ export const CarDetailPage = () => {
     navigate(-1);
   };
 
+  const handlePurchaseClick = () => {
+    navigate(`/purchase/${id}`);
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -250,7 +254,9 @@ export const CarDetailPage = () => {
             </S.SimilarCarFlexRow>
           </S.SimilarCarWrapper>
         </section>
-        <Button $fixed>구매하기</Button>
+        <Button $fixed onClick={handlePurchaseClick}>
+          구매하기
+        </Button>
       </S.CarDetailWrapper>
     );
   }
