@@ -1,5 +1,5 @@
 import { UserStories } from 'types/Feed';
-import { client, setTestToken } from '../../utils/axiosInstance';
+import { client } from '../../utils/axiosInstance';
 
 export interface WriteFeedRequest {
   contents: string;
