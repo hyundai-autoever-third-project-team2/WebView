@@ -15,6 +15,14 @@ import { useQuery } from '@tanstack/react-query';
 import { queries } from 'queries';
 import Loading from 'components/common/Loading';
 import { getElapsedTime } from 'utils/getElapsedTime';
+import option1 from 'assets/option1.png';
+import option2 from 'assets/option2.png';
+import option3 from 'assets/option3.png';
+import option4 from 'assets/option4.png';
+import option5 from 'assets/option5.png';
+import option6 from 'assets/option6.png';
+import option7 from 'assets/option7.png';
+import option8 from 'assets/option8.png';
 
 export const CarDetailPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,20 +38,24 @@ export const CarDetailPage = () => {
     navigate(-1);
   };
 
+  const handlePurchaseClick = () => {
+    navigate(`/purchase/${id}`);
+  };
+
   if (isLoading) {
     return <Loading />;
   }
 
   if (data) {
     const optionList = [
-      { name: '네비게이션', value: data.navigation },
-      { name: 'HUD', value: data.hud },
-      { name: '통풍시트', value: data.ventilated_seat },
-      { name: '열선시트', value: data.heated_seat },
-      { name: '크루즈컨트롤', value: data.cruise_control },
-      { name: '선루프', value: data.sunroof },
-      { name: '주차보조', value: data.parking_distance_warning },
-      { name: '차선이탈경보', value: data.line_out_warning },
+      { name: '네비게이션', value: data.navigation, image: option1 },
+      { name: 'HUD', value: data.hud, image: option2 },
+      { name: '통풍시트', value: data.ventilated_seat, image: option3 },
+      { name: '열선시트', value: data.heated_seat, image: option4 },
+      { name: '크루즈컨트롤', value: data.cruise_control, image: option5 },
+      { name: '선루프', value: data.sunroof, image: option6 },
+      { name: '주차보조', value: data.parking_distance_warning, image: option7 },
+      { name: '차선이탈경보', value: data.line_out_warning, image: option8 },
     ];
     return (
       <S.CarDetailWrapper>
@@ -100,11 +112,11 @@ export const CarDetailPage = () => {
               </S.BoxInfoWrapper>
               <S.BoxInfoWrapper>
                 <S.InfoText>주행거리</S.InfoText>
-                <S.BoxInfoValue>{data.distance}</S.BoxInfoValue>
+                <S.BoxInfoValue>{data.distance}km</S.BoxInfoValue>
               </S.BoxInfoWrapper>
               <S.BoxInfoWrapper>
                 <S.InfoText>운행기간</S.InfoText>
-                <S.BoxInfoValue>3년 2개월</S.BoxInfoValue>
+                <S.BoxInfoValue>3년</S.BoxInfoValue>
               </S.BoxInfoWrapper>
             </S.BoxCarInfoContainer>
 
@@ -168,10 +180,10 @@ export const CarDetailPage = () => {
           <S.OptionContainer>
             <S.Title>주요 옵션</S.Title>
             <S.OptionGrid>
-              {optionList.map((option, idx) => (
+              {optionList.map((option) => (
                 <S.OptionWrapper key={option.name} $isActive={option.value}>
                   <S.OptionImageWrapper>
-                    <S.OptionImage src={`/src/assets/option${idx + 1}.png`} />
+                    <S.OptionImage src={option.image} />
                   </S.OptionImageWrapper>
                   <S.OptionText>{option.name}</S.OptionText>
                 </S.OptionWrapper>
@@ -242,7 +254,9 @@ export const CarDetailPage = () => {
             </S.SimilarCarFlexRow>
           </S.SimilarCarWrapper>
         </section>
-        <Button $fixed>구매하기</Button>
+        <Button $fixed onClick={handlePurchaseClick}>
+          구매하기
+        </Button>
       </S.CarDetailWrapper>
     );
   }
