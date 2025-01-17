@@ -1,12 +1,11 @@
-import CarData from 'types/CarData';
 import { client } from '../../utils/axiosInstance';
+import { CarDetailResponse } from 'types/carDetail';
 
-export async function getCarDetail(carId: number): Promise<CarData> {
+export async function getCarDetail(carId: number) {
   try {
-    const response = await client.get<CarData>(`/car/detail`, {
+    const response = await client.get<CarDetailResponse>(`/car/detail`, {
       params: { carId },
     });
-
     return response.data;
   } catch (error) {
     console.error('Failed to fetch car detail:', error);
