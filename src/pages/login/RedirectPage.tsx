@@ -10,7 +10,7 @@ export const RedirectPage = () => {
     const accessToken = params.get('accessToken');
 
     if (accessToken) {
-      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('accessToken', `Bearer ${accessToken}`);
       navigate('/');
     } else {
       alert('로그인에 실패했습니다.');
