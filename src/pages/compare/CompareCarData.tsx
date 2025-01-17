@@ -14,6 +14,7 @@ interface CarInfo {
   downPaymentPercent: number;
   term: number;
   interestRate: number;
+  imageUrl:string
 }
 
 interface CarSpec {
@@ -163,21 +164,46 @@ const CompareCarData: React.FC<CompareCarDataProps> = ({
   options,
   onClose,
   onDetail
+  
 }) => {
+
+  // 월 납부 금액 계산 함수
+const calculateMonthlyPayment = (price: number): number => {
+  const interestRate = 5; // 연이자율 5%
+  const downPaymentPercentage = 30; // 선수금 30%
+  const loanTerm = 48; // 48개월 할부
+  
+  // 월 이자율 계산 (연 이자율을 12로 나눈 값)
+  const monthlyInterestRate = interestRate / 100 / 12;
+
+  // 선수금 계산
+  const downPayment = price * (downPaymentPercentage / 100);
+
+  // 대출 금액 = 전체 가격 - 선수금
+  const loanAmount = price - downPayment;
+
+  // 월 납부금액 계산 (이자율 적용)
+  const monthlyPayment =
+    (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, loanTerm)) /
+    (Math.pow(1 + monthlyInterestRate, loanTerm) - 1);
+
+ return Math.floor(monthlyPayment);
+};
+
   return (
     <Container>
       <Header>
         <Title>{carInfo.model}</Title>
         <CancelButton src={IconCancel} onClick={onClose}/>
       </Header>
-      <CarImage src={tempCar}/>
+      <CarImage src={carInfo.imageUrl}/>
       <DetailButton onClick={onDetail}>상세보기</DetailButton>
       <PriceContainer>
         <MainPrice>{carInfo.price.toLocaleString()}만원</MainPrice>
-        <PaymentText>할부 월 {carInfo.monthlyPayment}만원</PaymentText>
-        <PaymentDetails>* 선수금 {carInfo.downPaymentPercent}%</PaymentDetails>
+        <PaymentText>할부 월 {calculateMonthlyPayment(carInfo.price)}만원</PaymentText>
+        <PaymentDetails>* 선수금 30%</PaymentDetails>
         <PaymentDetails>
-            {carInfo.term}개월 할부 / 금리 {carInfo.interestRate}% 기준
+            48개월 할부 / 금리 5% 기준
         </PaymentDetails>
       </PriceContainer>
 
