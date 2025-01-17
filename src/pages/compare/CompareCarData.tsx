@@ -7,7 +7,7 @@ import { theme } from 'styles/theme';
 
 interface CarInfo {
   id:number;
-  year: number;
+  year: string | number;
   model: string;
   price: number;
   monthlyPayment: number;

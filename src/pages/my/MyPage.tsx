@@ -199,8 +199,8 @@ function MyPage() {
         const data = await fetchCountingList();
   
           setStatItems([
-          { value: data.purchaseCount, label: '구매 내역', path: '/my/purchase' },
-          { value: data.saleCount, label: '판매 내역', path: '/my/register' },
+          { value: data.saleCount, label: '구매 내역', path: '/my/purchase' },
+          { value: data.purchaseCount, label: '판매 내역', path: '/my/register' },
           { value: data.heartCount, label: '찜한 상품', path: '/wishlist' }
         ]);
       } catch (error) {
