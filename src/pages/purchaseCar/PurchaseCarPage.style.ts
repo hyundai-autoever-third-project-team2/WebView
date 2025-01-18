@@ -167,3 +167,44 @@ export const AgreementCheckbox = styled.input`
 `;
 
 export const ButtonSection = styled(PurchaseCarPageSection)``;
+
+export const ReservationSection = styled(PurchaseCarPageSection)``;
+
+export const DatePickerWrapper = styled.div`
+  .react-datepicker {
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    font-family: inherit;
+  }
+
+  .react-datepicker__header {
+    background-color: white;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .react-datepicker__current-month {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .react-datepicker__day--selected {
+    background-color: #007aff;
+    border-radius: 50%;
+  }
+
+  .react-datepicker__day:hover {
+    border-radius: 50%;
+  }
+`;
+
+export const DateInput = styled.input`
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #e1e1e1;
+  border-radius: 8px;
+  font-size: 16px;
+  &:focus {
+    outline: none;
+    border-color: #007aff;
+  }
+`;
