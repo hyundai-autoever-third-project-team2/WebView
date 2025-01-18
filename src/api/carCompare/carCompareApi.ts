@@ -1,4 +1,4 @@
-import { CarComparisonData } from 'types/carDetail';
+import { CarComparisonData } from 'types/CarDetail';
 import { client } from 'utils/axiosInstance';
 
 export const getViewComparesCar = async (carIds: number[]) => {

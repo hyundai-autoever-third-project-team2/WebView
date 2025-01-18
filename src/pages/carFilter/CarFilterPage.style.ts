@@ -53,7 +53,7 @@ export const MenuItem = styled.button<{ $active: boolean }>`
   width: 100%;
   padding: 16px;
   text-align: center;
-  color: ${(props) => (props.$active ? '#3B82F6' : '#666')};
+  color: ${(props) => (props.$active ? '#000' : '#666')};
   font-weight: ${(props) => (props.$active ? 'bold' : 'normal')};
   background-color: ${(props) => (props.$active ? 'white' : 'transparent')};
 `;
