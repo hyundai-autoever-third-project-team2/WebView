@@ -3,6 +3,8 @@ import { updatePurchaseCar } from 'api/mypage/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
+import ConfirmModal, { ModalConfigType } from './ConfirmModal';
+import { useState } from 'react';
 
 interface ActionButtonType {
   text: string;
@@ -66,7 +68,7 @@ const StatusLabel = styled.div<StatusLabelProps>`
       case "취소 / 반품":
       case "거절":
         return `${theme.colors.error}`;
-      case "판매 완료":
+      case "판매중":
       case "거래완료":
         return `${theme.colors.success}`;
       case "심사 완료":
@@ -132,6 +134,16 @@ const ActionButton = styled.button<{$isDecline : boolean}>`
   cursor: pointer;
 `;
 
+
+const getDisplayStatus = ($status: string) => {
+  switch ($status) {
+    case "판매중":
+      return "판매 완료";
+    default:
+      return $status;
+  }
+};
+
 const CarHistoryItem: React.FC<CarHistoryItemProps> = ({ 
   car_purchase_id =0,
   car_sales_id = 0,
@@ -146,6 +158,12 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
 }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [modalConfig, setModalConfig] = useState<ModalConfigType>({
+    isOpen: false,
+    title: "",
+    description: "",
+    onConfirm: () => {},
+  });
 
   //progress바꾸면 판매내역 데이터 리패칭하기
   const updateCarMutation = useMutation({
@@ -159,15 +177,19 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   });
 
 
-  const getActionButtons = ($status: string): ActionButtonType[] => {
-    switch ($status) {
+  const getActionButtons = (status: string): ActionButtonType[] => {
+    switch (status) {
       case "심사중":
         return [
           {
             text: "판매 취소",
             action: () => {
-              handleRejectButton()
-              console.log("판매 취소");
+              setModalConfig({
+                isOpen: true,
+                title: "판매를 취소하시겠습니까?",
+                description: "취소 후에는 되돌릴 수 없습니다.",
+                onConfirm: handleRejectButton,
+              });
             }
           }
         ];
@@ -176,13 +198,23 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
           {
             text: "판매 승인",
             action: () => {
-              handleApproveButton()
+              setModalConfig({
+                isOpen: true,
+                title: "판매를 승인하시겠습니까?",
+                description: "승인 후에는 취소가 불가능합니다.",
+                onConfirm: handleApproveButton,
+              });
             }
           },
           {
             text: "판매 거절",
             action: () => {
-              handleRejectButton()
+              setModalConfig({
+                isOpen: true,
+                title: "판매를 거절하시겠습니까?",
+                description: "거절 후에는 취소가 불가능합니다.",
+                onConfirm: handleRejectButton,
+              });
             }
           }
         ];
@@ -196,6 +228,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
       car_purchase_id: car_purchase_id,
       progress: '판매중'
     });
+    setModalConfig(prev => ({ ...prev, isOpen: false }))
   };
   
   const handleRejectButton = async () => {
@@ -203,6 +236,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
       car_purchase_id: car_purchase_id,
       progress: '거절'
     });
+    setModalConfig(prev => ({ ...prev, isOpen: false }))
   };
 
   const handleDetailButtonClick = () => { 
@@ -212,6 +246,14 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   const actionButtons = getActionButtons(status);
 
   return (
+    <>
+      <ConfirmModal
+      isOpen={modalConfig.isOpen}
+      onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+      onConfirm={modalConfig.onConfirm}
+      title={modalConfig.title}
+      description={modalConfig.description}
+      />
     <CarHistoryContainer>
       <TopWrapper>
         <DateText>{date}</DateText>
@@ -219,7 +261,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
           <DetailButton onClick={handleDetailButtonClick}>상세보기</DetailButton>
         )}
       </TopWrapper>
-      <StatusLabel $status={status}>{status}</StatusLabel>
+      <StatusLabel $status={status}>{getDisplayStatus(status)}</StatusLabel>
       <ContentWrapper>
         <CarImage src={imageUrl} alt="Car" />
         <InfoContainer>
@@ -237,9 +279,9 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
         <ActionButtonContainer>
           {actionButtons.map((button, index) => (
             <ActionButton 
-              key={index} 
-              onClick={button.action}
-              $isDecline={button.text === "판매 거절" || button.text === "판매 취소"}
+            key={index} 
+            onClick={button.action}
+            $isDecline={button.text === "판매 거절" || button.text === "판매 취소"}
             >
               {button.text}
             </ActionButton>
@@ -247,6 +289,7 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
         </ActionButtonContainer>
       )}
     </CarHistoryContainer>
+    </>
   );
 };
 
