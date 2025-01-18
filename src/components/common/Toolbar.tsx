@@ -1,4 +1,3 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
 import { LAYOUT } from 'styles/constants';
 import LogoIcon from '../../assets/logo_small.png';
@@ -12,6 +11,7 @@ import BackIconWhite from '../../assets/icon_back_white.svg';
 import LikedIcon from 'assets/icon_heart.svg';
 
 import { useNavigate } from 'react-router-dom';
+import useWishCar from 'api/wishCar/useWishCar';
 
 export { Title, ToolbarContainer };
 
@@ -28,6 +28,7 @@ interface ToolbarProps {
   rightButtons?: ButtonType[];
   backgroundColor?: string;
   color?: string;
+  carId?: number;
   onBackClick?: () => void;
   onSettingClick?: () => void;
 }
@@ -78,11 +79,11 @@ const IconButton = styled.button`
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-  
+
   &:hover {
     background: rgba(0, 0, 0, 0.05);
   }
-  `;
+`;
 
 const Logo = styled.div``;
 
@@ -91,7 +92,7 @@ const TitleSection = styled.div<{ $alignment: 'center' | 'left' }>`
   display: flex;
   justify-content: ${(props) => (props.$alignment === 'center' ? 'center' : 'flex-start')};
   min-width: 0;
-  `;
+`;
 
 const Title = styled.h1`
   margin: 0;
@@ -101,18 +102,14 @@ const Title = styled.h1`
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 8px;
-  `;
+`;
 
 const RightSection = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   flex: 0 0 90px;
-  `;
-
-
-
-
+`;
 
 const handleShareButtonClick = () => {
   console.log('TODO : Share 컴포넌트 동작');
@@ -121,11 +118,6 @@ const handleShareButtonClick = () => {
 const handleSettingButtonClick = () => {
   console.log('TODO : Setting 컴포넌트 동작');
 };
-
-const handleLikedButtonClick = () => {
-  console.log('TODO : 찜하기 기능 동작');
-};
-
 
 const Toolbar: React.FC<ToolbarProps> = ({
   showBackButton = false,
@@ -136,13 +128,15 @@ const Toolbar: React.FC<ToolbarProps> = ({
   rightButtons = [],
   backgroundColor,
   color,
+  carId,
   onBackClick,
   onSettingClick,
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const wishCar = carId ? useWishCar(carId) : null;
 
   const handleCloseButtonClick = () => {
-    navigate(-1)
+    navigate(-1);
   };
   const handleNotificationButtonClick = () => {
     navigate('/notification');
@@ -162,11 +156,12 @@ const Toolbar: React.FC<ToolbarProps> = ({
       case 'settingWhite':
         return <img src={SettingIconWhite} alt="Setting_white_ver" />;
       case 'liked':
-        return <img src={LikedIcon} alt="Setting_white_ver" />;
+        return <img src={wishCar?.isLiked ? LikedFillIcon : LikedIcon} alt="Like Button" />;
       default:
         return null;
     }
   };
+
   // 우측 버튼 클릭 이벤트 설정
   const getButtonOnClick = (type: ButtonType) => {
     switch (type) {
@@ -180,7 +175,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
       case 'settingWhite':
         return onSettingClick;
       case 'liked':
-        return () => handleLikedButtonClick();
+        return () => (wishCar ? wishCar.toggleLike() : () => {});
       default:
         return () => {};
     }

@@ -6,5 +6,5 @@ export interface IServeyData {
   min_model_year: number;
   max_model_year: number;
   car_model_ids: number[];
-  colors: string[];
+  colors: number[];
 }

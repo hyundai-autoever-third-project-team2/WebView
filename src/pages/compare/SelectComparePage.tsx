@@ -36,7 +36,10 @@ export const SelectComparePage = () => {
           handleSelectedButtonClick={handleSelectedButtonClick}
         />
       </S.SelectComparePageWrapper>
-      <S.CompareButtonWarpper $disabled={selectedCars.length < 2}>
+      <S.CompareButtonWarpper
+        $disabled={selectedCars.length < 2}
+        onClick={() => navigate('/compare', { state: { selectedCars } })}
+      >
         <S.SelectedCount>
           {selectedCars.length < 2 ? '비교 할 차량을 선택 해주세요' : `${selectedCars.length}대의 차량 비교하기`}
         </S.SelectedCount>

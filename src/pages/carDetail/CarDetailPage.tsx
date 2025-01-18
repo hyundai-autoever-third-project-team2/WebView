@@ -8,7 +8,7 @@ import TimeIcon from 'assets/icon_time.svg?react';
 import BlackHeartIcon from 'assets/icon_blackheart.svg?react';
 import DropDown from 'assets/icon_dropdown.svg?react';
 import DropUp from 'assets/icon_dropup.svg?react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'components/common/Button';
 import RightIcon from 'assets/icon_right_button_primary.svg?react';
 import { useQuery } from '@tanstack/react-query';
@@ -29,6 +29,17 @@ export const CarDetailPage = () => {
   const { id } = useParams();
   const { data, isLoading } = useQuery({ ...queries.car.detail(Number(id)) });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const recentCarList = localStorage.getItem('recentCarList');
+    const recentCarListArray = recentCarList ? JSON.parse(recentCarList) : [];
+    const removedArray = recentCarListArray.filter((item: number) => item !== Number(id));
+    if (removedArray.length >= 5) {
+      removedArray.shift();
+    }
+    removedArray.push(Number(id));
+    localStorage.setItem('recentCarList', JSON.stringify(removedArray));
+  }, []);
 
   const handleCompareCarClick = () => {
     navigate(`/select-compare`);
@@ -59,7 +70,13 @@ export const CarDetailPage = () => {
     ];
     return (
       <S.CarDetailWrapper>
-        <Toolbar title="차량상세" showBackButton onBackClick={handleBackClick} rightButtons={['liked']} />
+        <Toolbar
+          title="차량상세"
+          showBackButton
+          onBackClick={handleBackClick}
+          rightButtons={['liked']}
+          carId={Number(id)}
+        />
 
         <section>
           <S.SwiperWrapper>
@@ -99,7 +116,9 @@ export const CarDetailPage = () => {
               <S.InfoText>{data.like_count}</S.InfoText>
             </S.ModelInfo>
 
-            <S.Price>{data.price.toLocaleString()}만원</S.Price>
+            <S.Price>
+              {data.discount_price === 0 ? data.price.toLocaleString() : data.discount_price.toLocaleString()}만원
+            </S.Price>
 
             <S.BoxCarInfoContainer>
               <S.BoxInfoWrapper>
