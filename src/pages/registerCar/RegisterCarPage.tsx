@@ -26,7 +26,8 @@ function RegisterCarPage() {
   };
 
   const handleNextClick = async (data: string | string[]) => {
-    // TODO: validate data
+    console.log('test: ');
+    console.log(registerCarData);
     switch (step) {
       case 0:
         if (!firstStepValidation(data)) {
