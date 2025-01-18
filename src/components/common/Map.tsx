@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 declare global {
   interface Window {
@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-function MapTest() {
+function Map() {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
 
@@ -15,7 +15,7 @@ function MapTest() {
       if (window.kakao && window.kakao.maps) {
         const mapContainer = document.getElementById('map');
         const mapOption = {
-          center: new window.kakao.maps.LatLng(33.450701, 126.570667),
+          center: new window.kakao.maps.LatLng(37.48, 126.88),
           level: 3,
         };
 
@@ -55,10 +55,12 @@ function MapTest() {
 
   return (
     <>
-      <div id="map" style={{ width: '100%', height: '500px' }}></div>
-      <div id="clickLatlng" className="mt-4 text-sm"></div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1rem' }}>
+        <div id="map" style={{ width: '100%', height: '300px' }}></div>
+        <div id="clickLatlng" className="mt-4 text-sm"></div>
+      </div>
     </>
   );
 }
 
-export default MapTest;
+export default Map;

@@ -50,7 +50,19 @@ export const CarDetailPage = () => {
   };
 
   const handlePurchaseClick = () => {
-    navigate(`/purchase/${id}`);
+    navigate('/purchase', {
+      state: {
+        carId: data?.carId,
+        modelName: data?.model_name,
+        modelYear: data?.model_year,
+        distance: data?.distance,
+        price: data?.price,
+        discount_price: data?.discount_price,
+        image: data?.carImages[0],
+        agency_id: data?.agency_id,
+        agency_name: data?.agency_name,
+      },
+    });
   };
 
   if (isLoading) {
@@ -190,7 +202,7 @@ export const CarDetailPage = () => {
             </S.BasicInfoWrapper>
             <S.BasicInfoWrapper>
               <S.BasicInfoText>차량위치</S.BasicInfoText>
-              <S.BasicInfoText>가산디지털단지 지점</S.BasicInfoText>
+              <S.BasicInfoText>{data.agency_name}</S.BasicInfoText>
             </S.BasicInfoWrapper>
           </S.BaiscInfoContainer>
         </section>

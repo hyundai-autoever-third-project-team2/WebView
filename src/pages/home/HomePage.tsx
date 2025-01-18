@@ -191,7 +191,7 @@ function HomePage() {
         </S.StyledAdSwiper>
 
         <S.RecommendationSection>
-          <h3>회원님을 위한</h3>
+          <h3>{userInfo?.nickname}님을 위한</h3>
           <S.RecommendationSubTitle>
             실시간 Matching
             <BadgeCheck size={16} />

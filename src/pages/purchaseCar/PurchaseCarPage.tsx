@@ -1,14 +1,22 @@
 import { useReducer, useState } from 'react';
 import Toolbar from 'components/common/Toolbar';
 import * as S from './PurchaseCarPage.style';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from 'components/common/Button';
 import { ChevronDown } from 'lucide-react';
-import FeedSample from 'assets/feed_sample.jpg';
-import MapTest from 'pages/map/MapTest';
+import Map from 'components/common/Map';
+import { useUser } from 'hooks/useUser';
+import { calculateRegistrationFee } from 'utils/calculateRegistrationFee';
+import { PaymentReadyRequest, requestKakaoPayment } from 'api/carPurchase/kakaoPayApi';
+import { registerReservation } from 'api/carPurchase/reservationApi';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { ko } from 'date-fns/locale';
 
 function PurchaseCarPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { data: userInfo } = useUser();
   const [agreements, setAgreements] = useState({
     carInfo: false,
     inspection: false,
@@ -19,6 +27,24 @@ function PurchaseCarPage() {
     uniqueInfoThirdParty: false,
   });
   const [carDetailOpen, setCarDetailOpen] = useReducer((v) => !v, false);
+  const [mapOpen, setMapOpen] = useReducer((v) => !v, false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const isAllAgreed = Object.values(agreements).every((value) => value); // 모든 동의사항이 체크되었는지 확인
+
+  const {
+    carId,
+    modelName,
+    modelYear,
+    distance,
+    price: originalPrice,
+    discount_price,
+    image,
+    agency_id,
+    agency_name,
+  } = state;
+
+  const price = discount_price && discount_price !== 0 ? discount_price : originalPrice; // 할인된 가격이 있으면 할인된 가격으로 계산
+  const registrationFee = calculateRegistrationFee(price); // 이전 등록비
 
   const handleAgreementChange = (key: keyof typeof agreements) => {
     setAgreements((prev) => ({
@@ -27,7 +53,65 @@ function PurchaseCarPage() {
     }));
   };
 
-  const isAllAgreed = Object.values(agreements).every((value) => value);
+  log(carId);
+
+  const handlePayment = async () => {
+    if (!selectedDate) {
+      alert('방문 날짜를 선택해주세요');
+      return;
+    }
+
+    const formattedDate = selectedDate.toISOString().split('.')[0];
+
+    // 지점 방문 예약
+    try {
+      const reservationResult = await registerReservation({
+        agencyId: agency_id,
+        time: formattedDate,
+      });
+
+      console.log('예약 정보: ', reservationResult);
+    } catch (ereor) {
+      console.error('예약 등록 실패: ', error);
+      window.Error('예약 등록에 실패했습니다. 다시 시도해주세요.');
+    }
+
+    localStorage.setItem('reservationCarId', carId);
+
+    try {
+      // 예약이 성공하면 결제 진행
+      const paymentData: PaymentReadyRequest = {
+        partner_order_id: '12345',
+        partner_user_id: 'user123',
+        item_name: modelName,
+        quantity: 1,
+        total_amount: 300000,
+        tax_free_amount: 0,
+        approval_url: `${window.location.origin}/payment/success`,
+        cancel_url: `${window.location.origin}/payment/cancel`,
+        fail_url: `${window.location.origin}/payment/fail`,
+      };
+
+      const response = await requestKakaoPayment(paymentData);
+
+      // tid 값 추출
+      const tid = response.tid;
+
+      // tid 값을 로컬 스토리지에 저장
+      localStorage.setItem('kakaoPayTid', tid);
+
+      // agencyId, time을 이용해 예약 등록
+      localStorage.setItem('agencyId', agency_id);
+      localStorage.setItem('time', formattedDate);
+
+      console.log('Payment preparation successful. TID:', tid);
+
+      window.location.href = response.next_redirect_pc_url;
+      console.log('Payment response:', response);
+    } catch (error) {
+      console.error('Payment or Reservation failed:', error);
+    }
+  };
 
   return (
     <>
@@ -35,7 +119,7 @@ function PurchaseCarPage() {
       <S.PurchaseCarPageContainer>
         <S.ContractorInfoSection>
           <S.SectionTitle>주문자 정보</S.SectionTitle>
-          <S.ContractorName>전우정</S.ContractorName>
+          <S.ContractorName>{userInfo?.nickname}</S.ContractorName>
         </S.ContractorInfoSection>
 
         <S.SectionGap />
@@ -43,26 +127,41 @@ function PurchaseCarPage() {
         <S.CarInfoSection $isOpen={carDetailOpen} onClick={setCarDetailOpen}>
           <S.SectionTitle>차량 정보</S.SectionTitle>
           <S.CarInfoRightWrapper>
-            {!carDetailOpen && <S.CarModelName>2022 그랜저(IG) 하이브리드 르블랑</S.CarModelName>}
+            {!carDetailOpen && <S.CarModelName>{modelName}</S.CarModelName>}
             <ChevronDown />
           </S.CarInfoRightWrapper>
         </S.CarInfoSection>
 
         {carDetailOpen && (
           <>
-          <S.CarInfoDetailSection>
-          <S.CarInfoDetailImage src={FeedSample}></S.CarInfoDetailImage>
-          <S.CarInfoDetailContent>
-            <S.CarModelName>2022 그랜저(IG) 하이브리드 르블랑</S.CarModelName>
-            <S.CarInfoYearAndDistance>2022년식 0km</S.CarInfoYearAndDistance>
-            <S.CarInfoPrice>4,000만원</S.CarInfoPrice>
-          </S.CarInfoDetailContent>
-          
-        </S.CarInfoDetailSection>
-        <MapTest/></>
-      )}
-    
-          
+            <S.CarInfoDetailSection>
+              <S.CarInfoDetailImage src={image}></S.CarInfoDetailImage>
+              <S.CarInfoDetailContent>
+                <S.CarModelName>{modelName}</S.CarModelName>
+                <S.CarInfoYearAndDistance>
+                  {modelYear}년식 {distance}km
+                </S.CarInfoYearAndDistance>
+                <S.CarInfoPrice>{(price * 10000).toLocaleString()}원</S.CarInfoPrice>
+              </S.CarInfoDetailContent>
+            </S.CarInfoDetailSection>
+          </>
+        )}
+
+        <S.SectionGap />
+
+        <S.CarInfoSection $isOpen={mapOpen} onClick={setMapOpen}>
+          <S.SectionTitle>수령 위치</S.SectionTitle>
+          <S.CarInfoRightWrapper>
+            {!mapOpen && <S.CarModelName>{agency_name}</S.CarModelName>}
+            <ChevronDown />
+          </S.CarInfoRightWrapper>
+        </S.CarInfoSection>
+
+        {mapOpen && (
+          <>
+            <Map />
+          </>
+        )}
 
         <S.SectionGap />
 
@@ -70,20 +169,20 @@ function PurchaseCarPage() {
           <S.SectionTitle>주문금액</S.SectionTitle>
           <S.CarPriceWrapper>
             <S.CarPriceTitle>차량 주문금액</S.CarPriceTitle>
-            <S.CarPrice>40,000,000원</S.CarPrice>
+            <S.CarPrice>{(price * 10000).toLocaleString()}원</S.CarPrice>
           </S.CarPriceWrapper>
           <S.TotalPriceWrapper>
             <S.CarPriceWrapper>
               <S.CarPriceTitle>총 차량 주문금액</S.CarPriceTitle>
-              <S.CarPrice>40,000,000원</S.CarPrice>
+              <S.CarPrice>{(price * 10000).toLocaleString()}원</S.CarPrice>
             </S.CarPriceWrapper>
             <S.CarPriceWrapper>
               <S.CarPriceTitle>이전 등록비</S.CarPriceTitle>
-              <S.CarPrice>2,624,100원</S.CarPrice>
+              <S.CarPrice>{(registrationFee * 10000).toLocaleString()}원</S.CarPrice>
             </S.CarPriceWrapper>
             <S.HighlightedCarPriceWrapper>
               <S.CarPriceTitle>예상 총 주문금액</S.CarPriceTitle>
-              <S.CarPrice>42,624,100원</S.CarPrice>
+              <S.CarPrice>{(price * 10000 + registrationFee * 10000).toLocaleString()}원</S.CarPrice>
             </S.HighlightedCarPriceWrapper>
           </S.TotalPriceWrapper>
         </S.ContractPriceSection>
@@ -94,6 +193,24 @@ function PurchaseCarPage() {
           <S.SectionTitle>계약금액</S.SectionTitle>
           <S.ContractorName>300,000원</S.ContractorName>
         </S.DownPaymentSection>
+
+        <S.SectionGap />
+
+        <S.ReservationSection>
+          <S.SectionTitle>방문 예약</S.SectionTitle>
+          <S.DatePickerWrapper>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date: Date) => setSelectedDate(date)}
+              dateFormat="yyyy년 MM월 dd일"
+              minDate={new Date()} // 오늘 이후만 선택 가능
+              placeholderText="방문 날짜를 선택해주세요"
+              locale={ko}
+              showPopperArrow={false}
+              customInput={<S.DateInput />}
+            />
+          </S.DatePickerWrapper>
+        </S.ReservationSection>
 
         <S.SectionGap />
 
@@ -185,7 +302,9 @@ function PurchaseCarPage() {
         </S.AgreementSection>
 
         <S.ButtonSection>
-          <Button disabled={!isAllAgreed}>계약금 결제하기</Button>
+          <Button disabled={!isAllAgreed} onClick={handlePayment}>
+            계약금 결제하기
+          </Button>
         </S.ButtonSection>
       </S.PurchaseCarPageContainer>
     </>
