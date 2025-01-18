@@ -3,6 +3,7 @@ import * as S from './SurveyModal.style';
 import Slider from '@mui/material/Slider';
 import Button from '../Button';
 import { IServeyData } from 'types/Survey';
+import { submitSurvey } from 'api/survey/surveyApi';
 
 interface ISurveyProps {
   nextStep: (data?: Partial<IServeyData>) => void;
@@ -234,34 +235,22 @@ const QuestionModel = ({ nextStep }: ISurveyProps) => {
   );
 };
 
-const ColorList1 = [
-  { colorName: '흰색', colorCode: '#FFFFFF' },
-  { colorName: '빨강', colorCode: '#FA1919' },
-  { colorName: '파랑', colorCode: '#191DE7' },
-  { colorName: '갈색', colorCode: '#D68A1F' },
-  { colorName: '녹색', colorCode: '#27B714' },
-  { colorName: '하늘', colorCode: '#0DCCEE' },
-  { colorName: '노랑', colorCode: '#FFCF30' },
-  { colorName: '남색', colorCode: '#16076B' },
-  { colorName: '회색', colorCode: '#9A9A9A' },
-];
-
 const ColorList2 = [
-  { name: '흰색', color: '#F5F5F5' },
-  { name: '검정', color: '#1C1C1C' },
-  { name: '회색', color: '#808080' },
-  { name: '남색', color: '#1C3F6E' },
-  { name: '녹색', color: '#004225' },
-  { name: '갈색', color: '#433831' },
-  { name: '진주', color: '#FDEBD0' },
-  { name: '파랑', color: '#2A4B7C' },
-  { name: '하늘', color: '#4B8DAD' },
+  { name: '흰색', color: '#F5F5F5', idx: 10 },
+  { name: '검정', color: '#1C1C1C', idx: 1 },
+  { name: '회색', color: '#808080', idx: 9 },
+  { name: '남색', color: '#1C3F6E', idx: 3 },
+  { name: '녹색', color: '#004225', idx: 4 },
+  { name: '갈색', color: '#433831', idx: 0 },
+  { name: '진주', color: '#FDEBD0', idx: 6 },
+  { name: '파랑', color: '#2A4B7C', idx: 7 },
+  { name: '하늘', color: '#4B8DAD', idx: 8 },
 ];
 
 const QuestionColor = ({ nextStep }: ISurveyProps) => {
-  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<number[]>([]);
 
-  const handleSelectColor = (colorName: string) => {
+  const handleSelectColor = (colorName: number) => {
     if (selectedColors.length >= 3 && !selectedColors.includes(colorName)) return;
 
     setSelectedColors((prev) => {
@@ -285,8 +274,8 @@ const QuestionColor = ({ nextStep }: ISurveyProps) => {
 
       <S.CarGrid>
         {ColorList2.map((color) => (
-          <S.ImageWrapper key={color.name} onClick={() => handleSelectColor(color.name)}>
-            <S.ColorDiv $color={color.color} $isSelected={selectedColors.includes(color.name)} />
+          <S.ImageWrapper key={color.name} onClick={() => handleSelectColor(color.idx)}>
+            <S.ColorDiv $color={color.color} $isSelected={selectedColors.includes(color.idx)} />
             <S.Text>{color.name}</S.Text>
           </S.ImageWrapper>
         ))}
@@ -321,7 +310,11 @@ export const SurveyModal = ({ closeModal }: ISurveyModal) => {
   };
 
   const handleSubmitSurvey = async () => {
-    // TODO: 설문조사 API 호출
+    try {
+      await submitSurvey(surveyData);
+    } catch {
+      alert('설문조사 제출에 실패했습니다.');
+    }
     closeModal();
   };
 

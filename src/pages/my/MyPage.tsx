@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchCountingList } from 'api/mypage/mypageApi';
 import { useUser } from 'hooks/useUser';
+import SettingModal from './components/SettingModal';
+import { useQueryClient } from '@tanstack/react-query';
 
 const Container = styled.div`
   background-color: #fff;
@@ -180,8 +182,10 @@ const QUICKMENU_ITEMS : MenuItemProps[] = [
 ]
 
 function MyPage() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { data: user, isLoading, error } = useUser();
+  const { data: user } = useUser();
+  const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [statItems,setStatItems] = useState([
     {
       value: 0, label: '구매 내역', path: '/my/purchase'
@@ -226,6 +230,10 @@ function MyPage() {
     navigate('/');
   }
 
+  const handleUpdateSuccess = () => {
+    queryClient.invalidateQueries({queryKey:['user']})
+  }
+
   return (
     <Container>
       <Toolbar 
@@ -236,6 +244,7 @@ function MyPage() {
         backgroundColor={theme.colors.primary}
         onBackClick={handleBackClick}
         color='white'
+        onSettingClick={() => setIsSettingModalOpen(true)}
       />
       
       <ProfileContainer>
@@ -244,7 +253,7 @@ function MyPage() {
             src={user?.profileImage || testProfile} 
             alt="profile" />
           <ProfileText>
-          {user?.name || '사용자'} 님 
+          {user?.nickname || '사용자'} 님 
             <span>반갑습니다!</span>
           </ProfileText>
         </ProfileSection>
@@ -282,6 +291,14 @@ function MyPage() {
         <LogoutIcon src={LogoutIc}></LogoutIcon>
         <LogoutButton>로그아웃 하기</LogoutButton>
       </Logout>
+
+      {isSettingModalOpen && (
+        <SettingModal 
+          onClose={() => setIsSettingModalOpen(false)}
+          user={user}
+          onUpdateSuccess={handleUpdateSuccess}
+        />
+      )}
     </Container>
   );
 }
