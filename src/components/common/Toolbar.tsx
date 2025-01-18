@@ -10,7 +10,6 @@ import SettingIconWhite from '../../assets/icon_setting_white.svg';
 import BackIcon from '../../assets/icon_back.svg';
 import BackIconWhite from '../../assets/icon_back_white.svg';
 import LikedIcon from 'assets/icon_heart.svg';
-import LikedFillIcon from 'assets/icon_heart_fill.svg';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -30,6 +29,7 @@ interface ToolbarProps {
   backgroundColor?: string;
   color?: string;
   onBackClick?: () => void;
+  onSettingClick?: () => void;
 }
 
 const ToolbarContainer = styled.header<{ $backgroundColor?: string; $color?: string }>`
@@ -137,6 +137,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   backgroundColor,
   color,
   onBackClick,
+  onSettingClick,
 }) => {
   const navigate = useNavigate()
 
@@ -177,7 +178,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
       case 'share':
         return () => handleShareButtonClick();
       case 'settingWhite':
-        return () => handleSettingButtonClick();
+        return onSettingClick;
       case 'liked':
         return () => handleLikedButtonClick();
       default:
