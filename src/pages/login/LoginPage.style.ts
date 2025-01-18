@@ -25,5 +25,10 @@ export const LoginButtonWrapper = styled.div`
   bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
-  cursor: pointer;
+  transition: all 0.1s ease-in-out;
+
+  &:active {
+    transform: translateX(-50%) scale(0.97);
+    filter: brightness(0.95);
+  }
 `;

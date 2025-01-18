@@ -20,7 +20,7 @@ export const ImageUploadButton = ({
   handleUploadImage,
 }: ImageUploadButtonProps) => {
   const [imageFile, setImageFile] = useState('');
-  const imgRef = useRef<HTMLInputElement>(null);
+  // const imgRef = useRef<HTMLInputElement>(null);
 
   // 모바일 카메라 관련 코드
   useEffect(() => {
@@ -59,37 +59,34 @@ export const ImageUploadButton = ({
     };
   }, [handleUploadImage, index]);
 
-  // PC 환경 파일 업로드 처리
-  const handleUploadImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      try {
-        // 이미지 미리보기 설정
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          setImageFile(reader.result as string);
-        };
+  // // PC 환경 파일 업로드 처리
+  // const handleUploadImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     try {
+  //       // 이미지 미리보기 설정
+  //       const reader = new FileReader();
+  //       reader.readAsDataURL(file);
+  //       reader.onload = () => {
+  //         setImageFile(reader.result as string);
+  //       };
 
-        // 이미지 업로드 처리
-        const formData = new FormData();
-        formData.append('image', file);
-        const imageUrl = await fetchUploadImage(formData).then((res) => res.data);
-        console.log('Uploaded image URL:', imageUrl);
-        handleUploadImage(imageUrl);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
-    }
-  };
+  //       // 이미지 업로드 처리
+  //       const formData = new FormData();
+  //       formData.append('image', file);
+  //       const imageUrl = await fetchUploadImage(formData).then((res) => res.data);
+  //       console.log('Uploaded image URL:', imageUrl);
+  //       handleUploadImage(imageUrl);
+  //     } catch (error) {
+  //       console.error('Error uploading image:', error);
+  //     }
+  //   }
+  // };
 
   const handleImageUploadButtonClick = () => {
     // Android 객체가 존재하는 경우 (모바일 환경)
     if (typeof Android !== 'undefined' && Android?.openCamera) {
       Android.openCamera(index);
-    } else {
-      // PC 환경에서는 파일 input 클릭
-      imgRef.current?.click();
     }
   };
 
@@ -101,7 +98,7 @@ export const ImageUploadButton = ({
       onClick={handleImageUploadButtonClick}
     >
       <S.Img src={imageFile || backgroundImage} alt="upload" />
-      <S.ImageInput type="file" accept="image/*" onChange={handleUploadImageChange} ref={imgRef} />
+      {/* {<S.ImageInput type="file" accept="image/*" onChange={handleUploadImageChange} ref={imgRef} />} */}
     </S.ImageUploadButtonLabel>
   );
 };

@@ -8,7 +8,7 @@ import TimeIcon from 'assets/icon_time.svg?react';
 import BlackHeartIcon from 'assets/icon_blackheart.svg?react';
 import DropDown from 'assets/icon_dropdown.svg?react';
 import DropUp from 'assets/icon_dropup.svg?react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'components/common/Button';
 import RightIcon from 'assets/icon_right_button_primary.svg?react';
 import { useQuery } from '@tanstack/react-query';
@@ -30,6 +30,17 @@ export const CarDetailPage = () => {
   const { data, isLoading } = useQuery({ ...queries.car.detail(Number(id)) });
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const recentCarList = localStorage.getItem('recentCarList');
+    const recentCarListArray = recentCarList ? JSON.parse(recentCarList) : [];
+    const removedArray = recentCarListArray.filter((item: number) => item !== Number(id));
+    if (removedArray.length >= 5) {
+      removedArray.shift();
+    }
+    removedArray.push(Number(id));
+    localStorage.setItem('recentCarList', JSON.stringify(removedArray));
+  }, []);
+
   const handleCompareCarClick = () => {
     navigate(`/select-compare`);
   };
@@ -39,7 +50,19 @@ export const CarDetailPage = () => {
   };
 
   const handlePurchaseClick = () => {
-    navigate(`/purchase/${id}`);
+    navigate('/purchase', {
+      state: {
+        carId: data?.carId,
+        modelName: data?.model_name,
+        modelYear: data?.model_year,
+        distance: data?.distance,
+        price: data?.price,
+        discount_price: data?.discount_price,
+        image: data?.carImages[0],
+        agency_id: data?.agency_id,
+        agency_name: data?.agency_name,
+      },
+    });
   };
 
   if (isLoading) {
@@ -59,7 +82,13 @@ export const CarDetailPage = () => {
     ];
     return (
       <S.CarDetailWrapper>
-        <Toolbar title="차량상세" showBackButton onBackClick={handleBackClick} rightButtons={['liked']} />
+        <Toolbar
+          title="차량상세"
+          showBackButton
+          onBackClick={handleBackClick}
+          rightButtons={['liked']}
+          carId={Number(id)}
+        />
 
         <section>
           <S.SwiperWrapper>
@@ -99,7 +128,9 @@ export const CarDetailPage = () => {
               <S.InfoText>{data.like_count}</S.InfoText>
             </S.ModelInfo>
 
-            <S.Price>{data.price.toLocaleString()}만원</S.Price>
+            <S.Price>
+              {data.discount_price === 0 ? data.price.toLocaleString() : data.discount_price.toLocaleString()}만원
+            </S.Price>
 
             <S.BoxCarInfoContainer>
               <S.BoxInfoWrapper>
@@ -171,7 +202,7 @@ export const CarDetailPage = () => {
             </S.BasicInfoWrapper>
             <S.BasicInfoWrapper>
               <S.BasicInfoText>차량위치</S.BasicInfoText>
-              <S.BasicInfoText>가산디지털단지 지점</S.BasicInfoText>
+              <S.BasicInfoText>{data.agency_name}</S.BasicInfoText>
             </S.BasicInfoWrapper>
           </S.BaiscInfoContainer>
         </section>

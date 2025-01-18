@@ -7,6 +7,8 @@ import { SelectComparePage } from 'pages/compare/SelectComparePage';
 import ScrollToTop from 'components/common/ScrollToTop';
 import { LoginPage } from 'pages/login/LoginPage';
 import { RedirectPage } from 'pages/login/RedirectPage';
+import { PaymentCompletePage } from 'pages/payment/PaymentCompletePage';
+import { PaymentRedirectPage } from 'pages/payment/PaymentRedirectPage';
 
 const HomePage = lazy(() => import('pages/home/HomePage'));
 const WishlistPage = lazy(() => import('pages/wishlist/WishlistPage'));
@@ -113,7 +115,7 @@ const webviewRouter: RouteObject[] = [
         element: <SearchResultPage />,
       },
       {
-        path: 'purchase/:id',
+        path: 'purchase',
         element: <PurchaseCarPage />,
       },
       {
@@ -139,7 +141,16 @@ const webviewRouter: RouteObject[] = [
       {
         path: 'guide',
         element: <GuidePage />,
-      }
+      },
+      {
+        path: 'payment/success',
+        element: <PaymentRedirectPage />,
+      },
+      {
+        path: 'payment/complete',
+        element: <PaymentCompletePage />,
+      },
+
     ],
   },
 ];

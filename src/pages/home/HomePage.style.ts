@@ -221,6 +221,10 @@ export const CarListSection = styled.div`
   flex-direction: column;
   margin-top: 40px;
   gap: 15px;
+
+  & > div {
+    padding: 5px 0;
+  }
 `;
 
 export const TitleWithArrowButton = styled.div`
@@ -336,4 +340,12 @@ export const EmptyMessage = styled.div`
   align-items: center;
   padding: 32px;
   color: ${({ theme }) => theme.colors.neutral900};
+`;
+
+export const CarListItemWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  background: ${({ theme }) => theme.colors.neutral100};
+  border-radius: 16px;
+  overflow: hidden;
 `;

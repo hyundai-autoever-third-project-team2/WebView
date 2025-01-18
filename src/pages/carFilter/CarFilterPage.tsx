@@ -4,6 +4,8 @@ import * as S from './CarFilterPage.style';
 import Toolbar from 'components/common/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { CarFilterCondition, CarType, CarColor } from 'types/Filter';
+import { getFilteredCarList } from 'api/search/carSearchApi';
+import Loading from 'components/common/Loading';
 
 const CAR_TYPES: CarType[] = ['SUV', '경차', '대형', '상용', '소형', '스포츠카/쿠페', '준중형', '중대형'];
 
@@ -20,10 +22,28 @@ const COLORS: Array<{ name: CarColor; color: string; border?: boolean }> = [
   { name: '하늘', color: '#4B8DAD' },
 ];
 
+interface FilteredCarResult {
+  carId: number;
+  imageUrl: string;
+  brand: string;
+  model_name: string;
+  model_year: string;
+  distance: number;
+  price: number;
+  discount_price: number;
+  month_price: number;
+  create_date: string;
+  view_count: number;
+  liked: boolean;
+}
+
 const CarFilterPage = () => {
   const navigate = useNavigate();
   const contentRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState('year');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [filteredCars, setFilteredCars] = useState<FilteredCarResult[]>([]);
 
   // 필터 상태를 CarFilterCondition 타입으로 관리
   const [filterCondition, setFilterCondition] = useState<CarFilterCondition>({
@@ -118,6 +138,47 @@ const CarFilterPage = () => {
       }
     };
   }, []);
+
+  const handleFilterApply = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      // 모든 조건을 일단 포함
+      const filteredCondition: CarFilterCondition = {
+        carTypes: filterCondition.carTypes,
+        start_displacement: filterCondition.start_displacement,
+        end_displacement: filterCondition.end_displacement,
+        start_distance: filterCondition.start_distance,
+        end_distance: filterCondition.end_distance,
+        start_price: filterCondition.start_price,
+        end_price: filterCondition.end_price,
+        colors: filterCondition.colors,
+      };
+
+      log(filterCondition);
+
+      const results = await getFilteredCarList(filteredCondition);
+      setFilteredCars(results);
+
+      // 결과와 함께 이전 페이지로 이동
+      navigate(-1, {
+        state: {
+          filteredCars: results,
+          appliedFilters: filteredCondition,
+        },
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : '필터 적용 중 오류가 발생했습니다.');
+      console.error('Filter application error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -304,15 +365,8 @@ const CarFilterPage = () => {
 
         <S.Footer>
           <S.ResetButton onClick={resetFilter}>초기화</S.ResetButton>
-          <Button
-            $width="70%"
-            $height="48px"
-            onClick={() => {
-              // 필터 적용 로직
-              console.log('Applied Filter:', filterCondition);
-            }}
-          >
-            적용
+          <Button $width="70%" $height="48px" onClick={handleFilterApply} disabled={isLoading}>
+            {isLoading ? '필터 적용 중...' : '적용'}
           </Button>
         </S.Footer>
       </S.Container>

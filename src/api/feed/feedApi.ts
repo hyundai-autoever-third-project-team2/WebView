@@ -12,10 +12,6 @@ export interface DeleteFeedRequest {
   feedId: number;
 }
 
-interface FeedLikeResponse {
-  success: boolean;
-}
-
 export const getFeedList = async (): Promise<UserStories[] | undefined> => {
   try {
     const { data } = await client.get<UserStories[]>('/feed/list');
@@ -52,22 +48,37 @@ export const deleteFeed = async (feedId: number): Promise<void> => {
   }
 };
 
-export const feedLike = async (feedId: number): Promise<void> => {
+export const feedLike = async (feedId: number) => {
   try {
-    await client.post<FeedLikeResponse>('/feedLike/click', {
-      feedId: feedId,
+    const formData = new FormData();
+    formData.append('feedId', feedId.toString());
+
+    const response = await client.post('/feedLike/click', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
+
+    return response.data; // API 응답 데이터 반환
   } catch (error) {
     console.error('Failed to like feed:', error);
     throw error;
   }
 };
 
-export const feedUnlike = async (feedId: number): Promise<void> => {
+export const feedUnlike = async (feedId: number) => {
   try {
-    await client.delete<FeedLikeResponse>('/feedLike/unclick', {
-      data: { feedId: feedId },
+    const formData = new FormData();
+    formData.append('feedId', feedId.toString());
+
+    const response = await client.delete('/feedLike/unclick', {
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     });
+
+    return response.data; // API 응답 데이터 반환
   } catch (error) {
     console.error('Failed to unlike feed:', error);
     throw error;

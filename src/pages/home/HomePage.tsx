@@ -28,6 +28,7 @@ import { useModal } from 'hooks/useModal';
 import Loading from 'components/common/Loading';
 import { getFeedList } from 'api/feed/feedApi';
 import { useUser } from 'hooks/useUser';
+import Skeleton from 'components/common/Skeleton/Skeleton';
 
 function HomePage() {
   const { data: userInfo } = useUser();
@@ -107,6 +108,14 @@ function HomePage() {
     loadRecentCars();
   }, []);
 
+  const handleSearch = (value: string) => {
+    if (value.trim()) {
+      navigate(`/search?searchCar=${encodeURIComponent(value.trim())}`);
+    } else {
+      navigate('/search');
+    }
+  };
+
   function handleNotificationButtonClick() {
     navigate('/notification');
   }
@@ -131,8 +140,42 @@ function HomePage() {
   }
 
   function handleAllCarListClick() {
-    // navigate('/car-list');
+    navigate('/car-list/top50');
   }
+
+  const CarListSkeleton = () => (
+    <>
+      {Array.from({ length: 3 }, (_, index) => (
+        <S.CarListItemWrapper key={index}>
+          {/* 차량 이미지 영역 */}
+          <Skeleton width="130px" height="100px" borderRadius="8px" animation="pulse" />
+          {/* 차량 정보 영역 */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              padding: '4px',
+              gap: '8px',
+              flex: 1,
+            }}
+          >
+            {/* 모델명 */}
+            <Skeleton.Text width="80%" height="20px" style={{ background: '#f8f8f8' }} animation="pulse" />
+
+            {/* 연식 및 주행거리 */}
+            <Skeleton.Text width="60%" height="16px" style={{ background: '#f8f8f8' }} animation="pulse" />
+
+            {/* 가격 정보 */}
+            <Skeleton.Text width="70%" height="20px" style={{ background: '#f8f8f8' }} animation="pulse" />
+
+            {/* 등록일 및 조회수 */}
+            <Skeleton.Text width="40%" height="14px" style={{ background: '#f8f8f8' }} animation="pulse" />
+          </div>
+        </S.CarListItemWrapper>
+      ))}
+    </>
+  );
 
   return (
     <>
@@ -145,7 +188,7 @@ function HomePage() {
       </S.Header>
 
       <S.HomePageContainer>
-        <SearchInput />
+        <SearchInput onSearch={handleSearch} />
         <S.IconSection>
           <S.IconWrapper onClick={() => handleCarListButtonClick('DOMESTIC')}>
             <S.IconInnerWrapper>
@@ -191,7 +234,7 @@ function HomePage() {
         </S.StyledAdSwiper>
 
         <S.RecommendationSection>
-          <h3>회원님을 위한</h3>
+          <h3>{userInfo?.nickname}님을 위한</h3>
           <S.RecommendationSubTitle>
             실시간 Matching
             <BadgeCheck size={16} />
@@ -228,7 +271,7 @@ function HomePage() {
           ) : recentCarListError ? (
             <S.ErrorMessage>{recentCarListError}</S.ErrorMessage>
           ) : recentCarList.length === 0 ? (
-            <S.EmptyMessage>등록된 차량이 없습니다.</S.EmptyMessage>
+            <CarListSkeleton />
           ) : (
             recentCarList.map((car) => <CarListItem key={car.carId} data={car} />)
           )}
@@ -243,11 +286,17 @@ function HomePage() {
             오늘의 타볼카
             <ChevronRight size={16} onClick={() => navigate('/feed')} />
           </S.TitleWithArrowButton>
-          <S.FeedPreviewCardWrapper onClick={() => navigate('/feed')}>
-            {feedPreviewList.map((imageUrl, index) => (
-              <S.FeedPreviewCard key={index} src={imageUrl} alt={`피드 이미지 ${index + 1}`} />
-            ))}
-          </S.FeedPreviewCardWrapper>
+          {feedPreviewListError ? (
+            <S.ErrorMessage>{feedPreviewListError}</S.ErrorMessage>
+          ) : feedPreviewList.length === 0 ? (
+            <S.EmptyMessage>피드가 없습니다.</S.EmptyMessage>
+          ) : (
+            <S.FeedPreviewCardWrapper onClick={() => navigate('/feed')}>
+              {feedPreviewList.map((imageUrl, index) => (
+                <S.FeedPreviewCard key={index} src={imageUrl} alt={`피드 이미지 ${index + 1}`} />
+              ))}
+            </S.FeedPreviewCardWrapper>
+          )}
         </S.FeedPreviewSection>
       </S.HomePageContainer>
 
@@ -255,6 +304,7 @@ function HomePage() {
         <span>공지</span>
         타볼카 1.0.0 출시
       </S.AnnouncementSection>
+
       {isModalOpen && (
         <ModalPortal>
           <SurveyModal closeModal={closeModal} />

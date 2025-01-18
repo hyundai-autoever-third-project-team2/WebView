@@ -19,17 +19,6 @@ export interface CarFilterCondition {
 // 부분적 필터 조건을 위한 타입 (선택적 필드)
 export type PartialCarFilterCondition = Partial<CarFilterCondition>;
 
-// 단일 범위 조건을 위한 유틸리티 타입
-export interface RangeCondition<T> {
-  start: T;
-  end: T;
-}
-
-// 각 범위 조건들을 위한 타입
-export type DisplacementRange = RangeCondition<number>;
-export type DistanceRange = RangeCondition<number>;
-export type PriceRange = RangeCondition<number>;
-
 // 필터 조건을 생성하는 유틸리티 함수
 export const createFilterCondition = (condition: Partial<CarFilterCondition> = {}): CarFilterCondition => {
   return {
