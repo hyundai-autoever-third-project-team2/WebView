@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { convertToHttps } from 'utils/convertToHttps';
 
 interface ProfileProps extends React.HTMLAttributes<HTMLImageElement> {
   width?: string;
@@ -22,7 +23,7 @@ const ProfileImage = styled.img`
 function Profile({ width = '30px', height = '30px', src = 'https://via.placeholder.com/40' }: ProfileProps) {
   return (
     <ProfileContainer width={width} height={height}>
-      <ProfileImage src={src} alt="프로필 이미지" />
+      <ProfileImage src={convertToHttps(src)} alt="프로필" />
     </ProfileContainer>
   );
 }
