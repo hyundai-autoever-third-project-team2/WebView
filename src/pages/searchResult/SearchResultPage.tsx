@@ -38,7 +38,11 @@ const FilterButton = styled.button`
 
 const ResultContainer = styled.div`
   flex: 1;
-  padding: 16px;
+  padding: 0 16px;
+
+  & > div {
+    padding: 10px 0;
+  }
 `;
 
 const MessageContainer = styled.div`
