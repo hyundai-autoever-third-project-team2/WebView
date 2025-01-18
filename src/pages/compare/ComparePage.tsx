@@ -23,8 +23,8 @@ function ComparePage() {
       try {
         setIsLoading(true);
         setError(null);
-        const carIdsToCompare = [1, 4]; 
-        const compareData = await getViewComparesCar(carIdsToCompare);
+        const carIdsToCompare = [4, 6]; 
+        const compareData = await getViewComparesCar([4,6]);
         setCarDataList(compareData);
       } catch (err) {
         setError('차량 비교 데이터를 불러오는데 실패했습니다.');
@@ -72,7 +72,8 @@ function ComparePage() {
               monthlyPayment: Math.round(carData.price / (36 * 10000)), 
               downPaymentPercent: 0,
               term:0,
-              interestRate:0
+              interestRate:0,
+              imageUrl:carData.carImages[0],
             }}
             specs={{
               year: carData.model_year,

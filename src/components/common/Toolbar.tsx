@@ -9,7 +9,6 @@ import SettingIconWhite from '../../assets/icon_setting_white.svg';
 import BackIcon from '../../assets/icon_back.svg';
 import BackIconWhite from '../../assets/icon_back_white.svg';
 import LikedIcon from 'assets/icon_heart.svg';
-import LikedFillIcon from 'assets/icon_heart_fill.svg';
 
 import { useNavigate } from 'react-router-dom';
 import useWishCar from 'api/wishCar/useWishCar';
@@ -31,6 +30,7 @@ interface ToolbarProps {
   color?: string;
   carId?: number;
   onBackClick?: () => void;
+  onSettingClick?: () => void;
 }
 
 const ToolbarContainer = styled.header<{ $backgroundColor?: string; $color?: string }>`
@@ -130,6 +130,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
   color,
   carId,
   onBackClick,
+  onSettingClick,
 }) => {
   const navigate = useNavigate();
   const wishCar = carId ? useWishCar(carId) : null;
@@ -172,7 +173,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
       case 'share':
         return () => handleShareButtonClick();
       case 'settingWhite':
-        return () => handleSettingButtonClick();
+        return onSettingClick;
       case 'liked':
         return () => (wishCar ? wishCar.toggleLike() : () => {});
       default:
