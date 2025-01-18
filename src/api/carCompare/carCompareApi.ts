@@ -1,14 +1,10 @@
-import { CarComparisonData } from "types/carDetail"
-import { client } from "utils/axiosInstance"
+import { CarComparisonData } from 'types/carDetail';
+import { client } from 'utils/axiosInstance';
 
-
-  
 export const getViewComparesCar = async (carIds: number[]) => {
   try {
     const response = await client.post<CarComparisonData[]>('/car/compares', {
-      data:{
-        carIds:carIds
-      }
+      carIds: carIds,
     });
     return response.data;
   } catch (error) {
@@ -16,4 +12,3 @@ export const getViewComparesCar = async (carIds: number[]) => {
     throw error;
   }
 };
-
