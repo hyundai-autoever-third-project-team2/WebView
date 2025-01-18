@@ -23,7 +23,9 @@ const PurchaseDetailPage = lazy(() => import('pages/my/PurchaseDetailPage'));
 const PurchaseCarPage = lazy(() => import('pages/purchaseCar/PurchaseCarPage'));
 const ComparePage = lazy(() => import('pages/compare/ComparePage'));
 const SearchResultPage = lazy(() => import('pages/searchResult/SearchResultPage'));
-const ChatPage = lazy(() => import('pages/chat/ChatPage'));
+const ChatRoom = lazy(() => import('pages/chat/ChatRoom'));
+const NoticePage = lazy(() => import('pages/notice/NoticePage'))
+const GuidePage = lazy(()=> import('pages/guide/GuidePage'))
 
 const hasToken = localStorage.getItem('accessToken');
 
@@ -120,7 +122,7 @@ const webviewRouter: RouteObject[] = [
       },
       {
         path: 'chat/:roomId',
-        element: <ChatPage />,
+        element: <ChatRoom />,
       },
       {
         path: 'login',
@@ -130,6 +132,14 @@ const webviewRouter: RouteObject[] = [
         path: 'success',
         element: <RedirectPage />,
       },
+      {
+        path: 'notice',
+        element: <NoticePage />,
+      },
+      {
+        path: 'guide',
+        element: <GuidePage />,
+      }
     ],
   },
 ];
