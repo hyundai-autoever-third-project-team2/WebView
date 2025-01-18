@@ -1,4 +1,4 @@
-import { IServeyData } from 'types/survey';
+import { IServeyData } from 'types/Survey';
 import { client } from 'utils/axiosInstance';
 
 export async function submitSurvey(surveyData: IServeyData | {}) {
