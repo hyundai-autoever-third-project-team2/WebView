@@ -1,4 +1,4 @@
-import { userInfo } from 'types/userInfo';
+import { userInfo } from 'types/UserInfo';
 import { client } from '../../utils/axiosInstance';
 
 export const getUserInfo = async (): Promise<userInfo> => {

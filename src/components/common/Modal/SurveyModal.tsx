@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import * as S from './SurveyModal.style';
 import Slider from '@mui/material/Slider';
 import Button from '../Button';
-import { IServeyData } from 'types/survey';
+import { IServeyData } from 'types/Survey';
 
 interface ISurveyProps {
   nextStep: (data?: Partial<IServeyData>) => void;

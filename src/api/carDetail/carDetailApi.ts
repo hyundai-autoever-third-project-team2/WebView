@@ -1,5 +1,5 @@
 import { client } from '../../utils/axiosInstance';
-import { CarDetailResponse } from 'types/carDetail';
+import { CarDetailResponse } from 'types/CarDetail';
 
 export async function getCarDetail(carId: number) {
   try {
