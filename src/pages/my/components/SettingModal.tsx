@@ -231,6 +231,14 @@ const handleImageUpload = async (imageData: string) => {
     };
   }, []);
 
+  const secureImageUrl = (url: string) => {
+    if (!url) return '';
+    if (url.startsWith('http://')) {
+      return url.replace('http://', 'https://');
+    }
+    return url;
+  };
+
   return (
     <>
       <ModalOverlay onClick={onClose} />
@@ -244,7 +252,7 @@ const handleImageUpload = async (imageData: string) => {
 
         <ProfileSection>
           <ProfileImageContainer>
-            <ProfileImage src={profileImage} alt="Profile" />
+            <ProfileImage  src={secureImageUrl(user?.profileImage) || ''} alt="Profile" />
             <ImageEditButton 
               onClick={handleImageClick}
               disabled={isImageUploading}

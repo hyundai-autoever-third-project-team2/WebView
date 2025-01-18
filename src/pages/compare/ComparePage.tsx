@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
 import Toolbar from "components/common/Toolbar";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CompareCarData from "./CompareCarData";
 import styled from "styled-components";
 import { getViewComparesCar } from "api/carCompare/carCompareApi";
 import { CarComparisonData } from "types/carDetail";
+
+interface LocationState {
+  cars?: { id: number }[];
+}
 
 const Container = styled.div`
     padding-top: 70px;
@@ -17,14 +21,26 @@ function ComparePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedCars, setSelectedCars] = useState<number[]>([]);
+
 
   useEffect(() => {
+    const state = location.state as LocationState;
+    if (state?.cars) {
+      const carIds = state.cars.map(car => car.id);
+      setSelectedCars(carIds);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (selectedCars.length === 0) return;
+
     const fetchCompareData = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const carIdsToCompare = [4, 6]; 
-        const compareData = await getViewComparesCar([4,6]);
+        const compareData = await getViewComparesCar(selectedCars);
         setCarDataList(compareData);
       } catch (err) {
         setError('차량 비교 데이터를 불러오는데 실패했습니다.');
@@ -35,7 +51,7 @@ function ComparePage() {
     };
 
     fetchCompareData();
-  }, []);
+  }, [selectedCars]); // selectedCars를 의존성 배열에 추가
 
   const handleBackClick = () => {
     navigate(-1);

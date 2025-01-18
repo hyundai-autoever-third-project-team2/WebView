@@ -103,22 +103,6 @@ const ModalContent = styled.div`
   padding: 20px;
 `;
 
-const SelectedList = styled.div`
-  width: 100%;
-  max-height: 120px;
-  overflow-y: auto;
-  margin: 10px 0;
-  padding: 0 20px;
-`;
-
-const SelectedItem = styled.div`
-  padding: 8px;
-  margin: 4px 0;
-  background-color: white;
-  border-radius: 4px;
-  font-size: 12px;
-`;
-
 const CompareActionButton = styled.button<{ disabled: boolean }>`
   padding: 12px 24px;
   background-color: ${props => props.disabled ? 'rgba(62,56,96,0.37)' : theme.colors.primary};
@@ -137,14 +121,13 @@ function WishlistPage() {
   const [showCheckboxes, setShowCheckboxes] = useState(false);
   const [selectedCars, setSelectedCars] = useState<Array<{
     id: number;
-    title: string;
   }>>([]);
   const [isClosing, setIsClosing] = useState(false);
   const [carList, setCarList] = useState<CarListItemData[]>([]);
 
   
 
-    // 데이터 로딩
+  // 데이터 로딩
   useEffect(() => {
     const loadTransactions = async () => {
       try {
@@ -177,9 +160,9 @@ function WishlistPage() {
   };
 
   // 체크박스 상태 변경 핸들러
-  const handleCarSelect = (carId: number, carTitle: string) => (checked: boolean) => {
+  const handleCarSelect = (carId: number) => (checked: boolean) => {
     if (checked) {
-      setSelectedCars(prev => [...prev, { id: carId, title: carTitle }]);
+      setSelectedCars(prev => [...prev, { id: carId }]);
     } else {
       setSelectedCars(prev => prev.filter(car => car.id !== carId));
     }
@@ -222,7 +205,7 @@ function WishlistPage() {
               showHeartButton
               showCheckbox={showCheckboxes}
               checked={selectedCars.some(selected => selected.id === car.carId)}
-              onCheckChange={handleCarSelect(car.carId, car.model_name)}
+              onCheckChange={handleCarSelect(car.carId)}
             />
           ))}
         </WishList>

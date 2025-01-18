@@ -154,13 +154,6 @@ const LogoutButton = styled.div`
   color: #FF0000;
 `;
 
-interface StatItemProps {
-  value: number;
-  label: string;
-  path: string;
-}
-
-
 
 interface MenuItemProps {
   icon: string;
@@ -174,19 +167,15 @@ const MENU_ITEMS: MenuItemProps[] = [
   { icon: '📝', text: '피드보기', path: '/feed' }
 ];
 
-const QUICKMENU_ITEMS : MenuItemProps[] = [
-  {icon: ChatIcon, text: '채팅 상담', path: '/chat/1'},
-  {icon: NotificationIcon, text: '공지사항', path: '/my'},
-  {icon: GuideIcon, text: '이용안내', path: '/c'}
-  //퀵메뉴도 path로 라우팅해야할지 고민중
-]
 
 function MyPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  
   const { data: user } = useUser();
+  
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
-  const [statItems,setStatItems] = useState([
+  const [statItems, setStatItems] = useState([
     {
       value: 0, label: '구매 내역', path: '/my/purchase'
     },
@@ -196,14 +185,13 @@ function MyPage() {
     {
       value: 0, label: '찜한 상품', path: '/wishlist'
     }
-  ])
-  
+  ]);
+
   useEffect(() => {
     const loadCountingData = async () => {
       try {
         const data = await fetchCountingList();
-  
-          setStatItems([
+        setStatItems([
           { value: data.saleCount, label: '구매 내역', path: '/my/purchase' },
           { value: data.purchaseCount, label: '판매 내역', path: '/my/register' },
           { value: data.heartCount, label: '찜한 상품', path: '/wishlist' }
@@ -212,27 +200,34 @@ function MyPage() {
         console.error('Failed to fetch counting data:', error);
       }
     };
-  
+
     loadCountingData();
-  }, []); 
+  }, []);
 
   const handleBackClick = () => {
-    navigate('/')
-  }
+    navigate('/');
+  };
 
   const handleMenuClick = (menuType: string) => () => {
-    log("메뉴클릭 : " + menuType);
+    console.log("메뉴클릭 : " + menuType);
     navigate(menuType);
   };
 
   const handleLogoutClick = () => {
     localStorage.removeItem('accessToken');
     navigate('/');
-  }
+  };
 
   const handleUpdateSuccess = () => {
-    queryClient.invalidateQueries({queryKey:['user']})
-  }
+    queryClient.invalidateQueries({ queryKey: ['user'] });
+  };
+
+
+  const QUICKMENU_ITEMS: MenuItemProps[] = [
+    { icon: ChatIcon, text: '채팅 상담', path: `/chat/${user?.userId}` },
+    { icon: NotificationIcon, text: '공지사항', path: '/notice' },
+    { icon: GuideIcon, text: '이용안내', path: '/guide' }
+  ];
 
   return (
     <Container>
@@ -253,13 +248,13 @@ function MyPage() {
             src={user?.profileImage || testProfile} 
             alt="profile" />
           <ProfileText>
-          {user?.nickname || '사용자'} 님 
+            {user?.nickname || '사용자'} 님 
             <span>반갑습니다!</span>
           </ProfileText>
         </ProfileSection>
 
         <StatsContainer>
-          {statItems.map((item,idx)=> (
+          {statItems.map((item, idx) => (
             <StatItem key={idx} onClick={handleMenuClick(item.path)}>
               <StatValue>{item.value}</StatValue>
               <StatLabel>{item.label}</StatLabel>
