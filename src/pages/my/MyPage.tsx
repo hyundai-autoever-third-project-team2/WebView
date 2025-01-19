@@ -290,7 +290,7 @@ function MyPage() {
       {isSettingModalOpen && (
         <SettingModal 
           onClose={() => setIsSettingModalOpen(false)}
-          user={user}
+          user={user!}
           onUpdateSuccess={handleUpdateSuccess}
         />
       )}

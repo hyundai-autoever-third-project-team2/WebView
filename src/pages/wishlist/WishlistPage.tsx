@@ -178,6 +178,7 @@ function WishlistPage() {
     navigate('/compare', { state: { cars: selectedCars } });
   };
 
+
   return (
     <>
       <Toolbar title="관심 차량" showBackButton onBackClick={handleBackClick}/>
@@ -192,11 +193,15 @@ function WishlistPage() {
           {carList && carList.map(car => (
             <CarCard 
               key={car.carId}
+              carId={car.carId}
               imageUrl={car.imageUrl}
               title={car.model_name}
               year={car.model_year}
               mileage={car.distance.toLocaleString() + 'km'}
-              price={formatPrice(car.month_price)}
+              price={car.price.toString() + '만원'}
+              {...(car.discount_price && {
+                discountPrice: car.discount_price.toString() + '만원'
+              })}
               tags={[]}
               viewCount={car.view_count}
               isLiked={true} // 현재 dto에없음

@@ -3,13 +3,16 @@ import { theme } from 'styles/theme';
 import Checkbox from './CheckBox';
 import { useEffect, useState } from 'react';
 import ICarData from 'types/CarData';
+import { useNavigate } from 'react-router-dom';
 
 interface CarDataProps {
+  carId : number;
   imageUrl: string; //사진
   title: string; //차종
   year: string; // 연식
   mileage: string; // 주행거리
   price: string; //가격
+  discountPrice?: string;
   tags?: string[]; // 태그 / 선택적으로 변경
   checked?: boolean; // 체크했나
   isLiked?: boolean; // 좋아요 눌렀나
@@ -50,6 +53,7 @@ const Content = styled.div`
   gap: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 0.5rem;
+  cursor: pointer;
   
   @media (min-width: 500px) {
     gap: 16px;
@@ -131,15 +135,45 @@ const HashTag = styled.button`
   }
 `;
 
-const CarPrice = styled.div`
-  font-size: 12px;
-  font-weight: 500;
+const PriceContainer = styled.div`
   position: absolute;
   bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 
   @media (min-width: 500px) {
-    font-size: 14px;
     bottom: 8px;
+    gap: 4px;
+  }
+`;
+
+const DefaultPrice = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+
+  @media (min-width: 500px) {
+    font-size: 15px;
+  }
+`;
+
+const OriginalPrice = styled.span`
+  font-size: 11px;
+  color: ${theme.colors.neutral500};
+  text-decoration: line-through;
+
+  @media (min-width: 500px) {
+    font-size: 12px;
+  }
+`;
+
+const DiscountPrice = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+  color: ${theme.colors.primary};
+
+  @media (min-width: 500px) {
+    font-size: 15px;
   }
 `;
 
@@ -193,6 +227,7 @@ const FilledHeartIcon = () => (
 );
 
 function CarCard({
+  carId,
   imageUrl,
   title,
   year,
@@ -200,6 +235,7 @@ function CarCard({
   price,
   viewCount,
   postDate,
+  discountPrice,
   tags = ['무사고', '인증'],
   checked = false,
   isLiked = false,
@@ -212,6 +248,7 @@ function CarCard({
 }: CarDataProps) {
   const [internalChecked, setInternalChecked] = useState(checked);
   const [internalLiked, setInternalLiked] = useState(isLiked);
+  const navigate = useNavigate()
 
   useEffect(() => {
     setInternalChecked(false);
@@ -227,23 +264,36 @@ function CarCard({
     setInternalLiked(newLiked);
     onLikeChange?.(newLiked);
   };
+  
+  const handleCarClick = (carId : number) => () => {
+    {!showCheckbox && navigate(`/car-detail/${carId}`)}
+  }
 
   return (
     <Content>
-      <CarImage src={imageUrl} alt={title} />
-      <InfoContainer>
+      <CarImage src={imageUrl} alt={title} onClick={handleCarClick(carId)}/>
+      <InfoContainer onClick={handleCarClick(carId)}>
         <CarTitle>{title}</CarTitle>
         <CarYear>
           {year} {mileage}
         </CarYear>
-        {tags.length > 0 && (
+        {showTags && tags.length > 0 && (
           <HashTagContainer>
             {tags.map((tag, index) => (
               <HashTag key={index}>{tag}</HashTag>
             ))}
           </HashTagContainer>
         )}
-        <CarPrice>{price}</CarPrice>
+        <PriceContainer>
+          {discountPrice ? (
+            <>
+              <OriginalPrice>{price}</OriginalPrice>
+              <DiscountPrice>{discountPrice}</DiscountPrice>
+            </>
+          ) : (
+            <DefaultPrice>{price}</DefaultPrice>
+          )}
+        </PriceContainer>
         {showViewDate && (
           <ViewDate>
             <ViewText>{viewCount}</ViewText>
@@ -263,5 +313,4 @@ function CarCard({
     </Content>
   );
 }
-
 export default CarCard;
