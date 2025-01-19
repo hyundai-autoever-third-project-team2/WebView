@@ -41,6 +41,8 @@ function PurchaseCarPage() {
     image,
     agency_id,
     agency_name,
+    latitude,
+    longitude,
   } = state;
 
   const price = discount_price && discount_price !== 0 ? discount_price : originalPrice; // 할인된 가격이 있으면 할인된 가격으로 계산
@@ -52,8 +54,6 @@ function PurchaseCarPage() {
       [key]: !prev[key],
     }));
   };
-
-  log(carId);
 
   const handlePayment = async () => {
     if (!selectedDate) {
@@ -99,10 +99,6 @@ function PurchaseCarPage() {
 
       // tid 값을 로컬 스토리지에 저장
       localStorage.setItem('kakaoPayTid', tid);
-
-      // agencyId, time을 이용해 예약 등록
-      localStorage.setItem('agencyId', agency_id);
-      localStorage.setItem('time', formattedDate);
 
       console.log('Payment preparation successful. TID:', tid);
 
@@ -161,7 +157,7 @@ function PurchaseCarPage() {
 
         {mapOpen && (
           <>
-            <Map />
+            <Map latitude={latitude} longitude={longitude} />
           </>
         )}
 

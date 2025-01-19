@@ -6,7 +6,12 @@ declare global {
   }
 }
 
-function Map() {
+interface MapProps {
+  latitude: number;
+  longitude: number;
+}
+
+function Map({ latitude, longitude }: MapProps) {
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
 
@@ -15,7 +20,7 @@ function Map() {
       if (window.kakao && window.kakao.maps) {
         const mapContainer = document.getElementById('map');
         const mapOption = {
-          center: new window.kakao.maps.LatLng(37.48, 126.88),
+          center: new window.kakao.maps.LatLng(latitude, longitude),
           level: 3,
         };
 
