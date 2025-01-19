@@ -199,6 +199,7 @@ const SettingModal: React.FC<SettingModalProps> = ({ onClose, user, onUpdateSucc
       // 새 이미지가 있다면 프로필 이미지 업데이트
       if (newProfileImage) {
         await updateUserProfileImage(newProfileImage);
+        setProfileImage(newProfileImage); // 성공 시 프로필 이미지 상태 업데이트
       }
       
       // 닉네임 업데이트
@@ -206,13 +207,19 @@ const SettingModal: React.FC<SettingModalProps> = ({ onClose, user, onUpdateSucc
       
       onUpdateSuccess?.();
       onClose();
-    } catch (err) {
-      setError('프로필 변경에 실패했습니다. 다시 시도해주세요.');
-      console.error('Profile update error:', err);
+    } catch (err: any) {
+      // 에러 메시지를 더 자세히 표시
+      const errorMessage = err.response?.data?.message || err.message || '프로필 변경에 실패했습니다.';
+      setError(errorMessage);
+      console.error('Profile update error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status
+      });
     } finally {
       setIsNicknameSaving(false);
     }
-  };
+};
 
   useEffect(() => {
     // 안드로이드에서 호출할 콜백 함수
