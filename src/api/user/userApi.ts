@@ -7,7 +7,7 @@ export const getUserInfo = async (): Promise<userInfo> => {
 };
 
 export const updateUserProfileImage = async (profileImage : string) => {
-  const response = await client.put('/user/update/profile', profileImage);
+  const response = await client.put('/user/update/profileImage', profileImage);
   return response.data;
 }
 
