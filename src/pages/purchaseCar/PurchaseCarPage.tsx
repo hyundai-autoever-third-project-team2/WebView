@@ -4,7 +4,7 @@ import * as S from './PurchaseCarPage.style';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from 'components/common/Button';
 import { ChevronDown } from 'lucide-react';
-import Map from 'components/common/Map';
+import Map from 'pages/purchaseCar/Map';
 import { useUser } from 'hooks/useUser';
 import { calculateRegistrationFee } from 'utils/calculateRegistrationFee';
 import { PaymentReadyRequest, requestKakaoPayment } from 'api/carPurchase/kakaoPayApi';
@@ -12,7 +12,6 @@ import { registerReservation } from 'api/carPurchase/reservationApi';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
-import { isPc } from 'utils/isPC';
 
 function PurchaseCarPage() {
   const navigate = useNavigate();
@@ -107,7 +106,7 @@ function PurchaseCarPage() {
 
       console.log('Payment preparation successful. TID:', tid);
 
-      const redirectUrl = isPc() ? response.next_redirect_pc_url : response.next_redirect_mobile_url;
+      const redirectUrl = response.next_redirect_mobile_url;
 
       window.location.href = redirectUrl;
       console.log('Payment response:', response);
