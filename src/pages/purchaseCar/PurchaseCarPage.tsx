@@ -12,6 +12,7 @@ import { registerReservation } from 'api/carPurchase/reservationApi';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
+import { isPc } from 'utils/isPC';
 
 function PurchaseCarPage() {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ function PurchaseCarPage() {
       });
 
       console.log('예약 정보: ', reservationResult);
-    } catch (ereor) {
+    } catch (error) {
       console.error('예약 등록 실패: ', error);
       window.Error('예약 등록에 실패했습니다. 다시 시도해주세요.');
     }
@@ -106,7 +107,9 @@ function PurchaseCarPage() {
 
       console.log('Payment preparation successful. TID:', tid);
 
-      window.location.href = response.next_redirect_pc_url;
+      const redirectUrl = isPc() ? response.next_redirect_pc_url : response.next_redirect_mobile_url;
+
+      window.location.href = redirectUrl;
       console.log('Payment response:', response);
     } catch (error) {
       console.error('Payment or Reservation failed:', error);
@@ -201,7 +204,7 @@ function PurchaseCarPage() {
           <S.DatePickerWrapper>
             <DatePicker
               selected={selectedDate}
-              onChange={(date: Date) => setSelectedDate(date)}
+              onChange={(date: Date | null) => setSelectedDate(date)}
               dateFormat="yyyy년 MM월 dd일"
               minDate={new Date()} // 오늘 이후만 선택 가능
               placeholderText="방문 날짜를 선택해주세요"
