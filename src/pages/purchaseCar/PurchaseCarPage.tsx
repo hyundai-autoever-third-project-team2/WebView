@@ -201,7 +201,7 @@ function PurchaseCarPage() {
               selected={selectedDate}
               onChange={(date: Date | null) => setSelectedDate(date)}
               dateFormat="yyyy년 MM월 dd일"
-              minDate={new Date()} // 오늘 이후만 선택 가능
+              minDate={new Date(new Date().getTime() + 48 * 60 * 60 * 1000)} // 현재 날짜로부터 +2일 이후부터 예약 가능
               placeholderText="방문 날짜를 선택해주세요"
               locale={ko}
               showPopperArrow={false}
