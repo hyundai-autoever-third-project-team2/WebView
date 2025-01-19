@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { CarListItemData } from 'types/CarListItemData';
 import { fetchViewIsHeartCarList } from 'api/mypage/mypageApi';
 import { getViewComparesCar } from 'api/carCompare/carCompareApi';
-import { CarComparisonData } from 'types/carDetail';
+import { CarComparisonData } from 'types/CarDetail';
 
 interface ISelectCarListProps {
   title: string;
