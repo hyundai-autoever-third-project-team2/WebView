@@ -2,11 +2,10 @@ import styled from 'styled-components';
 import Toolbar from '../../components/common/Toolbar';
 import LogoutIc from '../../assets/icon_logout.svg';
 import { theme } from 'styles/theme';
-import ChatIcon from '../../assets/icon_mypage_chat.svg'
-import GuideIcon from '../../assets/icon_mypage_guide.svg'
-import NotificationIcon from '../../assets/icon_mypage_notification.svg'
-import RightButton from '../../assets/icon_right_button.svg'
-
+import ChatIcon from '../../assets/icon_mypage_chat.svg';
+import GuideIcon from '../../assets/icon_mypage_guide.svg';
+import NotificationIcon from '../../assets/icon_mypage_notification.svg';
+import RightButton from '../../assets/icon_right_button.svg';
 
 import testProfile from '../../assets/test_profile.jpg';
 import { useNavigate } from 'react-router-dom';
@@ -59,16 +58,15 @@ const StatsContainer = styled.div`
 const StatItem = styled.div`
   text-align: center;
   flex: 1;
-  cursor:pointer;
+  cursor: pointer;
   padding: 6px 0;
 
-      &:first-child {
-    border-right : 2px solid ${theme.colors.primary};
-    }
-    &:last-child{
-      border-left : 2px solid ${theme.colors.primary};
-    }
-  
+  &:first-child {
+    border-right: 2px solid ${theme.colors.primary};
+  }
+  &:last-child {
+    border-left: 2px solid ${theme.colors.primary};
+  }
 `;
 
 const StatValue = styled.div`
@@ -86,14 +84,14 @@ const QuickMenuList = styled.div`
   display: flex;
   gap: 20px;
   padding: 30px 30px;
-  background-color: #FFF3E0;  
+  background-color: #fff3e0;
 `;
 
 const QuickMenuIcon = styled.img`
-  width:1.6rem;
-  height:1.6rem;
-  margin-bottom : 10px;
-`
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-bottom: 10px;
+`;
 
 const QuickMenuItem = styled.div`
   display: flex;
@@ -104,7 +102,7 @@ const QuickMenuItem = styled.div`
   background-color: white;
   border-radius: 12px;
   font-size: 0.8rem;
-  cursor:pointer;
+  cursor: pointer;
   padding: 12px 0;
 `;
 
@@ -117,9 +115,8 @@ const MenuItem = styled.div`
   height: 80px;
   align-items: center;
   padding: 16px 0;
-  border-bottom: 1px solid #EEEEEE;
-  cursor:pointer;
-
+  border-bottom: 1px solid #eeeeee;
+  cursor: pointer;
 
   &:last-child {
     border-bottom: none;
@@ -134,26 +131,22 @@ const MenuText = styled.div`
   flex: 1;
 `;
 
-const MenuArrow = styled.img`
-`;
+const MenuArrow = styled.img``;
 
 const Logout = styled.div`
   display: flex;
   padding: 8px 20px;
-  cursor:pointer;
-
+  cursor: pointer;
 `;
 
-const LogoutIcon = styled.img`
-`;
+const LogoutIcon = styled.img``;
 
 const LogoutButton = styled.div`
   display: flex;
   align-items: center;
   padding: 16px 20px;
-  color: #FF0000;
+  color: #ff0000;
 `;
-
 
 interface MenuItemProps {
   icon: string;
@@ -164,27 +157,32 @@ interface MenuItemProps {
 const MENU_ITEMS: MenuItemProps[] = [
   { icon: '🚗', text: '내차사기', path: '/' },
   { icon: '💰', text: '내차팔기', path: '/register-car' },
-  { icon: '📝', text: '피드보기', path: '/feed' }
+  { icon: '📝', text: '피드보기', path: '/feed' },
 ];
-
 
 function MyPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  
+
   const { data: user } = useUser();
-  
+
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [statItems, setStatItems] = useState([
     {
-      value: 0, label: '구매 내역', path: '/my/purchase'
+      value: 0,
+      label: '구매 내역',
+      path: '/my/purchase',
     },
     {
-      value: 0, label: '판매 내역', path: '/my/register'
+      value: 0,
+      label: '판매 내역',
+      path: '/my/register',
     },
     {
-      value: 0, label: '찜한 상품', path: '/wishlist'
-    }
+      value: 0,
+      label: '찜한 상품',
+      path: '/wishlist',
+    },
   ]);
 
   useEffect(() => {
@@ -194,7 +192,7 @@ function MyPage() {
         setStatItems([
           { value: data.saleCount, label: '구매 내역', path: '/my/purchase' },
           { value: data.purchaseCount, label: '판매 내역', path: '/my/register' },
-          { value: data.heartCount, label: '찜한 상품', path: '/wishlist' }
+          { value: data.heartCount, label: '찜한 상품', path: '/wishlist' },
         ]);
       } catch (error) {
         console.error('Failed to fetch counting data:', error);
@@ -209,47 +207,43 @@ function MyPage() {
   };
 
   const handleMenuClick = (menuType: string) => () => {
-    console.log("메뉴클릭 : " + menuType);
+    console.log('메뉴클릭 : ' + menuType);
     navigate(menuType);
   };
 
   const handleLogoutClick = () => {
     localStorage.removeItem('accessToken');
-    navigate('/');
+    navigate('/login');
   };
 
   const handleUpdateSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['user'] });
   };
 
-
   const QUICKMENU_ITEMS: MenuItemProps[] = [
     { icon: ChatIcon, text: '채팅 상담', path: `/chat/${user?.userId}` },
     { icon: NotificationIcon, text: '공지사항', path: '/notice' },
-    { icon: GuideIcon, text: '이용안내', path: '/guide' }
+    { icon: GuideIcon, text: '이용안내', path: '/guide' },
   ];
 
   return (
     <Container>
-      <Toolbar 
+      <Toolbar
         showBackButtonWhite
-        title="마이페이지" 
+        title="마이페이지"
         titleAlignment="left"
         rightButtons={['notificationWhite', 'settingWhite']}
         backgroundColor={theme.colors.primary}
         onBackClick={handleBackClick}
-        color='white'
+        color="white"
         onSettingClick={() => setIsSettingModalOpen(true)}
       />
-      
+
       <ProfileContainer>
         <ProfileSection>
-          <ProfileImage
-            src={user?.profileImage || testProfile} 
-            alt="profile" />
+          <ProfileImage src={user?.profileImage || testProfile} alt="profile" />
           <ProfileText>
-            {user?.nickname || '사용자'} 님 
-            <span>반갑습니다!</span>
+            {user?.nickname || '사용자'} 님<span>반갑습니다!</span>
           </ProfileText>
         </ProfileSection>
 
@@ -266,7 +260,7 @@ function MyPage() {
       <QuickMenuList>
         {QUICKMENU_ITEMS.map((item) => (
           <QuickMenuItem key={item.path} onClick={handleMenuClick(item.path)}>
-            <QuickMenuIcon src={item.icon}/>
+            <QuickMenuIcon src={item.icon} />
             {item.text}
           </QuickMenuItem>
         ))}
@@ -277,7 +271,7 @@ function MyPage() {
           <MenuItem key={item.path} onClick={handleMenuClick(item.path)}>
             <MenuIcon>{item.icon}</MenuIcon>
             <MenuText>{item.text}</MenuText>
-            <MenuArrow src={RightButton}/>
+            <MenuArrow src={RightButton} />
           </MenuItem>
         ))}
       </MenuList>
@@ -288,11 +282,7 @@ function MyPage() {
       </Logout>
 
       {isSettingModalOpen && (
-        <SettingModal 
-          onClose={() => setIsSettingModalOpen(false)}
-          user={user!}
-          onUpdateSuccess={handleUpdateSuccess}
-        />
+        <SettingModal onClose={() => setIsSettingModalOpen(false)} user={user!} onUpdateSuccess={handleUpdateSuccess} />
       )}
     </Container>
   );
