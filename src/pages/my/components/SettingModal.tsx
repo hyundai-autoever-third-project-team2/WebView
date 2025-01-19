@@ -165,63 +165,59 @@ const ErrorMessage = styled.div`
   text-align: center;
 `;
 
-const SettingModal: React.FC<SettingModalProps> = ({ onClose, user,onUpdateSuccess }) => {
+const SettingModal: React.FC<SettingModalProps> = ({ onClose, user, onUpdateSuccess }) => {
   const [nickname, setNickname] = useState(user?.nickname || '');
   const [profileImage, setProfileImage] = useState(user?.profileImage || '');
+  const [newProfileImage, setNewProfileImage] = useState<string | null>(null); // S3에서 받은 새 이미지 URL
   const [isNicknameSaving, setIsNicknameSaving] = useState(false);
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleImageClick = () => {
-    // 안드로이드 네이티브 갤러리 호출
     if (typeof Android !== 'undefined' && Android?.openGallery()) {
       Android.openGallery();
     } else {
-        log('갤러리 호출 실패..');
+      console.log('갤러리 호출 실패');
     }
-
   };
 
- // 이미지 업로드 핸들러
-const handleImageUpload = async (imageData: string) => {
-    setIsImageUploading(true);
+  // S3에서 받은 이미지 URL 처리
+  const handleImageUpload = (imageUrl: string) => {
+    setIsImageUploading(false);
     setError(null);
-    
-    try {
-      // API 호출
-      await updateUserProfileImage( imageData );
-      setProfileImage(imageData); 
-      onUpdateSuccess?.();  
-    } catch (err) {
-      setError('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-      console.error('Image upload error:', err);
-    } finally {
-      setIsImageUploading(false);
-    }
+    setNewProfileImage(imageUrl); // 새 이미지 URL 저장
   };
-  
-  // 닉네임 업데이트 핸들러
-  const handleNicknameUpdate = async () => {
+
+  // 프로필 저장 (이미지 + 닉네임)
+  const handleSave = async () => {
     if (!nickname.trim()) return;
     
     setIsNicknameSaving(true);
     setError(null);
   
     try {
+      // 새 이미지가 있다면 프로필 이미지 업데이트
+      if (newProfileImage) {
+        await updateUserProfileImage(newProfileImage);
+      }
+      
+      // 닉네임 업데이트
       await updateUserNickName(nickname.trim());
-      onUpdateSuccess?.();  // 성공 콜백 호출
+      
+      onUpdateSuccess?.();
       onClose();
     } catch (err) {
-      setError('닉네임 변경에 실패했습니다. 다시 시도해주세요.');
-      console.error('Nickname update error:', err);
+      setError('프로필 변경에 실패했습니다. 다시 시도해주세요.');
+      console.error('Profile update error:', err);
     } finally {
       setIsNicknameSaving(false);
     }
   };
 
   useEffect(() => {
-    const receiveImage = (imageData: string) => {
-      handleImageUpload(imageData);  // 이미지 선택 즉시 업로드
+    // 안드로이드에서 호출할 콜백 함수
+    const receiveImage = (imageUrl: string) => {
+      handleImageUpload(imageUrl);
     };
 
     window.receiveImageFromGallery = receiveImage;
@@ -252,7 +248,10 @@ const handleImageUpload = async (imageData: string) => {
 
         <ProfileSection>
           <ProfileImageContainer>
-            <ProfileImage  src={secureImageUrl(user?.profileImage) || ''} alt="Profile" />
+            <ProfileImage 
+              src={secureImageUrl(newProfileImage || user?.profileImage) || ''} 
+              alt="Profile" 
+            />
             <ImageEditButton 
               onClick={handleImageClick}
               disabled={isImageUploading}
@@ -279,7 +278,7 @@ const handleImageUpload = async (imageData: string) => {
         {error && <ErrorMessage>{error}</ErrorMessage>}
 
         <SaveButton
-          onClick={handleNicknameUpdate}
+          onClick={handleSave}
           disabled={!nickname.trim() || isNicknameSaving}
         >
           {isNicknameSaving ? '저장 중...' : '저장하기'}
