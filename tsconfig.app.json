@@ -28,7 +28,10 @@
     /* import 시 절대 경로 사용 가능 */
     "baseUrl": "src",
 
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+
+    /* react-datepicker type 파일을 인식하지 못하는 에러를 위한 설정 */
+    "types": ["react-datepicker"]
   },
   "include": ["src", "svg.d.ts", "global.d.ts"]
 }
