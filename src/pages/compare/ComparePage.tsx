@@ -4,7 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CompareCarData from "./CompareCarData";
 import styled from "styled-components";
 import { getViewComparesCar } from "api/carCompare/carCompareApi";
-import { CarComparisonData } from "types/carDetail";
+import { CarComparisonData } from "../../types/CarDetail";
+import Loading from "components/common/Loading";
 
 interface LocationState {
   cars?: { id: number }[];
@@ -66,7 +67,7 @@ function ComparePage() {
   };
 
   if (isLoading) {
-    return <div>데이터를 불러오는 중입니다...</div>;
+    return <Loading/>;
   }
 
   if (error) {
