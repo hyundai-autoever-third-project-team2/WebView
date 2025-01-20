@@ -4,6 +4,11 @@ import Checkbox from './CheckBox';
 import { useEffect, useState } from 'react';
 import ICarData from 'types/CarData';
 import { useNavigate } from 'react-router-dom';
+import useWishCar from 'api/wishCar/useWishCar';
+import ConfirmModal, { ModalConfigType } from 'pages/my/components/ConfirmModal';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { fetchViewIsHeartCarList } from 'api/mypage/mypageApi';
+import { CarListItemData } from 'types/CarListItemData';
 
 interface CarDataProps {
   carId : number;
@@ -249,6 +254,17 @@ function CarCard({
   const [internalChecked, setInternalChecked] = useState(checked);
   const [internalLiked, setInternalLiked] = useState(isLiked);
   const navigate = useNavigate()
+  const queryClient = useQueryClient();
+  const wishCar = carId ? useWishCar(carId) : null;
+
+    const [modalConfig, setModalConfig] = useState<ModalConfigType>({
+      isOpen: false,
+      title: "",
+      description: "",
+      onConfirm: () => {},
+    });
+
+
 
   useEffect(() => {
     setInternalChecked(false);
@@ -259,17 +275,66 @@ function CarCard({
     onCheckChange?.(newChecked);
   };
 
+  //하트 버튼 동작 전 확인
+  const handleLikeCheck = () => {
+    {!showCheckbox &&
+      setModalConfig({
+        isOpen: true,
+        title: "찜한 차량을 취소하시겠습니까?",
+        description: "취소 시 찜 목록에서 삭제됩니다.",
+        onConfirm: handleLikeClick,
+      });
+    }
+  }
+
+  const updateLikeCarMutation = useMutation({
+    mutationFn: async () => {
+      if (wishCar) {
+        await wishCar.toggleLike();
+        return fetchViewIsHeartCarList();
+      }
+    },
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['wishlist'] });
+      
+      // 이전 데이터 저장
+      const previousWishlist = queryClient.getQueryData(['wishlist']);
+      
+      // Optimistic update
+      queryClient.setQueryData(['wishlist'], (old: CarListItemData[] | undefined) => 
+        old ? old.filter(car => car.carId !== carId) : []
+      );
+      
+      return { previousWishlist };
+    },
+    onError: (error, variables, context) => {
+      // 에러 시 이전 데이터로 롤백
+      queryClient.setQueryData(['wishlist'], context?.previousWishlist);
+      console.error("찜한 차량 데이터 뮤테이션 실패", error);
+      setInternalLiked(!internalLiked); 
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+    },
+    onSettled: () => {
+      setModalConfig(prev => ({ ...prev, isOpen: false }));
+    }
+  });
+
   const handleLikeClick = () => {
     const newLiked = !internalLiked;
     setInternalLiked(newLiked);
     onLikeChange?.(newLiked);
+    updateLikeCarMutation.mutate();
   };
+
   
   const handleCarClick = (carId : number) => () => {
     {!showCheckbox && navigate(`/car-detail/${carId}`)}
   }
 
   return (
+    <>
     <Content>
       <CarImage src={imageUrl} alt={title} onClick={handleCarClick(carId)}/>
       <InfoContainer onClick={handleCarClick(carId)}>
@@ -288,7 +353,7 @@ function CarCard({
           {discountPrice ? (
             <>
               <OriginalPrice>{price}</OriginalPrice>
-              <DiscountPrice>{discountPrice}</DiscountPrice>
+              <DiscountPrice>{'할인가 ' + discountPrice}</DiscountPrice>
             </>
           ) : (
             <DefaultPrice>{price}</DefaultPrice>
@@ -305,12 +370,20 @@ function CarCard({
         {showCheckbox && <Checkbox checked={internalChecked} onChange={handleCheckChange} />}
         <div />
         {showHeartButton && (
-          <HeartButton onClick={handleLikeClick}>
+          <HeartButton onClick={handleLikeCheck}>
             {internalLiked ? <FilledHeartIcon /> : <EmptyHeartIcon />}
           </HeartButton>
         )}
       </ActionsWrapper>
     </Content>
+    <ConfirmModal
+      isOpen={modalConfig.isOpen}
+      onClose={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+      onConfirm={modalConfig.onConfirm}
+      title={modalConfig.title}
+      description={modalConfig.description}
+      />
+    </>
   );
 }
 export default CarCard;

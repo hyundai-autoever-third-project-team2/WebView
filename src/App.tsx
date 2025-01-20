@@ -56,7 +56,7 @@ const webviewRouter: RouteObject[] = [
         element: <MyPage />,
       },
       {
-        path: 'my/purchase/:id',
+        path: 'my/purchase/:purchaseId',
         element: <PurchaseDetailPage />,
       },
     ],

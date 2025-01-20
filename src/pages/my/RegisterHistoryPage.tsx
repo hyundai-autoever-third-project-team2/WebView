@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import DropDownButton from "./components/DropDownButton";
 import styled from "styled-components";
 import CarHistoryItem from "./components/CarHistoryItem";
-import SearchInput from "components/common/SearchInput";
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchViewTransactionList, fetchViewUserCarTransactionList } from "api/mypage/mypageApi";
-import { useState, useEffect } from "react";
+import {  fetchViewUserCarTransactionList } from "api/mypage/mypageApi";
+import { useState } from "react";
 import {  CarViewUserCarTransactionData } from "types/ViewTransactionData";
 import FilterSearchInput from "./components/FilterSearchInput";
 
@@ -36,12 +35,14 @@ const CarHistoryList = styled.div`
 
 const LoadingText = styled.div`
     text-align: center;
+    padding-top:50px;
     padding: 20px;
     color: ${({ theme }) => theme.colors.gray};
 `
 
 const ErrorText = styled.div`
     text-align: center;
+    padding-top:50px;
     padding: 20px;
     color: ${({ theme }) => theme.colors.error};
 `
