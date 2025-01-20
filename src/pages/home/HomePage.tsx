@@ -74,7 +74,7 @@ function HomePage() {
         setRecommendedCars(recommendedCarList);
       } catch (error) {
         console.error('Failed to load recommended cars:', error);
-        setRecommendedCarsError('추천 차량을 불러오는데 실패했습니다.');
+        setRecommendedCarsError('추천 차량을 불러오지 못했어요.');
       } finally {
         setLoading(false);
       }

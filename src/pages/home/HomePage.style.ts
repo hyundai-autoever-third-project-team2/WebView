@@ -331,7 +331,8 @@ export const ErrorMessage = styled.div`
   justify-content: center;
   align-items: center;
   padding: 32px;
-  color: ${({ theme }) => theme.colors.error};
+  font-size: ${({ theme }) => theme.fontSize.md};
+  color: ${({ theme }) => theme.colors.neutral50};
 `;
 
 export const EmptyMessage = styled.div`
