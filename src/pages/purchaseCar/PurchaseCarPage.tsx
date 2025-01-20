@@ -216,7 +216,7 @@ function PurchaseCarPage() {
           <S.SectionTitle>구매 필수 확인사항 · 동의</S.SectionTitle>
           <S.SectionSubtitle>구매 전 필수 사항을 모두 확인하고, 동의하셔야 계약이 진행됩니다.</S.SectionSubtitle>
           <S.AgreementCheckboxContainer>
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('carInfo')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.carInfo}
@@ -231,7 +231,7 @@ function PurchaseCarPage() {
               </S.AgreementCheckboxDescription>
             </S.AgreementCheckboxWrapper>
 
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('inspection')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.inspection}
@@ -245,7 +245,7 @@ function PurchaseCarPage() {
               </S.AgreementCheckboxDescription>
             </S.AgreementCheckboxWrapper>
 
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('contract')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.contract}
@@ -254,7 +254,7 @@ function PurchaseCarPage() {
               <S.AgreementCheckboxDescription>[필수] 계약조항 및 환불약관 내용 확인</S.AgreementCheckboxDescription>
             </S.AgreementCheckboxWrapper>
 
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('payment')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.payment}
@@ -270,7 +270,7 @@ function PurchaseCarPage() {
         <S.AgreementSection>
           <S.SectionTitle>개인정보 수집 · 이용 · 제공 동의</S.SectionTitle>
           <S.AgreementCheckboxContainer>
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('privateInfo')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.privateInfo}
@@ -279,7 +279,7 @@ function PurchaseCarPage() {
               <S.AgreementCheckboxDescription>[필수] 개인정보 수집 및 이용 동의</S.AgreementCheckboxDescription>
             </S.AgreementCheckboxWrapper>
 
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('privateInfoThirdParty')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.privateInfoThirdParty}
@@ -288,7 +288,7 @@ function PurchaseCarPage() {
               <S.AgreementCheckboxDescription>[필수] 개인정보 제3자 제공에 대한 동의</S.AgreementCheckboxDescription>
             </S.AgreementCheckboxWrapper>
 
-            <S.AgreementCheckboxWrapper>
+            <S.AgreementCheckboxWrapper onClick={() => handleAgreementChange('uniqueInfoThirdParty')}>
               <S.AgreementCheckbox
                 type="checkbox"
                 checked={agreements.uniqueInfoThirdParty}
