@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import * as S from './SurveyModal.style';
 import Slider from '@mui/material/Slider';
 import Button from '../Button';
-import { IServeyData } from 'types/Survey';
+import { IServeyData } from 'types/survey';
 import { submitSurvey } from 'api/survey/surveyApi';
 
 interface ISurveyProps {
@@ -262,8 +262,13 @@ const QuestionColor = ({ nextStep }: ISurveyProps) => {
   };
 
   const hanleNextButtonClick = () => {
+    if (selectedColors.length !== 3) {
+      alert('3개의 색상을 선택해주세요');
+      return;
+    }
     nextStep({ colors: selectedColors });
   };
+
   return (
     <S.QuestionWrapperLarge>
       <S.SurveyMessage>
