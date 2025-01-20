@@ -61,6 +61,8 @@ export const CarDetailPage = () => {
         image: data?.carImages[0],
         agency_id: data?.agency_id,
         agency_name: data?.agency_name,
+        latitude: data?.latitude,
+        longitude: data?.longitude,
       },
     });
   };
