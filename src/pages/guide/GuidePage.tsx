@@ -11,7 +11,7 @@ interface GuideItem {
 }
 
 interface AccordionProps {
-  isOpen: boolean;
+  $isOpen: boolean;
 }
 
 // const theme = {
@@ -67,9 +67,9 @@ const GuideItem = styled.div`
   white-space: pre-wrap;
 `;
 
-const GuideHeader = styled.div<{ isOpen: boolean }>`
+const GuideHeader = styled.div<{ $isOpen: boolean }>`
   padding: 16px;
-  background-color: ${props => props.isOpen ? '#ECF0F1' : 'white'};
+  background-color: ${props => props.$isOpen ? '#ECF0F1' : 'white'};
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -85,17 +85,17 @@ const GuideTitle = styled.h3`
 `;
 
 const GuideContent = styled.div<AccordionProps>`
-  padding: ${props => props.isOpen ? '16px' : '0 16px'};
-  max-height: ${props => props.isOpen ? '500px' : '0'};
+  padding: ${props => props.$isOpen ? '16px' : '0 16px'};
+  max-height: ${props => props.$isOpen ? '500px' : '0'};
   overflow: hidden;
   transition: all 0.3s ease-in-out;
   background-color: white;
-  border-top: ${props => props.isOpen ? '1px solid ${theme.border}' : 'none'};
+  border-top: ${props => props.$isOpen ? '1px solid ${theme.border}' : 'none'};
   line-height: 1.6;
 `;
 
 const Arrow = styled.span<AccordionProps>`
-  transform: ${props => props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
+  transform: ${props => props.$isOpen ? 'rotate(180deg)' : 'rotate(0deg)'};
   transition: transform 0.3s ease-in-out;
 
 `;
@@ -170,13 +170,13 @@ const GuidePage: React.FC = () => {
               return (
               <GuideItem key={itemIndex}>
                 <GuideHeader 
-                  isOpen={openItems.includes(globalIndex)}
+                  $isOpen={openItems.includes(globalIndex)}
                   onClick={() => toggleItem(globalIndex)}
                   >
                   <GuideTitle>{item.title}</GuideTitle>
-                  <Arrow isOpen={openItems.includes(globalIndex)}>▼</Arrow>
+                  <Arrow $isOpen={openItems.includes(globalIndex)}>▼</Arrow>
                 </GuideHeader>
-                <GuideContent isOpen={openItems.includes(globalIndex)}>
+                <GuideContent $isOpen={openItems.includes(globalIndex)}>
                   {item.content}
                 </GuideContent>
               </GuideItem>
