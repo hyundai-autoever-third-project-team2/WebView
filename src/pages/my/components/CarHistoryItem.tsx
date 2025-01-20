@@ -240,7 +240,8 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   };
 
   const handleDetailButtonClick = () => { 
-    navigate(`/my/purchase/${car_purchase_id}`);
+    navigate(`/my/purchase/${car_sales_id}`);
+
   };
 
   const actionButtons = getActionButtons(status);
