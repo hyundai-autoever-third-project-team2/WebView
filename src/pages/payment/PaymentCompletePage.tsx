@@ -9,7 +9,7 @@ export function PaymentCompletePage() {
   const { state } = useLocation();
   const paymentResult = state?.paymentResult;
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     navigate('/');
   };
 
