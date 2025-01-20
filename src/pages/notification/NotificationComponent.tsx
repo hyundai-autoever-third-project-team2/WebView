@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import ResultIcon from 'assets/icon_result.png';
 import WishlistIcon from 'assets/icon_add.png';
 import DiscountIcon from 'assets/icon_down.png';
+import { formatReceivedTime } from 'utils/formatDate';
+import { useMutation } from '@tanstack/react-query';
+import { fetchNotificationClick } from 'api/notification/notificationApi';
 
 const NotificationWrapper = styled.div`
   display: flex;
@@ -66,8 +69,7 @@ interface NotificationComponentProps {
   type: NotificationType;
   content: string;
   receivedTime: string;
-  carId?: string; // 관심 차량 ID
-  saleId?: string; // 판매 내역 ID
+  notificationId: number;
   onClick?: () => void;
 }
 
@@ -88,11 +90,11 @@ function NotificationComponent({
   type,
   content,
   receivedTime,
-  carId,
-  saleId,
+  notificationId,
   onClick,
 }: NotificationComponentProps) {
   const navigate = useNavigate();
+  const { mutate } = useMutation({ mutationFn: fetchNotificationClick });
   const title = NOTIFICATION_TITLES[type];
   const icon = NOTIFICATION_ICONS[type];
 
@@ -102,18 +104,15 @@ function NotificationComponent({
       onClick();
     }
 
+    mutate(notificationId);
     // 알림 타입에 따른 라우팅 처리
     switch (type) {
       case NotificationType.RESULT:
-        if (saleId) {
-          navigate(`/user/userCarTransaction`);
-        }
+        navigate(`/my/register`);
         break;
       case NotificationType.WISHLIST:
       case NotificationType.DISCOUNT:
-        if (carId) {
-          navigate(`/cars/detail/${carId}`);
-        }
+        navigate(`/wishlist`);
         break;
     }
   };
@@ -128,7 +127,7 @@ function NotificationComponent({
         {title}
       </TitleWrapper>
       <ContentWrapper>{content}</ContentWrapper>
-      <ReceivedTimeWrapper>{receivedTime}</ReceivedTimeWrapper>
+      <ReceivedTimeWrapper>{formatReceivedTime(receivedTime)}</ReceivedTimeWrapper>
     </NotificationWrapper>
   );
 }

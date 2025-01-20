@@ -188,7 +188,7 @@ export const DatePickerWrapper = styled.div`
   }
 
   .react-datepicker__day--selected {
-    background-color: #007aff;
+    background-color: ${({ theme }) => theme.colors.primary};
     border-radius: 50%;
   }
 
@@ -198,13 +198,16 @@ export const DatePickerWrapper = styled.div`
 `;
 
 export const DateInput = styled.input`
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
+  width: auto;
+  padding: 1px 0px;
+  border: none;
   font-size: 16px;
+  /* color: ${({ theme }) => theme.colors.neutral800}; */
+  font-family: inherit;
+  text-align: right;
+  caret-color: transparent;
   &:focus {
     outline: none;
-    border-color: #007aff;
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
