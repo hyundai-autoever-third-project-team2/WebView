@@ -35,3 +35,13 @@ export async function fetchRecentCarList(): Promise<CarListItemData[]> {
     throw error;
   }
 }
+
+export async function fetchRecommenedCarList(): Promise<CarListItemData[]> {
+  try {
+    const response = await client.get('/user/userRecommend');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch recommended car list:', error);
+    throw error;
+  }
+}

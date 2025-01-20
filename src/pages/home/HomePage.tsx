@@ -3,8 +3,6 @@ import Logo from '../../assets/logo_small.png';
 import { useNavigate } from 'react-router-dom';
 import SearchInput from 'components/common/SearchInput';
 import { BadgeCheck, ChevronRight } from 'lucide-react';
-import CarList from '../../mocks/carList';
-import CarData from 'types/CarData';
 import { SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -20,7 +18,7 @@ import Advertisement3 from 'assets/advertisement3.png';
 import Advertisement4 from 'assets/advertisement4.png';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { CarListItemData } from 'types/CarListItemData';
-import { fetchRecentCarList } from 'api/carList/carListApi';
+import { fetchRecentCarList, fetchRecommenedCarList } from 'api/carList/carListApi';
 import CarListItem from 'components/common/CarListItem';
 import { ModalPortal } from 'components/common/Modal/ModalPortal';
 import { SurveyModal } from 'components/common/Modal/SurveyModal';
@@ -38,9 +36,9 @@ function HomePage() {
   const [feedPreviewList, setFeedPreviewList] = useState<string[]>([]);
   const [recentCarListError, setRecentCarListError] = useState<string | null>(null);
   const [feedPreviewListError, setFeedPreviewListError] = useState<string | null>(null);
+  const [recommendedCars, setRecommendedCars] = useState<CarListItemData[]>([]);
+  const [recommendedCarsError, setRecommendedCarsError] = useState<string | null>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
-
-  const recommendCarList: CarData[] = [...CarList];
 
   const advertisementList: { imageUrl: string; title: string }[] = [
     {
@@ -66,6 +64,23 @@ function HomePage() {
       openModal();
       localStorage.setItem('newUser', 'true');
     }
+  }, []);
+
+  useLayoutEffect(() => {
+    async function loadRecommendedCars() {
+      try {
+        setLoading(true);
+        const recommendedCarList = await fetchRecommenedCarList();
+        setRecommendedCars(recommendedCarList);
+      } catch (error) {
+        console.error('Failed to load recommended cars:', error);
+        setRecommendedCarsError('추천 차량을 불러오는데 실패했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadRecommendedCars();
   }, []);
 
   useLayoutEffect(() => {
@@ -248,19 +263,37 @@ function HomePage() {
             loop={true}
             className="mySwiper"
           >
-            {recommendCarList.slice(0, 9).map((car) => (
-              <SwiperSlide key={car.id}>
+            {recommendedCarsError ? (
+              <SwiperSlide>
+                <S.ErrorMessage>{recommendedCarsError}</S.ErrorMessage>
+              </SwiperSlide>
+            ) : recommendedCars.length === 0 ? (
+              <SwiperSlide>
                 <S.RecommendationCarCard>
-                  <S.CarCardImage src={car.imageUrlList[0]} alt={car.model} />
+                  <Skeleton width="100%" height="200px" borderRadius="8px" animation="pulse" />
                   <S.CarCardInfo>
-                    <S.CarName>{car.model}</S.CarName>
-                    <S.CarYear>{car.modelYear}</S.CarYear>
-                    <p>{car.dist}</p>
-                    <p>{car.price}</p>
+                    <Skeleton.Text width="80%" height="20px" animation="pulse" />
+                    <Skeleton.Text width="60%" height="16px" animation="pulse" />
+                    <Skeleton.Text width="70%" height="16px" animation="pulse" />
+                    <Skeleton.Text width="50%" height="16px" animation="pulse" />
                   </S.CarCardInfo>
                 </S.RecommendationCarCard>
               </SwiperSlide>
-            ))}
+            ) : (
+              recommendedCars.map((car) => (
+                <SwiperSlide key={car.carId}>
+                  <S.RecommendationCarCard onClick={() => navigate(`/car-detail/${car.carId}`)}>
+                    <S.CarCardImage src={car.imageUrl} alt={car.model_name} />
+                    <S.CarCardInfo>
+                      <S.CarName>{car.model_name}</S.CarName>
+                      <S.CarYear>{car.model_year}</S.CarYear>
+                      <p>{car.distance.toLocaleString()}km</p>
+                      <p>{car.price.toLocaleString()}만원</p>
+                    </S.CarCardInfo>
+                  </S.RecommendationCarCard>
+                </SwiperSlide>
+              ))
+            )}
           </S.StyledSwiper>
         </S.RecommendationSection>
 
