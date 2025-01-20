@@ -4,7 +4,7 @@ import Logo from 'assets/logo_large.png';
 
 export const LoginPage = () => {
   const handleKakaoLoginClick = () => {
-    window.location.href = `${import.meta.env.VITE_KAKAO_LOGIN_URL}`;
+    window.location.replace(`${import.meta.env.VITE_KAKAO_LOGIN_URL}`);
   };
 
   return (
