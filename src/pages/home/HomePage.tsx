@@ -158,6 +158,11 @@ function HomePage() {
     navigate('/car-list/top50');
   }
 
+  function handleCloseSurveyModal() {
+    closeModal();
+    window.location.reload();
+  }
+
   const CarListSkeleton = () => (
     <>
       {Array.from({ length: 3 }, (_, index) => (
@@ -270,7 +275,7 @@ function HomePage() {
             ) : recommendedCars.length === 0 ? (
               <SwiperSlide>
                 <S.RecommendationCarCard>
-                  <Skeleton width="100%" height="200px" borderRadius="8px" animation="pulse" />
+                  <Skeleton width="40%" height="80px" borderRadius="8px" animation="pulse" />
                   <S.CarCardInfo>
                     <Skeleton.Text width="80%" height="20px" animation="pulse" />
                     <Skeleton.Text width="60%" height="16px" animation="pulse" />
@@ -340,7 +345,7 @@ function HomePage() {
 
       {isModalOpen && (
         <ModalPortal>
-          <SurveyModal closeModal={closeModal} />
+          <SurveyModal closeModal={handleCloseSurveyModal} />
         </ModalPortal>
       )}
     </>
