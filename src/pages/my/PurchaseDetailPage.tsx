@@ -120,7 +120,7 @@ const PurchaseDetailPage: React.FC = () => {
 
 
   const handleBackClick = () => {
-    navigate('/my/purchase');
+    navigate(-1);
   };
 
   const formatPrice = (price: number) => {
