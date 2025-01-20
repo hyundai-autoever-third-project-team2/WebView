@@ -286,7 +286,6 @@ function CarCard({
       });
     }
   }
-
   const updateLikeCarMutation = useMutation({
     mutationFn: async () => {
       if (wishCar) {
@@ -294,27 +293,13 @@ function CarCard({
         return fetchViewIsHeartCarList();
       }
     },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['wishlist'] });
-      
-      // 이전 데이터 저장
-      const previousWishlist = queryClient.getQueryData(['wishlist']);
-      
-      // Optimistic update
-      queryClient.setQueryData(['wishlist'], (old: CarListItemData[] | undefined) => 
-        old ? old.filter(car => car.carId !== carId) : []
-      );
-      
-      return { previousWishlist };
-    },
-    onError: (error, variables, context) => {
-      // 에러 시 이전 데이터로 롤백
-      queryClient.setQueryData(['wishlist'], context?.previousWishlist);
+    onError: (error) => {
       console.error("찜한 차량 데이터 뮤테이션 실패", error);
-      setInternalLiked(!internalLiked); 
+      setInternalLiked(!internalLiked);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['wishlist'] });
+      queryClient.invalidateQueries({ queryKey: ['userCountingData']})
     },
     onSettled: () => {
       setModalConfig(prev => ({ ...prev, isOpen: false }));

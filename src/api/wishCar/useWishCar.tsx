@@ -21,6 +21,9 @@ const useWishCar = (carId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['wishCar'] });
+      queryClient.invalidateQueries({ queryKey: ['userCountingData']})
+
+      
     },
   });
 
@@ -37,6 +40,8 @@ const useWishCar = (carId: number) => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['wishCar'] });
+      queryClient.invalidateQueries({ queryKey: ['userCountingData']})
+
     },
   });
 
