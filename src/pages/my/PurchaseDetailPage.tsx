@@ -7,6 +7,7 @@ import { theme } from 'styles/theme';
 import { useUser } from 'hooks/useUser';
 import { useQuery } from '@tanstack/react-query';
 import { queries } from 'queries';
+import { calculateRegistrationFee } from 'utils/calculateRegistrationFee';
 
 interface CarDetailData {
   created_at: string;
@@ -107,7 +108,7 @@ const AmountRow = styled.div`
 
 const Amount = styled.span<{ $discount?: boolean }>`
   color: ${props => props.$discount ? theme.colors.primary : theme.colors.neutral900};
-  font-weight: ${props => props.$discount ? 'normal' : 'bold'};
+  font-weight: 600;
 `;
 
 const PurchaseDetailPage: React.FC = () => {
@@ -115,9 +116,8 @@ const PurchaseDetailPage: React.FC = () => {
   const { purchaseId } = useParams<{ purchaseId: string }>();
   const [carDetail, setCarDetail] = useState<CarDetailData | null>(null);
   const { data: user } = useUser();
-  const { data, isLoading } = useQuery({ ...queries.car.detail(1) });
+  const { data, isLoading } = useQuery({ ...queries.car.detail(Number(purchaseId)) });
 
-  
 
   const handleBackClick = () => {
     navigate('/my/purchase');
@@ -155,7 +155,7 @@ const PurchaseDetailPage: React.FC = () => {
 
       <Section>
         <SectionTitle>계약자 정보</SectionTitle>
-        <InfoRow>{user?.userName || '이름 정보 없음'}</InfoRow>
+        <InfoRow>{user?.nickname || '이름 정보 없음'}</InfoRow>
         <InfoRow>{'010-****-9538'}</InfoRow>
         <InfoRow>{'경기도 고양시 일산동구 강송로 195, *** **** ***동 ****호'}</InfoRow>
       </Section>
@@ -176,21 +176,34 @@ const PurchaseDetailPage: React.FC = () => {
         <SectionTitle>결제 정보</SectionTitle>
         <AmountRow>
           <span>차량 금액</span>
-          <Amount>{formatPrice(data?.price)}</Amount>
+          <Amount>{formatPrice(data?.price * 10000)}</Amount>
         </AmountRow>
-        {data?.discount_price > 0 && (
           <AmountRow>
             <span>할인 금액</span>
-            <Amount $discount>-{formatPrice(data?.discount_price)}</Amount>
+        {data?.discount_price > 0 ? (
+            <Amount $discount>{formatPrice(data?.price * 10000 - data?.discount_price * 10000)}</Amount>
+          ) : (
+            <Amount style={{color:theme.colors.primary}}>할인 정보 없음</Amount>
+          )}
           </AmountRow>
-        )}
+        <AmountRow>
+          <span>이전 등록 비</span>
+          <Amount>{calculateRegistrationFee(data?.price * 10000).toLocaleString() + '원'}</Amount>
+        </AmountRow>
+        <AmountRow>
+          <span>계약금</span>
+          <Amount>300,000원</Amount>
+        </AmountRow>
         <AmountRow>
           <span>최종 결제 금액</span>
-          <Amount>{formatPrice(data?.price - data?.discount_price)}</Amount>
+          {data?.discount_price > 0 ? (
+            <Amount>{formatPrice(data?.discount_price * 10000 + calculateRegistrationFee(data?.discount_price * 10000) - 300000)}</Amount>
+          ) :
+          (
+            <Amount>{formatPrice(data?.price * 10000 + calculateRegistrationFee(data?.price * 10000) - 300000)}</Amount>
+          )}
         </AmountRow>
       </Section>
-
-      <BottomNavigationBar />
     </Container>
   );
 };
