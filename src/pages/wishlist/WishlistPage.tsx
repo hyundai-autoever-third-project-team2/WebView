@@ -14,6 +14,8 @@ import { fetchViewIsHeartCarList } from "api/mypage/mypageApi"
 import { CarListItemData } from "types/CarListItemData"
 import { formatPrice } from "utils/formatPrice"
 import { formatDate } from "utils/formatDate"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
+import Loading from "components/common/Loading"
 
 const slideUp = keyframes`
   from {
@@ -123,24 +125,23 @@ function WishlistPage() {
     id: number;
   }>>([]);
   const [isClosing, setIsClosing] = useState(false);
-  const [carList, setCarList] = useState<CarListItemData[]>([]);
-
+  
+  const queryClient = useQueryClient()
+  const { data: carList = [], isLoading } = useQuery<CarListItemData[]>({
+    queryKey: ['wishlist'],
+    queryFn: fetchViewIsHeartCarList,
+  });
   
 
-  // 데이터 로딩
-  useEffect(() => {
-    const loadTransactions = async () => {
-      try {
-        const data = await fetchViewIsHeartCarList();
-        log(data)
-        setCarList(data);
-      } catch (e) {
-        console.error(e);
-    }
+  const handleLikeChange = (carId: number) => {
+    queryClient.setQueryData(['wishlist'], (old: CarListItemData[]) => 
+      old.filter(car => car.carId !== carId)
+    );
   };
 
-      loadTransactions();
-  }, []);  
+  if (isLoading) {
+    return <Loading/>;
+  }
 
   const handleBackClick = () => {
     navigate('/');
@@ -185,7 +186,7 @@ function WishlistPage() {
       <Container>
         {!showCheckboxes && (
           <CompareButton onClick={handleCompareButtonClick}>
-            차량비교하기
+            차량 비교하기
             <img src={RightButton}/>
           </CompareButton>
         )}
@@ -204,13 +205,14 @@ function WishlistPage() {
               })}
               tags={[]}
               viewCount={car.view_count}
-              isLiked={true} // 현재 dto에없음
+              isLiked={true} 
               postDate={car.create_date}
               showTags
               showHeartButton
               showCheckbox={showCheckboxes}
               checked={selectedCars.some(selected => selected.id === car.carId)}
               onCheckChange={handleCarSelect(car.carId)}
+              onLikeChange={() => handleLikeChange(car.carId)}
             />
           ))}
         </WishList>
