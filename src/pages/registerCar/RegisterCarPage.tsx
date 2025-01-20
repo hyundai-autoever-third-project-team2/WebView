@@ -6,6 +6,8 @@ import { CarImages } from './CarImages';
 import { CarIntroduction } from './CarIntroduction';
 import { firstStepValidation, secondStepValidation, thirdStepValidation } from './RegisterCarValidation';
 import { fetchRegisterCar, IRegisterCarData } from 'api/registerCar/registerCarApi';
+import { useModal } from 'hooks/useModal';
+import ConfirmModal from 'components/common/ConfirmModal';
 
 function RegisterCarPage() {
   const [step, setStep] = useState(0);
@@ -15,6 +17,9 @@ function RegisterCarPage() {
     images: [],
   });
   const navigate = useNavigate();
+  const { closeModal, openModal, isModalOpen } = useModal();
+  const [modlaDescription, setModalDescription] = useState<string>('');
+  const [modalTitle, setModalTitle] = useState<string>('');
 
   const handleBackClick = () => {
     if (step === 0) {
@@ -25,13 +30,17 @@ function RegisterCarPage() {
     setStep(step - 1);
   };
 
+  const handleModalOpen = (title: string, description: string) => {
+    openModal();
+    setModalTitle(title);
+    setModalDescription(description);
+  };
+
   const handleNextClick = async (data: string | string[]) => {
-    console.log('test: ');
-    console.log(registerCarData);
     switch (step) {
       case 0:
         if (!firstStepValidation(data)) {
-          alert('차량번호를 정확히 입력해주세요.');
+          handleModalOpen('차량번호를 정확히 입력해주세요.', '');
           return;
         }
         setRegisterCarData({ ...registerCarData, car_number: data as string });
@@ -39,7 +48,7 @@ function RegisterCarPage() {
       case 1:
       case 2:
         if (!secondStepValidation(data)) {
-          alert('사진을 4장 등록해주세요.');
+          handleModalOpen('사진을 4장 등록해주세요.', '');
           return;
         }
         const newCarImages = registerCarData['images'].concat(data as string[]);
@@ -47,17 +56,15 @@ function RegisterCarPage() {
         break;
       case 3:
         if (!thirdStepValidation(data)) {
-          alert('차량 설명을 입력해주세요.');
+          handleModalOpen('차량 설명을 입력해주세요.', '');
           return;
         }
 
         try {
           await fetchRegisterCar({ ...registerCarData, comments: data as string });
-          // TODO: 모달창 완성되면 모달창으로 띄우기
-          alert('차량 등록이 완료되었습니다');
-          navigate('/');
+          handleModalOpen('차량 등록이 완료되었습니다.', '빠르게 검토하여 등록여부를 알려드리겠습니다.');
         } catch (error) {
-          alert('차량 등록에 실패했습니다');
+          handleModalOpen('차량 등록에 실패했습니다', '다시 시도해주세요.');
         }
         return;
     }
@@ -72,6 +79,15 @@ function RegisterCarPage() {
       {step === 1 && <CarImages imageType="외부" handleNextClick={handleNextClick} />}
       {step === 2 && <CarImages imageType="내부" handleNextClick={handleNextClick} />}
       {step === 3 && <CarIntroduction handleNextClick={handleNextClick} />}
+      {isModalOpen && (
+        <ConfirmModal
+          title={modalTitle}
+          description={modlaDescription}
+          isOpen={true}
+          onClose={closeModal}
+          onConfirm={modalTitle === '차량 등록이 완료되었습니다.' ? () => navigate('/') : closeModal}
+        />
+      )}
     </>
   );
 }
