@@ -8,6 +8,14 @@ import CarHistoryItem from "./components/CarHistoryItem";
 import { fetchViewTransactionList } from "api/mypage/mypageApi"; 
 import { CarViewTransactionData } from "types/ViewTransactionData";
 import FilterSearchInput from "./components/FilterSearchInput";
+import { useQuery } from "@tanstack/react-query";
+
+
+interface StatusCounts {
+  pending: number;
+  completed: number;
+  cancelled: number;
+}
 
 
 const Contents = styled.div``
@@ -38,76 +46,73 @@ const ErrorText = styled.div`
   color: ${({ theme }) => theme.colors.error};
 `;
 
-function PurchasePage() {
+const useTransactions = () => {
+  return useQuery({
+    queryKey: ['transactions'],
+    queryFn: fetchViewTransactionList,
+    staleTime: 5 * 60 * 1000, 
+    gcTime: 10 * 60 * 1000,   
+    retry: 2,                  
+  });
+};
 
+function PurchasePage() {
   const navigate = useNavigate();
-  const [transactions, setTransactions] = useState<CarViewTransactionData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [selectedProgress, setSelectedProgress] = useState<string | null>(null);
+  const [statusCounts, setStatusCounts] = useState<StatusCounts>({
+    pending: 0,
+    completed: 0,
+    cancelled: 0
+  });
 
-  // 거래 상태별 카운트 계산
+  const { data: transactions = [], isLoading, error } = useTransactions();
+
   const getStatusCounts = () => {
-    const pending = transactions.filter((t) => t.progress === '거래중').length;
-    const completed = transactions.filter((t) => t.progress === '거래완료').length;
-    const cancelled = transactions.filter((t) => t.progress === '취소').length;
-
     return [
       {
-        value: pending,
+        value: statusCounts.pending,
         label: '거래중',
         onClick: () => setSelectedProgress('거래중'),
       },
       {
-        value: completed,
+        value: statusCounts.completed,
         label: '거래 완료',
         onClick: () => setSelectedProgress('거래완료'),
       },
       {
-        value: cancelled,
+        value: statusCounts.cancelled,
         label: '취소 / 반품',
         onClick: () => setSelectedProgress('취소'),
       },
     ];
   };
 
-  // 데이터 로딩
   useEffect(() => {
-    const loadTransactions = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const data = await fetchViewTransactionList();
-        log(data);
-        setTransactions(data);
-      } catch (e) {
-        setError('거래 내역이 존재하지 않습니다.');
-        console.error(e);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    const pending = transactions.filter((t) => t.progress === '거래중').length;
+    const completed = transactions.filter((t) => t.progress === '거래완료').length;
+    const cancelled = transactions.filter((t) => t.progress === '취소').length;
 
-    loadTransactions();
-  }, []);
+    setStatusCounts({
+      pending,
+      completed,
+      cancelled
+    });
+  }, [transactions]);
 
-  // 필터링
+  // Filtering logic
   const filteredTransactions = transactions.filter((transaction) => {
-    // 검색어 필터
     const matchesSearch =
       transaction.model_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    // 연도 필터
     const matchesYear = !selectedYear || new Date(transaction.sales_date).getFullYear().toString() === selectedYear;
-
-    // Progress 필터
     const matchesProgress = !selectedProgress || transaction.progress === selectedProgress;
 
     return matchesSearch && matchesYear && matchesProgress;
   });
 
+  // Helper functions remain the same...
   const handleBackClick = () => {
     navigate(-1);
   };
@@ -135,7 +140,6 @@ function PurchasePage() {
     setSelectedYear(year);
   };
 
-  // StatMenu 클릭 핸들러
   const handleStatClick = (label: string) => {
     let status;
     switch (label) {
@@ -151,7 +155,6 @@ function PurchasePage() {
       default:
         status = null;
     }
-    // 같은 상태를 다시 클릭하면 필터 해제
     setSelectedProgress((prevStatus) => (prevStatus === status ? null : status));
   };
 
@@ -168,7 +171,7 @@ function PurchasePage() {
 
         <CarHistoryList>
           {isLoading && <LoadingText>거래 내역을 불러오는 중입니다...</LoadingText>}
-          {error && <ErrorText>{error}</ErrorText>}
+          {error && <ErrorText>거래 내역이 존재하지 않습니다.</ErrorText>}
 
           {!isLoading &&
             !error &&
@@ -176,7 +179,7 @@ function PurchasePage() {
               <CarHistoryItem
                 key={transaction.car_sales_id}
                 car_sales_id={transaction.car_sales_id}
-                car_id = {transaction.car_id}
+                car_id={transaction.car_id}
                 date={formatDate(transaction.sales_date)}
                 status={transaction.progress}
                 title={`${transaction.brand} ${transaction.model_name}`}
