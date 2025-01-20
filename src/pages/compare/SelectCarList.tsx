@@ -43,7 +43,11 @@ export const SelectCarList = ({ title, selectedCars, handleSelectedButtonClick }
       <S.Title>{title}</S.Title>
       <S.CarListContainer>
         {carList.map((car) => (
-          <S.CarListWrapper key={car.carId}>
+          <S.CarListWrapper
+            key={car.carId}
+            $isSelected={selectedCarSet.has(car.carId)}
+            onClick={() => handleSelectedButtonClick(car.carId)}
+          >
             <S.CarImageWrapper>
               <S.CarImage src={isCarListItemData(car) ? car.imageUrl : car.carImages[0]} alt="car" />
               <S.CheckboxWrapper>

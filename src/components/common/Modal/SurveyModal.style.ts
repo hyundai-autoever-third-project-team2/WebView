@@ -80,7 +80,7 @@ export const QuestionWrapper = styled.div`
 `;
 
 export const QuestionWrapperLarge = styled(QuestionWrapper)`
-  height: 600px;
+  height: 640px;
 `;
 
 export const SurveyRangeWrapper = styled.div`

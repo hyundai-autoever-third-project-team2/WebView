@@ -265,24 +265,24 @@ export const CarDetailPage = () => {
             <S.SimilarCarFlexRow>
               <S.SimilarCarFlexColumn>
                 <S.SimilarCarImageWrapper>
-                  <S.SimilarImage src="https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380182231_ori.jpg?s=480x360&t=crop" />
+                  <S.SimilarImage src="https://imgsc.chutcha.kr/files/car_resist/202409/30/a2b0d36583548d73eb9325631dc41286_ori.jpg?s=480x360&t=crop" />
                 </S.SimilarCarImageWrapper>
                 <S.SimilarCarTitle>2022 그랜저(IG) 하이브리드 르블랑</S.SimilarCarTitle>
                 <S.SimilarCarPrice>3,000만원</S.SimilarCarPrice>
               </S.SimilarCarFlexColumn>
               <S.SimilarCarFlexColumn>
                 <S.SimilarCarImageWrapper>
-                  <S.SimilarImage src="https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380182231_ori.jpg?s=480x360&t=crop" />
+                  <S.SimilarImage src="https://imgsc.chutcha.kr/files/car_resist/202410/23/2024102315521917296663397129_ori.jpg?s=480x360&t=crop" />
                 </S.SimilarCarImageWrapper>
-                <S.SimilarCarTitle>2022 그랜저(IG) 하이브리드 르블랑</S.SimilarCarTitle>
-                <S.SimilarCarPrice>3,000만원</S.SimilarCarPrice>
+                <S.SimilarCarTitle>2021 K7 하이브리드 노블레스 2.4</S.SimilarCarTitle>
+                <S.SimilarCarPrice>3,300만원</S.SimilarCarPrice>
               </S.SimilarCarFlexColumn>
               <S.SimilarCarFlexColumn>
                 <S.SimilarCarImageWrapper>
-                  <S.SimilarImage src="https://imgsc.chutcha.kr/files/car_resist/202412/29/2024122911065817354380182231_ori.jpg?s=480x360&t=crop" />
+                  <S.SimilarImage src="https://imgsc.chutcha.kr/files/car_resist/202412/19/2024121916401617345940168713_ori.jpg?s=480x360&t=crop" />
                 </S.SimilarCarImageWrapper>
-                <S.SimilarCarTitle>2022 그랜저(IG) 하이브리드 르블랑</S.SimilarCarTitle>
-                <S.SimilarCarPrice>3,000만원</S.SimilarCarPrice>
+                <S.SimilarCarTitle>2020 K5 하이브리드 3세대 프레스티지</S.SimilarCarTitle>
+                <S.SimilarCarPrice>2,890만원</S.SimilarCarPrice>
               </S.SimilarCarFlexColumn>
             </S.SimilarCarFlexRow>
           </S.SimilarCarWrapper>
