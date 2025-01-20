@@ -133,7 +133,7 @@ function PurchasePage() {
   };
 
   const formatMonthlyPayment = (price: number) => {
-    return `${(price / 10000 / 36).toFixed(0)}만원`;
+    return `${(price / 36).toFixed(0)}만원`;
   };
 
   const handleYearSelect = (year: string | null) => {
@@ -184,7 +184,7 @@ function PurchasePage() {
                 status={transaction.progress}
                 title={`${transaction.brand} ${transaction.model_name}`}
                 model={`주문번호 A-2025011${transaction.car_sales_id}`}
-                price={formatPrice(transaction.price)}
+                price={transaction.price.toLocaleString() + "만원"}
                 monthlyPayment={'/ 월 ' + formatMonthlyPayment(transaction.price)}
                 imageUrl={transaction.imageUrl}
                 isPurchase
