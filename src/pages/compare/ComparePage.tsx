@@ -1,21 +1,30 @@
-import { useState, useEffect } from "react";
-import Toolbar from "components/common/Toolbar";
-import { useLocation, useNavigate } from "react-router-dom";
-import CompareCarData from "./CompareCarData";
-import styled from "styled-components";
-import { getViewComparesCar } from "api/carCompare/carCompareApi";
-import { CarComparisonData } from "../../types/CarDetail";
-import Loading from "components/common/Loading";
+import { useState, useEffect } from 'react';
+import Toolbar from 'components/common/Toolbar';
+import { useLocation, useNavigate } from 'react-router-dom';
+import CompareCarData from './CompareCarData';
+import styled from 'styled-components';
+import { getViewComparesCar } from 'api/carCompare/carCompareApi';
+import { CarComparisonData } from '../../types/CarDetail';
+import Loading from 'components/common/Loading';
 
 interface LocationState {
   cars?: { id: number }[];
 }
 
 const Container = styled.div`
-    padding-top: 70px;
-    overflow-x: auto;
-    display: flex;
-`
+  padding-top: 70px;
+  overflow-x: auto;
+  display: flex;
+  animation: slideInRight 0.3s ease;
+  @keyframes slideInRight {
+    from {
+      transform: translateX(3%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+`;
 
 function ComparePage() {
   const [carDataList, setCarDataList] = useState<CarComparisonData[]>([]);
@@ -25,11 +34,10 @@ function ComparePage() {
   const location = useLocation();
   const [selectedCars, setSelectedCars] = useState<number[]>([]);
 
-
   useEffect(() => {
     const state = location.state as LocationState;
     if (state?.cars) {
-      const carIds = state.cars.map(car => car.id);
+      const carIds = state.cars.map((car) => car.id);
       setSelectedCars(carIds);
     }
   }, [location.state]);
@@ -59,7 +67,7 @@ function ComparePage() {
   };
 
   const handleCloseButtonClick = (carId: number) => {
-    setCarDataList(prevList => prevList.filter(car => car.carId !== carId));
+    setCarDataList((prevList) => prevList.filter((car) => car.carId !== carId));
   };
 
   const handleDetailButtonClick = (carId: number) => {
@@ -67,7 +75,7 @@ function ComparePage() {
   };
 
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   if (error) {
@@ -76,21 +84,21 @@ function ComparePage() {
 
   return (
     <>
-      <Toolbar title="비교하기" showBackButton onBackClick={handleBackClick}/>
+      <Toolbar title="비교하기" showBackButton onBackClick={handleBackClick} />
       <Container>
         {carDataList.map((carData) => (
-          <CompareCarData 
+          <CompareCarData
             key={carData.carId}
             carInfo={{
               id: carData.carId,
               year: carData.model_year,
               model: `${carData.brand} ${carData.model_name}`,
               price: carData.price,
-              monthlyPayment: Math.round(carData.price / (36 * 10000)), 
+              monthlyPayment: Math.round(carData.price / (36 * 10000)),
               downPaymentPercent: 0,
-              term:0,
-              interestRate:0,
-              imageUrl:carData.carImages[0],
+              term: 0,
+              interestRate: 0,
+              imageUrl: carData.carImages[0],
             }}
             specs={{
               year: carData.model_year,
@@ -100,17 +108,17 @@ function ComparePage() {
               color: carData.color,
               trim: carData.car_type,
               transmission: carData.gear,
-              fuelType: carData.fuel
+              fuelType: carData.fuel,
             }}
             options={[
-              { name: "네비게이션", isChecked: carData.navigation },
-              { name: "헤드업 디스플레이", isChecked: carData.hud },
-              { name: "열선시트", isChecked: carData.heated_seat },
-              { name: "통풍시트", isChecked: carData.ventilated_seat },
-              { name: "크루즈 컨트롤", isChecked: carData.cruise_control },
-              { name: "선루프", isChecked: carData.sunroof },
-              { name: "전방 주차거리 경고", isChecked: carData.parking_distance_warning },
-              { name: "차선 이탈 경보", isChecked: carData.line_out_warning }
+              { name: '네비게이션', isChecked: carData.navigation },
+              { name: '헤드업 디스플레이', isChecked: carData.hud },
+              { name: '열선시트', isChecked: carData.heated_seat },
+              { name: '통풍시트', isChecked: carData.ventilated_seat },
+              { name: '크루즈 컨트롤', isChecked: carData.cruise_control },
+              { name: '선루프', isChecked: carData.sunroof },
+              { name: '전방 주차거리 경고', isChecked: carData.parking_distance_warning },
+              { name: '차선 이탈 경보', isChecked: carData.line_out_warning },
             ]}
             onClose={() => handleCloseButtonClick(carData.carId)}
             onDetail={() => handleDetailButtonClick(carData.carId)}

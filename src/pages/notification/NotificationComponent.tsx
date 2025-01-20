@@ -10,7 +10,7 @@ import { fetchNotificationClick } from 'api/notification/notificationApi';
 const NotificationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 40px;
+  padding: 20px 30px;
   gap: 10px;
   background: transparent;
   cursor: pointer;

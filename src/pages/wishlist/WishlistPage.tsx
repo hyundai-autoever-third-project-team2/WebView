@@ -40,6 +40,17 @@ const Container = styled.div`
   margin-top: 90px;
   position: relative;
   padding: 20px;
+  animation: fadeUp 0.3s ease;
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 const CompareButton = styled.div`

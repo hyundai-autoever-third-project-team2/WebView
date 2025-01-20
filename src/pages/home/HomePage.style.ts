@@ -43,6 +43,18 @@ export const HomePageContainer = styled.div`
   ${media.mobile} {
     padding: 80px 20px 0;
   }
+
+  animation: fadeUp 0.3s ease;
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 export const IconSection = styled.div`
@@ -99,7 +111,7 @@ export const RecommendationSection = styled.div`
   background-color: #090160;
   border-radius: ${({ theme }) => theme.borderRadius.sm};
   color: ${({ theme }) => theme.colors.neutral50};
-  padding: 20px;
+  padding: 15px 15px;
   font-size: ${({ theme }) => theme.fontSize.sm};
   background: linear-gradient(180deg, #e67e00 0%, #ff9d00 50%, #ffbf66 100%);
 
@@ -203,7 +215,7 @@ export const StyledSwiper = styled(Swiper)`
   .swiper-pagination-bullet {
     background: #d3e3f8;
     opacity: 0.5;
-    margin: 0 4px;
+    /* margin: 0 4px; */
     width: 4px;
     height: 4px;
 

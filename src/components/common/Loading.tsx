@@ -16,7 +16,7 @@ const LoadingOverlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: ${theme.colors.neutral50};
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
