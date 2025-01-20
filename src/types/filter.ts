@@ -7,8 +7,8 @@ export type CarColor = '갈색' | '검정' | '남색' | '녹색' | '은색' | '�
 // 메인 필터 인터페이스
 export interface CarFilterCondition {
   carTypes: CarType[];
-  start_displacement: number;
-  end_displacement: number;
+  start_year: number;
+  end_year: number;
   start_distance: number;
   end_distance: number;
   start_price: number;
@@ -23,8 +23,8 @@ export type PartialCarFilterCondition = Partial<CarFilterCondition>;
 export const createFilterCondition = (condition: Partial<CarFilterCondition> = {}): CarFilterCondition => {
   return {
     carTypes: [],
-    start_displacement: 0,
-    end_displacement: 0,
+    start_year: 0,
+    end_year: 0,
     start_distance: 0,
     end_distance: 0,
     start_price: 0,
