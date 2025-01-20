@@ -33,18 +33,41 @@ const ProfileSection = styled.div`
   margin-bottom: 20px;
 `;
 
+const ProfileWrapper = styled.div`
+  width: 60px;
+  height: 60px;
+`
+
 const ProfileImage = styled.img`
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
+  object-fit: cover;
 `;
 
 const ProfileText = styled.div`
   display: flex;
-  align-items: center;
+  align-items: start;
+  flex-direction: column;
+  
   gap: 8px;
   font-size: 16px;
   font-weight: 500;
+`;
+
+const NicknameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+
+`;
+
+const NicknameText = styled.span`
+  font-weight: 600;  
+  font-size: 17px;   
+  color: #FFF6E6;
+ 
 `;
 
 const StatsContainer = styled.div`
@@ -241,10 +264,16 @@ function MyPage() {
 
       <ProfileContainer>
         <ProfileSection>
-          <ProfileImage src={user?.profileImage || testProfile} alt="profile" />
-          <ProfileText>
-            {user?.nickname || '사용자'} 님<span>반갑습니다!</span>
-          </ProfileText>
+          <ProfileImage
+            src={user?.profileImage || testProfile} 
+            alt="profile" />
+            </ProfileWrapper>
+              <ProfileText>
+                <NicknameWrapper>
+                  <NicknameText>{user?.nickname || '사용자'}</NicknameText>님,
+                </NicknameWrapper>
+                <span>오늘도 좋은 거래 되세요!</span>
+              </ProfileText>
         </ProfileSection>
 
         <StatsContainer>
