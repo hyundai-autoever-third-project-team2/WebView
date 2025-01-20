@@ -1,21 +1,21 @@
-import CarData from "components/common/CarCard"
-import Toolbar from "components/common/Toolbar"
-import { useNavigate } from "react-router-dom"
-import styled from "styled-components"
-import RightButton from "../../assets/icon_right_button_primary.svg"
-import XButton from "../../assets/icon_close.svg"
+import CarData from 'components/common/CarCard';
+import Toolbar from 'components/common/Toolbar';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import RightButton from '../../assets/icon_right_button_primary.svg';
+import XButton from '../../assets/icon_close.svg';
 import { keyframes, css } from 'styled-components';
 
-import temp from "../../assets/feed_sample.jpg"
-import { theme } from "styles/theme"
-import { useEffect, useState } from "react"
-import CarCard from "components/common/CarCard"
-import { fetchViewIsHeartCarList } from "api/mypage/mypageApi"
-import { CarListItemData } from "types/CarListItemData"
-import { formatPrice } from "utils/formatPrice"
-import { formatDate } from "utils/formatDate"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import Loading from "components/common/Loading"
+import temp from '../../assets/feed_sample.jpg';
+import { theme } from 'styles/theme';
+import { useEffect, useState } from 'react';
+import CarCard from 'components/common/CarCard';
+import { fetchViewIsHeartCarList } from 'api/mypage/mypageApi';
+import { CarListItemData } from 'types/CarListItemData';
+import { formatPrice } from 'utils/formatPrice';
+import { formatDate } from 'utils/formatDate';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Loading from 'components/common/Loading';
 
 const slideUp = keyframes`
   from {
@@ -40,7 +40,7 @@ const Container = styled.div`
   margin-top: 90px;
   position: relative;
   padding: 20px;
-`
+`;
 
 const CompareButton = styled.div`
   position: absolute;
@@ -51,34 +51,38 @@ const CompareButton = styled.div`
   font-size: 14px;
   color: ${theme.colors.primary};
   cursor: pointer;
-`
+`;
 
 const WishList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-`
+`;
 
 const SelectModal = styled.div<{ $isClosing?: boolean }>`
-  background-color: #FAE9CD;
-  position: fixed; 
+  background-color: #fae9cd;
+  position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
   height: 14rem;
   z-index: 10000;
-  border-radius: 20px 20px 0 0; 
-  animation: ${props => props.$isClosing ? 
-    css`${slideDown} 0.5s ease-in forwards` : 
-    css`${slideUp} 0.5s ease-out forwards`
-  };
+  border-radius: 20px 20px 0 0;
+  animation: ${(props) =>
+    props.$isClosing
+      ? css`
+          ${slideDown} 0.5s ease-in forwards
+        `
+      : css`
+          ${slideUp} 0.5s ease-out forwards
+        `};
   display: flex;
-  justify-content:center;
+  justify-content: center;
   align-items: center;
 `;
 
 const ModalOverlay = styled.div<{ $show: boolean }>`
-  opacity: ${props => (props.$show ? 1 : 0)};
+  opacity: ${(props) => (props.$show ? 1 : 0)};
   transition: opacity 0.3s ease-in-out;
 `;
 
@@ -107,40 +111,38 @@ const ModalContent = styled.div`
 
 const CompareActionButton = styled.button<{ disabled: boolean }>`
   padding: 12px 24px;
-  background-color: ${props => props.disabled ? 'rgba(62,56,96,0.37)' : theme.colors.primary};
+  background-color: ${(props) => (props.disabled ? 'rgba(62,56,96,0.37)' : theme.colors.primary)};
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
-  cursor: ${props => props.disabled ? 'default' : 'pointer'};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   margin-top: 16px;
-
 `;
 
 function WishlistPage() {
   const navigate = useNavigate();
   const [showCheckboxes, setShowCheckboxes] = useState(false);
-  const [selectedCars, setSelectedCars] = useState<Array<{
-    id: number;
-  }>>([]);
+  const [selectedCars, setSelectedCars] = useState<
+    Array<{
+      id: number;
+    }>
+  >([]);
   const [isClosing, setIsClosing] = useState(false);
-  
-  const queryClient = useQueryClient()
+
+  const queryClient = useQueryClient();
   const { data: carList = [], isLoading } = useQuery<CarListItemData[]>({
     queryKey: ['wishlist'],
     queryFn: fetchViewIsHeartCarList,
   });
-  
 
   const handleLikeChange = (carId: number) => {
-    queryClient.setQueryData(['wishlist'], (old: CarListItemData[]) => 
-      old.filter(car => car.carId !== carId)
-    );
+    queryClient.setQueryData(['wishlist'], (old: CarListItemData[]) => old.filter((car) => car.carId !== carId));
   };
 
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
   const handleBackClick = () => {
@@ -163,9 +165,9 @@ function WishlistPage() {
   // 체크박스 상태 변경 핸들러
   const handleCarSelect = (carId: number) => (checked: boolean) => {
     if (checked) {
-      setSelectedCars(prev => [...prev, { id: carId }]);
+      setSelectedCars((prev) => [...prev, { id: carId }]);
     } else {
-      setSelectedCars(prev => prev.filter(car => car.id !== carId));
+      setSelectedCars((prev) => prev.filter((car) => car.id !== carId));
     }
   };
 
@@ -175,57 +177,57 @@ function WishlistPage() {
       alert('2대 이상의 차량을 선택해주세요.');
       return;
     }
-    
+
     navigate('/compare', { state: { cars: selectedCars } });
   };
 
-
   return (
     <>
-      <Toolbar title="관심 차량" showBackButton onBackClick={handleBackClick}/>
+      <Toolbar title="관심 차량" showBackButton onBackClick={handleBackClick} />
       <Container>
         {!showCheckboxes && (
           <CompareButton onClick={handleCompareButtonClick}>
             차량 비교하기
-            <img src={RightButton}/>
+            <img src={RightButton} />
           </CompareButton>
         )}
         <WishList>
-          {carList && carList.map(car => (
-            <CarCard 
-              key={car.carId}
-              carId={car.carId}
-              imageUrl={car.imageUrl}
-              title={car.model_name}
-              year={car.model_year}
-              mileage={car.distance.toLocaleString() + 'km'}
-              price={car.price.toString() + '만원'}
-              {...(car.discount_price && {
-                discountPrice: car.discount_price.toString() + '만원'
-              })}
-              tags={[]}
-              viewCount={car.view_count}
-              isLiked={true} 
-              postDate={car.create_date}
-              showTags
-              showHeartButton
-              showCheckbox={showCheckboxes}
-              checked={selectedCars.some(selected => selected.id === car.carId)}
-              onCheckChange={handleCarSelect(car.carId)}
-              onLikeChange={() => handleLikeChange(car.carId)}
-            />
-          ))}
+          {carList &&
+            carList.map((car) => (
+              <CarCard
+                key={car.carId}
+                carId={car.carId}
+                imageUrl={car.imageUrl}
+                title={car.model_name}
+                year={car.model_year}
+                mileage={car.distance.toLocaleString() + 'km'}
+                price={car.price.toLocaleString() + '만원'}
+                {...(car.discount_price && {
+                  discountPrice: car.discount_price.toLocaleString() + '만원',
+                })}
+                tags={[]}
+                viewCount={car.view_count}
+                isLiked={true}
+                postDate={car.create_date}
+                showTags
+                showHeartButton
+                showCheckbox={showCheckboxes}
+                checked={selectedCars.some((selected) => selected.id === car.carId)}
+                onCheckChange={handleCarSelect(car.carId)}
+                onLikeChange={() => handleLikeChange(car.carId)}
+              />
+            ))}
         </WishList>
       </Container>
-      
+
       {showCheckboxes && (
         <>
           <ModalOverlay $show={showCheckboxes} />
           <SelectModal $isClosing={isClosing}>
-            <CancelButton src={XButton} onClick={handleXButtonClick}/>
+            <CancelButton src={XButton} onClick={handleXButtonClick} />
             <ModalContent>
               <SelectedCount>
-                {selectedCars.length < 2 ? "비교 할 차량을 선택 해주세요" : `${selectedCars.length}대의 차량 비교하기`}
+                {selectedCars.length < 2 ? '비교 할 차량을 선택 해주세요' : `${selectedCars.length}대의 차량 비교하기`}
               </SelectedCount>
               {/* {selectedCars.length > 0 && (
                 <SelectedList>
@@ -235,10 +237,7 @@ function WishlistPage() {
                   ))}
                 </SelectedList>
               )} */}
-              <CompareActionButton 
-                disabled={selectedCars.length < 2}
-                onClick={handleCompare}
-              >
+              <CompareActionButton disabled={selectedCars.length < 2} onClick={handleCompare}>
                 비교하기
               </CompareActionButton>
             </ModalContent>
@@ -248,6 +247,5 @@ function WishlistPage() {
     </>
   );
 }
-
 
 export default WishlistPage;
