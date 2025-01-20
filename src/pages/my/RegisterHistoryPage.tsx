@@ -192,7 +192,7 @@ function RegisterHistoryPage() {
                             status={transaction.progress}
                             title={`${transaction.brand} ${transaction.model_name}`}
                             model={`판매번호 S-2025012${transaction.car_purchase_id}`}
-                            price={formatPrice(transaction.price)}
+                            price={transaction.price.toLocaleString() + "만원"}
                             imageUrl={transaction.imageUrl}
                             
                         />
