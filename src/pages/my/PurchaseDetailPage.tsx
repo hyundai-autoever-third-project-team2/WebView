@@ -115,7 +115,7 @@ const PurchaseDetailPage: React.FC = () => {
   const { purchaseId } = useParams<{ purchaseId: string }>();
   const [carDetail, setCarDetail] = useState<CarDetailData | null>(null);
   const { data: user } = useUser();
-  const { data, isLoading } = useQuery({ ...queries.car.detail(Number(purchaseId)) });
+  const { data, isLoading } = useQuery({ ...queries.car.detail(1) });
 
   
 
