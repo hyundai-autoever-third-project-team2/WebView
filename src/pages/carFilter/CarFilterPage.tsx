@@ -2,7 +2,7 @@ import Button from 'components/common/Button';
 import { useState, useEffect, useRef } from 'react';
 import * as S from './CarFilterPage.style';
 import Toolbar from 'components/common/Toolbar';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { CarFilterCondition, CarType, CarColor } from 'types/Filter';
 import { getFilteredCarList } from 'api/search/carSearchApi';
 import Loading from 'components/common/Loading';
@@ -22,40 +22,50 @@ const COLORS: Array<{ name: CarColor; color: string; border?: boolean }> = [
   { name: '하늘', color: '#4B8DAD' },
 ];
 
-interface FilteredCarResult {
-  carId: number;
-  imageUrl: string;
-  brand: string;
-  model_name: string;
-  model_year: string;
-  distance: number;
-  price: number;
-  discount_price: number;
-  month_price: number;
-  create_date: string;
-  view_count: number;
-  liked: boolean;
-}
-
 const CarFilterPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const contentRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState('year');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [filteredCars, setFilteredCars] = useState<FilteredCarResult[]>([]);
+  const previousFilters = location.state?.appliedFilters;
 
   // 필터 상태를 CarFilterCondition 타입으로 관리
-  const [filterCondition, setFilterCondition] = useState<CarFilterCondition>({
-    carTypes: [],
-    start_displacement: 0,
-    end_displacement: 5000,
-    start_distance: 0,
-    end_distance: 100000,
-    start_price: 0,
-    end_price: 100000000,
-    colors: [],
-  });
+  const [filterCondition, setFilterCondition] = useState<CarFilterCondition>(
+    previousFilters || {
+      carTypes: [],
+      start_year: 2000,
+      end_year: 2025,
+      start_distance: 0,
+      end_distance: 300000,
+      start_price: 0,
+      end_price: 10000,
+      colors: [],
+    }
+  );
+
+  const handleFilterApply = async () => {
+    try {
+      setIsLoading(true);
+
+      const results = await getFilteredCarList(filterCondition);
+
+      // 결과가 배열인지 확인하고 처리
+      const filteredResults = Array.isArray(results) ? results : [];
+
+      // 검색 결과 유무와 관계없이 결과 페이지로 이동
+      navigate('/search', {
+        state: {
+          filteredCars: filteredResults,
+          appliedFilters: filterCondition,
+        },
+      });
+    } catch (err) {
+      console.error('Filter application error:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleScroll = () => {
     if (!contentRef.current) return;
@@ -115,8 +125,8 @@ const CarFilterPage = () => {
   const resetFilter = () => {
     setFilterCondition({
       carTypes: [],
-      start_displacement: 2010,
-      end_displacement: 2025,
+      start_year: 0,
+      end_year: 2025,
       start_distance: 0,
       end_distance: 300000,
       start_price: 0,
@@ -138,43 +148,6 @@ const CarFilterPage = () => {
       }
     };
   }, []);
-
-  const handleFilterApply = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      // 모든 조건을 일단 포함
-      const filteredCondition: CarFilterCondition = {
-        carTypes: filterCondition.carTypes,
-        start_displacement: filterCondition.start_displacement,
-        end_displacement: filterCondition.end_displacement,
-        start_distance: filterCondition.start_distance,
-        end_distance: filterCondition.end_distance,
-        start_price: filterCondition.start_price,
-        end_price: filterCondition.end_price,
-        colors: filterCondition.colors,
-      };
-
-      log(filterCondition);
-
-      const results = await getFilteredCarList(filteredCondition);
-      setFilteredCars(results);
-
-      // 결과와 함께 이전 페이지로 이동
-      navigate(-1, {
-        state: {
-          filteredCars: results,
-          appliedFilters: filteredCondition,
-        },
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : '필터 적용 중 오류가 발생했습니다.');
-      console.error('Filter application error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   if (isLoading) {
     return <Loading />;
@@ -216,18 +189,18 @@ const CarFilterPage = () => {
               <S.SectionTitle>연식</S.SectionTitle>
               <S.YearSelector>
                 <S.Select
-                  value={filterCondition.start_displacement}
+                  value={filterCondition.start_year}
                   onChange={(e) => {
                     const newStartYear = Number(e.target.value);
                     setFilterCondition((prev) => ({
                       ...prev,
-                      start_displacement: newStartYear,
+                      start_year: newStartYear,
                       // 시작 연도가 종료 연도보다 크면 종료 연도를 시작 연도로 설정
-                      end_displacement: newStartYear > prev.end_displacement ? newStartYear : prev.end_displacement,
+                      end_year: newStartYear > prev.end_year ? newStartYear : prev.end_year,
                     }));
                   }}
                 >
-                  {Array.from({ length: 16 }, (_, i) => 2010 + i).map((year) => (
+                  {Array.from({ length: 26 }, (_, i) => 2000 + i).map((year) => (
                     <option key={year} value={year}>
                       {year}
                     </option>
@@ -235,14 +208,14 @@ const CarFilterPage = () => {
                 </S.Select>
                 <span>~</span>
                 <S.Select
-                  value={filterCondition.end_displacement}
+                  value={filterCondition.end_year}
                   onChange={(e) => {
                     const newEndYear = Number(e.target.value);
                     setFilterCondition((prev) => ({
                       ...prev,
                       // 종료 연도가 시작 연도보다 작으면 시작 연도를 종료 연도로 설정
-                      start_displacement: newEndYear < prev.start_displacement ? newEndYear : prev.start_displacement,
-                      end_displacement: newEndYear,
+                      start_year: newEndYear < prev.start_year ? newEndYear : prev.start_year,
+                      end_year: newEndYear,
                     }));
                   }}
                 >

@@ -345,7 +345,8 @@ export const EmptyMessage = styled.div`
 export const CarListItemWrapper = styled.div`
   display: flex;
   width: 100%;
-  background: ${({ theme }) => theme.colors.neutral100};
+  background: transparent;
   border-radius: 16px;
   overflow: hidden;
+  gap: 10px;
 `;
