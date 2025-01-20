@@ -28,10 +28,12 @@ export const CarListContainer = styled.div`
   gap: 4px;
 `;
 
-export const CarListWrapper = styled.div`
+export const CarListWrapper = styled.div<{ $isSelected: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+  opacity: ${({ $isSelected }) => ($isSelected ? 1 : 0.6)};
 `;
 
 export const CarImageWrapper = styled.div`
