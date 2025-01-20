@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import ICarData from 'types/CarData';
 import { useNavigate } from 'react-router-dom';
 import useWishCar from 'api/wishCar/useWishCar';
-import ConfirmModal, { ModalConfigType } from 'pages/my/components/ConfirmModal';
+import ConfirmModal, { ModalConfigType } from 'components/common/ConfirmModal';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchViewIsHeartCarList } from 'api/mypage/mypageApi';
 import { CarListItemData } from 'types/CarListItemData';

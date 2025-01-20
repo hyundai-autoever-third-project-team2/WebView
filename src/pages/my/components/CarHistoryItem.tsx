@@ -3,7 +3,7 @@ import { updatePurchaseCar } from 'api/mypage/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
-import ConfirmModal, { ModalConfigType } from './ConfirmModal';
+import ConfirmModal, { ModalConfigType } from '../../../components/common/ConfirmModal';
 import { useState } from 'react';
 
 interface ActionButtonType {
