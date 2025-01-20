@@ -3,13 +3,19 @@ import Toolbar from 'components/common/Toolbar';
 import Button from 'components/common/Button';
 import styled from 'styled-components';
 import { CheckCircle } from 'lucide-react';
+import { changeCarContractStatus } from 'api/carPurchase/reservationApi';
 
 export function PaymentCompletePage() {
   const navigate = useNavigate();
   const { state } = useLocation();
   const paymentResult = state?.paymentResult;
+  const purchasedCarId = localStorage.getItem('carId');
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
+    if (purchasedCarId) {
+      const response = await changeCarContractStatus(Number(purchasedCarId));
+      console.log(response);
+    }
     navigate('/');
   };
 
