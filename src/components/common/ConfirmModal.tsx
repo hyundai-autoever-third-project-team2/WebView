@@ -51,16 +51,12 @@ const ModalButton = styled.button<{ $isConfirm?: boolean }>`
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  border: 1px solid ${({ $isConfirm }) => 
-    $isConfirm ? theme.colors.primary : theme.colors.neutral300};
-  background-color: ${({ $isConfirm }) => 
-    $isConfirm ? theme.colors.primary : 'white'};
-  color: ${({ $isConfirm }) => 
-    $isConfirm ? 'white' : theme.colors.neutral700};
+  border: 1px solid ${({ $isConfirm }) => ($isConfirm ? theme.colors.primary : theme.colors.neutral300)};
+  background-color: ${({ $isConfirm }) => ($isConfirm ? theme.colors.primary : 'white')};
+  color: ${({ $isConfirm }) => ($isConfirm ? 'white' : theme.colors.neutral700)};
 
   &:hover {
-    background-color: ${({ $isConfirm }) => 
-      $isConfirm ? theme.colors.primary : theme.colors.neutral50};
+    background-color: ${({ $isConfirm }) => ($isConfirm ? theme.colors.primary : theme.colors.neutral50)};
   }
 `;
 
@@ -70,6 +66,7 @@ export interface ConfirmModalProps {
   onConfirm: () => void;
   title: string;
   description: string;
+  cancelButton?: boolean;
 }
 
 export interface ModalConfigType {
@@ -77,29 +74,33 @@ export interface ModalConfigType {
   title: string;
   description: string;
   onConfirm: () => void;
+  cancelButton?: boolean;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
-    isOpen,
-    onClose,
-    onConfirm,
-    title,
-    description,
-  }) => {
-    if (!isOpen) return null;
-  
-    return (
-      <ModalOverlay onClick={onClose}>
-        <ModalContent onClick={e => e.stopPropagation()}>
-          <ModalTitle>{title}</ModalTitle>
-          <ModalDescription>{description}</ModalDescription>
-          <ModalButtonContainer>
-            <ModalButton onClick={onClose}>취소</ModalButton>
-            <ModalButton $isConfirm onClick={onConfirm}>확인</ModalButton>
-          </ModalButtonContainer>
-        </ModalContent>
-      </ModalOverlay>
-    );
-  };
-  
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  cancelButton = true,
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <ModalOverlay onClick={onClose}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
+        <ModalTitle>{title}</ModalTitle>
+        <ModalDescription>{description}</ModalDescription>
+        <ModalButtonContainer>
+          {cancelButton && <ModalButton onClick={onClose}>취소</ModalButton>}
+          <ModalButton $isConfirm onClick={onConfirm}>
+            확인
+          </ModalButton>
+        </ModalButtonContainer>
+      </ModalContent>
+    </ModalOverlay>
+  );
+};
+
 export default ConfirmModal;
