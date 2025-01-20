@@ -76,7 +76,7 @@ function PurchaseCarPage() {
       window.Error('예약 등록에 실패했습니다. 다시 시도해주세요.');
     }
 
-    localStorage.setItem('reservationCarId', carId);
+    localStorage.setItem('contractCarId', carId);
 
     try {
       // 예약이 성공하면 결제 진행
@@ -102,7 +102,7 @@ function PurchaseCarPage() {
 
       console.log('Payment preparation successful. TID:', tid);
 
-      const redirectUrl = response.next_redirect_mobile_url;
+      const redirectUrl = response.next_redirect_pc_url;
 
       window.location.href = redirectUrl;
       console.log('Payment response:', response);

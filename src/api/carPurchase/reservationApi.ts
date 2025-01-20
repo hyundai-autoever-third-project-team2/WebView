@@ -33,11 +33,16 @@ export const registerReservation = async (data: ReservationRequest): Promise<Res
   }
 };
 
-export const changeCarContractStatus = async (carId: number): Promise<void> => {
+export const changeCarContractStatus = async (carId: number): Promise<string> => {
   try {
     const formData = new FormData();
-    formData.append('carId', String(carId));
-    await client.put(`/car/contract`, formData);
+    formData.append('carId', carId.toString());
+    const response = await client.put(`/car/contract`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
   } catch (error) {
     console.error('Unexpected Error:', error);
     throw error;
