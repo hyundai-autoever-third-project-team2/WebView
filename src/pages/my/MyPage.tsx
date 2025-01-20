@@ -14,7 +14,8 @@ import { useEffect, useState } from 'react';
 import { fetchCountingList } from 'api/mypage/mypageApi';
 import { useUser } from 'hooks/useUser';
 import SettingModal from './components/SettingModal';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import UserCountingData from 'types/UserCountingData';
 
 const Container = styled.div`
   background-color: #fff;
@@ -196,17 +197,23 @@ function MyPage() {
   const navigate = useNavigate();
   
   const { data: user } = useUser();
+
+  const { data: countingData } = useQuery<UserCountingData, Error>({
+    queryKey: ['userCountingData'],
+    queryFn: fetchCountingList,
+    refetchOnWindowFocus: false,
+  });    
   
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
   const [statItems, setStatItems] = useState([
     {
-      value: 0, label: '구매 내역', path: '/my/purchase'
+      value: countingData?.saleCount, label: '구매 내역', path: '/my/purchase'
     },
     {
-      value: 0, label: '판매 내역', path: '/my/register'
+      value: countingData?.purchaseCount, label: '판매 내역', path: '/my/register'
     },
     {
-      value: 0, label: '찜한 상품', path: '/wishlist'
+      value: countingData?.heartCount, label: '찜한 상품', path: '/wishlist'
     }
   ]);
 
