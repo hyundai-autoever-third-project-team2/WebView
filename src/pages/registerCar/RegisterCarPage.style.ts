@@ -10,6 +10,20 @@ export const CarNumberWrapper = styled.div`
   gap: 1px;
 `;
 
+export const InnerWrapper = styled.div`
+  animation: fadeUp 0.3s ease;
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+`;
+
 export const CarOutsieImagesWrapper = styled(CarNumberWrapper)``;
 
 export const CarInsideImagesWrapper = styled(CarNumberWrapper)``;
