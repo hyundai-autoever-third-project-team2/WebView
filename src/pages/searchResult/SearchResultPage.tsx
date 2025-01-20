@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { SlidersHorizontal } from 'lucide-react';
 import styled from 'styled-components';
 import SearchInput from 'components/common/SearchInput';
@@ -59,14 +59,14 @@ const MessageContainer = styled.div`
 const RetryButton = styled.button`
   margin-top: 16px;
   padding: 8px 16px;
-  background-color: #007aff;
+  background-color: ${({ theme }) => theme.colors.primary};
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: ${({ theme }) => theme.colors.primaryDark};
   }
 `;
 
@@ -78,6 +78,7 @@ interface SearchState {
 
 function SearchResultPage() {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const [searchState, setSearchState] = useState<SearchState>({
     data: [],
@@ -86,8 +87,28 @@ function SearchResultPage() {
   });
 
   const keyword = searchParams.get('searchCar');
+  const filteredData = location.state?.filteredCars;
+  const appliedFilters = location.state?.appliedFilters;
+
+  console.log('Location State:', location.state);
+  console.log('Filtered Data:', filteredData);
+  console.log('Applied Filters:', appliedFilters);
 
   useEffect(() => {
+    // 필터 결과가 있다면 그것을 사용
+    if (filteredData) {
+      console.log('Processing filter data:', filteredData);
+      const dataArray = Array.isArray(filteredData) ? filteredData : [];
+      console.log('Processed data array:', dataArray);
+      setSearchState({
+        data: dataArray,
+        loading: false,
+        error: null,
+      });
+      return;
+    }
+
+    // 필터 결과가 없을 경우에만 키워드 검색 실행
     async function fetchData() {
       if (!keyword) {
         setSearchState((prev) => ({ ...prev, data: [], error: null }));
@@ -96,27 +117,42 @@ function SearchResultPage() {
 
       setSearchState((prev) => ({ ...prev, loading: true, error: null }));
 
+      // 4. 키워드 검색 시작 확인
+      console.log('Starting keyword search with:', keyword);
+
       try {
         const result = await searchCars(keyword);
-        setSearchState((prev) => ({
-          ...prev,
-          data: result,
+        // 5. API 응답 확인
+        console.log('API Response:', result);
+        const dataArray = Array.isArray(result) ? result : [];
+        setSearchState({
+          data: dataArray,
           loading: false,
           error: null,
-        }));
+        });
       } catch (error) {
         console.error('Failed to fetch search results:', error);
-        setSearchState((prev) => ({
-          ...prev,
+        setSearchState({
           data: [],
           loading: false,
           error: '검색 결과를 불러오는데 실패했습니다. 다시 시도해주세요.',
-        }));
+        });
       }
     }
 
     fetchData();
-  }, [keyword]);
+  }, [keyword, filteredData]);
+
+  console.log('Current searchState:', searchState);
+
+  const handleFilterClick = () => {
+    // 현재 적용된 필터가 있다면 그것을 전달
+    navigate('/car-filter', {
+      state: {
+        appliedFilters: appliedFilters,
+      },
+    });
+  };
 
   const handleSearch = (value: string) => {
     if (value.trim()) {
@@ -124,14 +160,6 @@ function SearchResultPage() {
     } else {
       navigate('/search');
     }
-  };
-
-  const handleFilterClick = () => {
-    navigate('/car-filter');
-  };
-
-  const handleBackClick = () => {
-    navigate(-1);
   };
 
   const renderContent = () => {
@@ -148,15 +176,25 @@ function SearchResultPage() {
       );
     }
 
-    if (!keyword) {
-      return (
-        <MessageContainer>
-          <p>검색어를 입력해주세요.</p>
-        </MessageContainer>
-      );
-    }
+    // 검색 결과가 없을 때 메시지를 필터/검색 상황에 맞게 표시
+    if (!Array.isArray(searchState.data) || searchState.data.length === 0) {
+      if (filteredData) {
+        return (
+          <MessageContainer>
+            <p>검색 조건에 맞는 차량이 없습니다.</p>
+            <p style={{ fontSize: '14px', marginTop: '8px', color: '#999' }}>필터 조건을 변경해보세요.</p>
+          </MessageContainer>
+        );
+      }
 
-    if (searchState.data.length === 0) {
+      if (!keyword) {
+        return (
+          <MessageContainer>
+            <p>검색어를 입력하거나 필터를 적용해주세요.</p>
+          </MessageContainer>
+        );
+      }
+
       return (
         <MessageContainer>
           <p>검색 결과가 없습니다.</p>
@@ -170,7 +208,7 @@ function SearchResultPage() {
 
   return (
     <S.SearchResultPageContainer>
-      <Toolbar title="검색 결과" showBackButton onBackClick={handleBackClick} />
+      <Toolbar title={filteredData ? '필터 검색 결과' : '검색 결과'} showBackButton onBackClick={() => navigate(-1)} />
       <SearchInputWrapper>
         <SearchInput initialValue={keyword || ''} onSearch={handleSearch} searchPageRouting={false} />
         <FilterButton onClick={handleFilterClick}>

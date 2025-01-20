@@ -176,6 +176,7 @@ function PurchasePage() {
               <CarHistoryItem
                 key={transaction.car_sales_id}
                 car_sales_id={transaction.car_sales_id}
+                car_id = {transaction.car_id}
                 date={formatDate(transaction.sales_date)}
                 status={transaction.progress}
                 title={`${transaction.brand} ${transaction.model_name}`}
