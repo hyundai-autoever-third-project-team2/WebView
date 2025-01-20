@@ -191,6 +191,8 @@ function MyPage() {
     queryKey: ['userCountingData'],
     queryFn: fetchCountingList,
     refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   const [isSettingModalOpen, setIsSettingModalOpen] = useState(false);
@@ -211,23 +213,6 @@ function MyPage() {
       path: '/wishlist',
     },
   ]);
-
-  useEffect(() => {
-    const loadCountingData = async () => {
-      try {
-        const data = await fetchCountingList();
-        setStatItems([
-          { value: data.saleCount, label: '구매 내역', path: '/my/purchase' },
-          { value: data.purchaseCount, label: '판매 내역', path: '/my/register' },
-          { value: data.heartCount, label: '찜한 상품', path: '/wishlist' },
-        ]);
-      } catch (error) {
-        console.error('Failed to fetch counting data:', error);
-      }
-    };
-
-    loadCountingData();
-  }, []);
 
   const handleBackClick = () => {
     navigate('/');

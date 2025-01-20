@@ -114,9 +114,8 @@ const Amount = styled.span<{ $discount?: boolean }>`
 const PurchaseDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { purchaseId } = useParams<{ purchaseId: string }>();
-  const [carDetail, setCarDetail] = useState<CarDetailData | null>(null);
   const { data: user } = useUser();
-  const { data, isLoading } = useQuery({ ...queries.car.detail(Number(purchaseId)) });
+  const { data } = useQuery({ ...queries.car.detail(Number(purchaseId)) });
 
 
   const handleBackClick = () => {
