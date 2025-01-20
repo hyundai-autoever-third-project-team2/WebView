@@ -300,7 +300,7 @@ function HomePage() {
         </S.FeedPreviewSection>
       </S.HomePageContainer>
 
-      <S.AnnouncementSection>
+      <S.AnnouncementSection onClick={() => navigate('/notice')}>
         <span>공지</span>
         타볼카 1.0.0 출시
       </S.AnnouncementSection>
