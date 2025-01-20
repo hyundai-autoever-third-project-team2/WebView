@@ -3,7 +3,7 @@ import { updatePurchaseCar } from 'api/mypage/mypageApi';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
-import ConfirmModal, { ModalConfigType } from './ConfirmModal';
+import ConfirmModal, { ModalConfigType } from '../../../components/common/ConfirmModal';
 import { useState } from 'react';
 
 interface ActionButtonType {
@@ -19,6 +19,7 @@ type StatusLabelProps = {
 interface CarHistoryItemProps {
   car_purchase_id?: number,
   car_sales_id?: number,
+  car_id? :number,
   date?: string;
   status?: string;
   title?: string;
@@ -147,6 +148,7 @@ const getDisplayStatus = ($status: string) => {
 const CarHistoryItem: React.FC<CarHistoryItemProps> = ({ 
   car_purchase_id =0,
   car_sales_id = 0,
+  car_id = 0,
   date = "날짜",
   status = "정보",
   title = "이름",
@@ -240,7 +242,8 @@ const CarHistoryItem: React.FC<CarHistoryItemProps> = ({
   };
 
   const handleDetailButtonClick = () => { 
-    navigate(`/my/purchase/${car_purchase_id}`);
+    navigate(`/my/purchase/${car_id}`);
+
   };
 
   const actionButtons = getActionButtons(status);

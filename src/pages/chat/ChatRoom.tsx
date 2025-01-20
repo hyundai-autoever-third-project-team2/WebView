@@ -29,7 +29,6 @@ const ChatContainer = styled.div`
 `;
 
 
-
 const MessagesContainer = styled.div`
   flex: 1;
   overflow-y: auto;
@@ -66,8 +65,8 @@ const MessageBubble = styled.div<{ $isOwn: boolean }>`
 `;
 
 const Avatar = styled.div<{ color: string }>`
-  width: 2rem;
-  height: 2rem;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background-color: ${props => props.color};
   color: white;
@@ -75,6 +74,7 @@ const Avatar = styled.div<{ color: string }>`
   align-items: center;
   justify-content: center;
   margin-right: 0.5rem;
+  flex-shrink: 0;
 `;
 
 const SenderName = styled.p`

@@ -1,5 +1,6 @@
 interface CarViewTransactionData { //사용자 입장에서 구매
     car_sales_id : number,
+    car_id :number,
     sales_date : Date,
     progress : string,
     brand : string,

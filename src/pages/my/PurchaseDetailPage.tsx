@@ -1,50 +1,52 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Toolbar from 'components/common/Toolbar';
 import BottomNavigationBar from 'components/common/BottomNavigationBar/BottomNavigationBar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { theme } from 'styles/theme';
+import { useUser } from 'hooks/useUser';
+import { useQuery } from '@tanstack/react-query';
+import { queries } from 'queries';
+import { calculateRegistrationFee } from 'utils/calculateRegistrationFee';
 
-
-interface PurchaseUserInfo {
-  car_purchase_id:number;
-  purchase_date: Date;
-  name: string;
-  phone: string;
-  address: string;
-  amount: number;
-  discountAmount: number;
-  finalAmount: number;
-  paymentMethod: string;
+interface CarDetailData {
+  created_at: string;
+  price: number;
+  discount_price: number;
+  progress: string;
+  agency_name: string;
+  car_number: string;
+  brand: string;
+  model_name: string;
+  model_year: string;
+  carImages: string[];
 }
 
-
 const Container = styled.div`
-
+  padding-bottom: 60px;
 `;
 
 const TradeSection = styled.div`
-    padding: 1.5rem;
-    margin-top: 70px;
-    border-bottom: 1px solid #999;
-
-`
+  padding: 1.5rem;
+  margin-top: 70px;
+  border-bottom: 1px solid ${theme.colors.neutral300};
+`;
 
 const Section = styled.section`
   background-color: white;
   margin-top: 20px;
   padding: 1.5rem;
-  border-bottom: 1px solid #999;
+  border-bottom: 1px solid ${theme.colors.neutral300};
 `;
 
 const TradeDate = styled.p`
-    margin-bottom: 4px;
-`
+  margin-bottom: 4px;
+  font-weight: 500;
+`;
 
 const TradeId = styled.p`
-    color: #8C8C8C;
-    
-`
+  color: ${theme.colors.neutral600};
+`;
 
 const SectionTitle = styled.h2`
   font-size: 1rem;
@@ -54,18 +56,43 @@ const SectionTitle = styled.h2`
 
 const InfoRow = styled.div`
   margin: 0.5rem 0;
-  color: #333;
+  color: ${theme.colors.neutral800};
 `;
 
+const CarImage = styled.img`
+  width: 80%;
+  max-width: 600px;
+  object-fit: fill;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+`;
 
-const Button = styled.button<{ primary?: boolean }>`
-  padding: 0.5rem 1rem;
-  border: 1px solid ${props => props.primary ? '#ff6b00' : '#ddd'};
-  background-color: ${props => props.primary ? '#ff6b00' : 'white'};
-  color: ${props => props.primary ? 'white' : '#333'};
+const CarInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const CarTitle = styled.h3`
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+`;
+
+const CarDetail = styled.p`
+  color: ${theme.colors.neutral600};
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+`;
+
+const StatusLabel = styled.div`
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
   border-radius: 4px;
-  flex: 1;
-  cursor: pointer;
+  background-color: ${theme.colors.primary}15;
+  color: ${theme.colors.primary};
+  font-size: 0.875rem;
+  margin: 0.5rem 0;
 `;
 
 const AmountRow = styled.div`
@@ -73,84 +100,110 @@ const AmountRow = styled.div`
   justify-content: space-between;
   margin: 0.5rem 0;
   &:last-child {
-    border-top: 1px solid #eee;
+    border-top: 1px solid ${theme.colors.neutral200};
     padding-top: 1rem;
     margin-top: 1rem;
   }
 `;
 
-const Amount = styled.span<{ discount?: boolean }>`
-  color: ${props => props.discount ? '#2b00ff' : '#333'};
-  font-weight: ${props => props.discount ? 'normal' : 'bold'};
+const Amount = styled.span<{ $discount?: boolean }>`
+  color: ${props => props.$discount ? theme.colors.primary : theme.colors.neutral900};
+  font-weight: 600;
 `;
 
-const paymentInfo: PurchaseUserInfo = {
-    car_purchase_id:131123123,
-    purchase_date: new Date(),
-    name: "박*연",
-    phone: "010-****-5282",
-    address: "(10415) 경기 수원시 어딘가 111 **********",
-    amount: 32500000,
-    discountAmount: -3250000,
-    finalAmount: 3000000,
-    paymentMethod: "카카오 페이 - 카카오"
+const PurchaseDetailPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { purchaseId } = useParams<{ purchaseId: string }>();
+  const [carDetail, setCarDetail] = useState<CarDetailData | null>(null);
+  const { data: user } = useUser();
+  const { data, isLoading } = useQuery({ ...queries.car.detail(Number(purchaseId)) });
+
+
+  const handleBackClick = () => {
+    navigate('/my/purchase');
   };
 
-const PurchaseDetailPage: React.FC = () => {
+  const formatPrice = (price: number) => {
+    return `${price.toLocaleString()}원`;
+  };
 
-    const navigate = useNavigate();
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
 
-    const handleBackClick = () => {
-        navigate('/my/purchase')
-    }
-
+  if (!data) {
+    return (
+      <Container>
+        <Toolbar showBackButton title="주문 상세 내역" onBackClick={handleBackClick} />
+        <div>Loading...</div>
+      </Container>
+    );
+  }
 
   return (
     <Container>
-      <Toolbar showBackButton title='주문 상세 내역' onBackClick={handleBackClick} />
+      <Toolbar showBackButton title="주문 상세 내역" onBackClick={handleBackClick} />
 
       <TradeSection>
-        <TradeDate>
-            {new Date(paymentInfo.purchase_date).toLocaleDateString()}
-        </TradeDate>
-        <TradeId>
-            {paymentInfo.car_purchase_id}
-        </TradeId>
+        <TradeDate>{formatDate(data?.created_at)}</TradeDate>
+        <TradeId>주문번호: A-2025011{purchaseId}</TradeId>
       </TradeSection>
 
       <Section>
         <SectionTitle>계약자 정보</SectionTitle>
-        <InfoRow>{paymentInfo.name}</InfoRow>
-        <InfoRow>{paymentInfo.phone}</InfoRow>
-        <InfoRow>{paymentInfo.address}</InfoRow>
+        <InfoRow>{user?.nickname || '이름 정보 없음'}</InfoRow>
+        <InfoRow>{'010-****-9538'}</InfoRow>
+        <InfoRow>{'경기도 고양시 일산동구 강송로 195, *** **** ***동 ****호'}</InfoRow>
       </Section>
 
       <Section>
-        <SectionTitle>주문 차량</SectionTitle>
-
+        <SectionTitle>차량 정보</SectionTitle>
+        <CarImage src={data?.carImages[0]} alt={`${data?.brand} ${data?.model_name}`} />
+        <CarInfo>
+          <CarTitle>{data?.brand} {data?.model_name}</CarTitle>
+          <CarDetail>차량번호: {data?.car_number}</CarDetail>
+          <CarDetail>연식: {data?.model_year}</CarDetail>
+          <CarDetail>판매처: {data?.agency_name}</CarDetail>
+          <StatusLabel>{data?.progress}</StatusLabel>
+        </CarInfo>
       </Section>
 
       <Section>
         <SectionTitle>결제 정보</SectionTitle>
         <AmountRow>
           <span>차량 금액</span>
-          <Amount>{paymentInfo.amount.toLocaleString()}원</Amount>
+          <Amount>{formatPrice(data?.price * 10000)}</Amount>
+        </AmountRow>
+          <AmountRow>
+            <span>할인 금액</span>
+        {data?.discount_price > 0 ? (
+            <Amount $discount>{formatPrice(data?.price * 10000 - data?.discount_price * 10000)}</Amount>
+          ) : (
+            <Amount style={{color:theme.colors.primary}}>할인 정보 없음</Amount>
+          )}
+          </AmountRow>
+        <AmountRow>
+          <span>이전 등록 비</span>
+          <Amount>{calculateRegistrationFee(data?.price * 10000).toLocaleString() + '원'}</Amount>
         </AmountRow>
         <AmountRow>
-          <span>할인 금액</span>
-          <Amount discount>{paymentInfo.discountAmount.toLocaleString()}원</Amount>
+          <span>계약금</span>
+          <Amount>300,000원</Amount>
         </AmountRow>
         <AmountRow>
-          <span>계약금 선금(결제 금액)</span>
-          <Amount>{paymentInfo.finalAmount.toLocaleString()}원</Amount>
-        </AmountRow>
-        <AmountRow>
-          <span>결제 수단</span>
-          <span>{paymentInfo.paymentMethod}</span>
+          <span>최종 결제 금액</span>
+          {data?.discount_price > 0 ? (
+            <Amount>{formatPrice(data?.discount_price * 10000 + calculateRegistrationFee(data?.discount_price * 10000) - 300000)}</Amount>
+          ) :
+          (
+            <Amount>{formatPrice(data?.price * 10000 + calculateRegistrationFee(data?.price * 10000) - 300000)}</Amount>
+          )}
         </AmountRow>
       </Section>
-
-    <BottomNavigationBar/>
     </Container>
   );
 };

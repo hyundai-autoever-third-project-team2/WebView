@@ -15,33 +15,48 @@ export const SelectComparePage = () => {
   const handleSelectedButtonClick = (id: number) => {
     if (selectedCars.includes(id)) {
       setSelectedCars(selectedCars.filter((carId) => carId !== id));
-
       return;
     }
     setSelectedCars([...selectedCars, id]);
   };
 
+  const handleCompareClick = () => {
+    const transformedSelectedCars = selectedCars.map(id => ({ id }));
+    navigate('/compare', { 
+      state: { 
+        cars: transformedSelectedCars 
+      } 
+    });
+  };
+
   return (
     <>
       <S.SelectComparePageWrapper>
-        <Toolbar title="차량비교 선택" onBackClick={handleBackClick} showBackButton />
-        <SelectCarList
-          title="찜한상품"
-          selectedCars={selectedCars}
-          handleSelectedButtonClick={handleSelectedButtonClick}
+        <Toolbar 
+          title="차량비교 선택" 
+          onBackClick={handleBackClick} 
+          showBackButton 
         />
-        <SelectCarList
-          title="최근본상품"
-          selectedCars={selectedCars}
-          handleSelectedButtonClick={handleSelectedButtonClick}
+        <SelectCarList 
+          title="찜한상품" 
+          selectedCars={selectedCars} 
+          handleSelectedButtonClick={handleSelectedButtonClick} 
+        />
+        <SelectCarList 
+          title="최근본상품" 
+          selectedCars={selectedCars} 
+          handleSelectedButtonClick={handleSelectedButtonClick} 
         />
       </S.SelectComparePageWrapper>
-      <S.CompareButtonWarpper
+      <S.CompareButtonWarpper 
         $disabled={selectedCars.length < 2}
-        onClick={() => navigate('/compare', { state: { selectedCars } })}
+        onClick={handleCompareClick}
       >
         <S.SelectedCount>
-          {selectedCars.length < 2 ? '비교 할 차량을 선택 해주세요' : `${selectedCars.length}대의 차량 비교하기`}
+          {selectedCars.length < 2 
+            ? '비교 할 차량을 선택 해주세요' 
+            : `${selectedCars.length}대의 차량 비교하기`
+          }
         </S.SelectedCount>
       </S.CompareButtonWarpper>
     </>

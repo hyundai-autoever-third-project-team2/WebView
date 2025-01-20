@@ -55,10 +55,6 @@ const webviewRouter: RouteObject[] = [
         path: 'my',
         element: <MyPage />,
       },
-      {
-        path: 'my/purchase/:id',
-        element: <PurchaseDetailPage />,
-      },
     ],
   },
   // 내비게이션 바가 없는 페이지를 추가해주세요.
@@ -150,7 +146,10 @@ const webviewRouter: RouteObject[] = [
         path: 'payment/complete',
         element: <PaymentCompletePage />,
       },
-
+      {
+        path: 'my/purchase/:purchaseId',
+        element: <PurchaseDetailPage />,
+      },
     ],
   },
 ];
