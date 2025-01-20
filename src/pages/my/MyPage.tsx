@@ -219,6 +219,18 @@ function MyPage() {
     }
   ]);
 
+  useEffect(()=> {
+    setStatItems([{
+      value: countingData?.saleCount, label: '구매 내역', path: '/my/purchase'
+    },
+    {
+      value: countingData?.purchaseCount, label: '판매 내역', path: '/my/register'
+    },
+    {
+      value: countingData?.heartCount, label: '찜한 상품', path: '/wishlist'
+    }])
+  },[countingData])
+
   const handleBackClick = () => {
     navigate('/');
   };
