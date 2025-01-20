@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
 import CloseIcon from '../../../assets/icon_close.svg';
 import { updateUserProfileImage, updateUserNickName } from 'api/user/userApi';
+import { fetchUploadImage } from 'api/registerCar/registerCarApi';
 
 interface User {
   nickname: string;
@@ -172,12 +173,16 @@ const SettingModal: React.FC<SettingModalProps> = ({ onClose, user, onUpdateSucc
   const [isNicknameSaving, setIsNicknameSaving] = useState(false);
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   const handleImageClick = () => {
-    if (typeof Android !== 'undefined' && Android?.openGallery()) {
+    if (typeof Android !== 'undefined' && Android?.openGallery) {
+      // 안드로이드 환경
       Android.openGallery();
     } else {
-      console.log('갤러리 호출 실패');
+      // 웹 환경
+      fileInputRef.current?.click();
     }
   };
 
@@ -242,6 +247,35 @@ const SettingModal: React.FC<SettingModalProps> = ({ onClose, user, onUpdateSucc
     return url;
   };
 
+  //웹용
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsImageUploading(true);
+      
+      // FormData 생성
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // API 호출하여 S3에 업로드
+      const response = await fetchUploadImage(formData);
+
+      // 업로드 성공시 이미지 URL 처리
+      handleImageUpload(response.data);
+    } catch (err) {
+      console.error('File upload error:', err);
+      setError('이미지 업로드에 실패했습니다.');
+    } finally {
+      setIsImageUploading(false);
+      // 같은 파일을 다시 선택할 수 있도록 input 초기화
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
   return (
     <>
       <ModalOverlay onClick={onClose} />
@@ -252,7 +286,13 @@ const SettingModal: React.FC<SettingModalProps> = ({ onClose, user, onUpdateSucc
             <img src={CloseIcon} alt="Close" />
           </CloseButton>
         </ModalHeader>
-
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          style={{ display: 'none' }}
+        />
         <ProfileSection>
           <ProfileImageContainer>
             <ProfileImage 
