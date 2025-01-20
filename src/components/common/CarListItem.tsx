@@ -48,6 +48,17 @@ export const CarListItemWrapper = styled.div`
   display: flex;
   gap: 10px;
   padding: 10px 20px;
+  animation: fadeUp 0.3s ease;
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 export const CarListItemImage = styled.img`

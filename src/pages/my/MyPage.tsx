@@ -129,6 +129,17 @@ const QuickMenuItem = styled.div`
 
 const MenuList = styled.div`
   padding: 8px 20px;
+  animation: fadeUp 0.3s ease;
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 const MenuItem = styled.div`
@@ -214,17 +225,25 @@ function MyPage() {
     },
   ]);
 
-  useEffect(()=> {
-    setStatItems([{
-      value: countingData?.saleCount, label: '구매 내역', path: '/my/purchase'
-    },
-    {
-      value: countingData?.purchaseCount, label: '판매 내역', path: '/my/register'
-    },
-    {
-      value: countingData?.heartCount, label: '찜한 상품', path: '/wishlist'
-    }])
-  },[countingData])
+  useEffect(() => {
+    setStatItems([
+      {
+        value: countingData?.saleCount,
+        label: '구매 내역',
+        path: '/my/purchase',
+      },
+      {
+        value: countingData?.purchaseCount,
+        label: '판매 내역',
+        path: '/my/register',
+      },
+      {
+        value: countingData?.heartCount,
+        label: '찜한 상품',
+        path: '/wishlist',
+      },
+    ]);
+  }, [countingData]);
 
   const handleBackClick = () => {
     navigate('/');
