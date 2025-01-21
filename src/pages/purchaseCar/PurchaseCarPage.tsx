@@ -102,7 +102,7 @@ function PurchaseCarPage() {
 
       console.log('Payment preparation successful. TID:', tid);
 
-      const redirectUrl = response.next_redirect_pc_url;
+      const redirectUrl = response.next_redirect_mobile_url;
 
       window.location.href = redirectUrl;
       console.log('Payment response:', response);
